@@ -16,7 +16,7 @@ Team. Back-End
 ### Tech
 
 - Web
-1. Spring Boot 2.6.2 + OpenJDK 11
+1. Spring Boot 2.5.8 + OpenJDK 11
 2. Spring batch
 3. Swagger 2.0
 4. JWT
