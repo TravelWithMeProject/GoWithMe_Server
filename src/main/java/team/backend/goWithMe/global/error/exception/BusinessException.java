@@ -1,4 +1,4 @@
-package team.backend.trip.global.error.exception;
+package team.backend.goWithMe.global.error.exception;
 
 public class BusinessException extends RuntimeException {
 

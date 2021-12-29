@@ -1,4 +1,4 @@
-package team.backend.trip.global.error;
+package team.backend.goWithMe.global.error;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -6,16 +6,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import team.backend.trip.global.error.exception.BusinessException;
-import team.backend.trip.global.error.exception.ErrorCode;
+import team.backend.goWithMe.global.error.exception.BusinessException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import java.nio.file.AccessDeniedException;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,4 +1,4 @@
-package team.backend.trip.global.config;
+package team.backend.goWithMe.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

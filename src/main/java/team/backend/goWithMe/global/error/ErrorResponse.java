@@ -1,11 +1,11 @@
-package team.backend.trip.global.error;
+package team.backend.goWithMe.global.error;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import team.backend.trip.global.error.exception.ErrorCode;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;

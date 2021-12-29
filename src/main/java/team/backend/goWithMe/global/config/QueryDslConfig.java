@@ -1,4 +1,4 @@
-package team.backend.trip.global.config;
+package team.backend.goWithMe.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
