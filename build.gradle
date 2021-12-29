@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.2'
+    id 'org.springframework.boot' version '2.5.8'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
@@ -34,6 +34,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.batch:spring-batch-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
