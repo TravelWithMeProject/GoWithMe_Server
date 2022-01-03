@@ -1,4 +1,4 @@
-package team.backend.trip;
+package team.backend.goWithMe;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
