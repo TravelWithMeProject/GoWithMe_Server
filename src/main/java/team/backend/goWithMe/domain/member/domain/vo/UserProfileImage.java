@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserProfileImage {
+public final class UserProfileImage {
 
     @Column(name = "profile_image", nullable = false, length = 100)
     private String profileImage;
@@ -21,7 +21,7 @@ public class UserProfileImage {
     }
 
     @JsonValue
-    public String getProfileImage() {
+    public String userProfileImage() {
         return profileImage;
     }
 }

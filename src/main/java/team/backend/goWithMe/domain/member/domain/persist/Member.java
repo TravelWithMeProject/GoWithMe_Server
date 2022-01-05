@@ -1,6 +1,9 @@
 package team.backend.goWithMe.domain.member.domain.persist;
 
+import io.jsonwebtoken.lang.Assert;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import team.backend.goWithMe.domain.member.domain.vo.*;
@@ -10,6 +13,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
@@ -39,6 +43,27 @@ public class Member extends BaseTimeEntity {
 
     @Embedded
     private UserProfileImage profileImage;
+
+    @Builder
+    public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType, UserNickName nickname, LocalDate birth, UserProfileImage profileImage) {
+
+        // null 방지 검증 로직
+        Assert.hasText(email.userEmail());
+        Assert.hasText(password.userPassword());
+        Assert.hasText(name.userName());
+        Assert.hasText(roleType.name());
+        Assert.hasText(nickname.userNickname());
+        Assert.hasText(profileImage.userProfileImage());
+
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.roleType = roleType;
+        this.nickname = nickname;
+        this.birth = birth;
+        this.profileImage = profileImage;
+    }
+
 
     /**
      * 비즈 니스 로직

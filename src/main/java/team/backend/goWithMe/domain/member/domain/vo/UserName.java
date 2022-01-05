@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserName {
+public final class UserName {
 
     @NotBlank(message = "이름은 필수 입력사항 입니다.")
     @Column(unique = true, nullable = false, length = 20)
@@ -23,7 +23,7 @@ public class UserName {
     }
 
     @JsonValue
-    public String getName() {
+    public String userName() {
         return name;
     }
 }

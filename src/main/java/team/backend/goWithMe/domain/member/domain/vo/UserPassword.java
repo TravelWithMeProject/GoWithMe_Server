@@ -17,7 +17,7 @@ import java.util.Objects;
 @Embeddable
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserPassword {
+public final class UserPassword {
 
     @NotBlank(message = "비밀번호는 필수 입력사항 입니다.")
     @Column(unique = true, nullable = false, length = 100)
@@ -26,6 +26,10 @@ public class UserPassword {
     public static UserPassword encode(final String rawPassword, final PasswordEncoder passwordEncoder) {
         validateBlank(rawPassword);
         return new UserPassword(passwordEncoder.encode(rawPassword));
+    }
+
+    public static UserPassword from(final String password) {
+        return new UserPassword(password);
     }
 
     private static void validateBlank(String rawPassword) {
@@ -42,6 +46,6 @@ public class UserPassword {
 
     @JsonValue
     public String userPassword() {
-        return userPassword();
+        return password;
     }
 }
