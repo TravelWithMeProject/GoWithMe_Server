@@ -1,12 +1,12 @@
-package team.backend.travel.trip.entity;
+package team.backend.goWithMe.domain.trip.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
-import team.backend.travel.trip.vo.TripArrivalCount;
-import team.backend.travel.trip.vo.TripArrivalImg;
-import team.backend.travel.trip.vo.TripArrivalName;
+import team.backend.goWithMe.domain.trip.vo.TripArrivalCount;
+import team.backend.goWithMe.domain.trip.vo.TripArrivalImg;
+import team.backend.goWithMe.domain.trip.vo.TripArrivalName;
 import javax.persistence.*;
 
 
