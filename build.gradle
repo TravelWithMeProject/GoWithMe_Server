@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.5.8'
+    id 'org.springframework.boot' version '2.6.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
@@ -38,8 +38,6 @@ dependencies {
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
-
-
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
@@ -59,4 +57,8 @@ configurations {
 
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
+}
+
+test {
+    useJUnitPlatform()
 }
