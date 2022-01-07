@@ -42,7 +42,7 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("빌더 실패 테스트 : IllegalArgumentException이 터져야 한다.")
+    @DisplayName("빌더 실패 테스트 : NullPointException이 터져야 한다.")
     void builderFailTest() {
 
         // given
