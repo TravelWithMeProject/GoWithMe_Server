@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import team.backend.goWithMe.domain.member.domain.vo.*;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
 
@@ -84,5 +85,11 @@ public class Member extends BaseTimeEntity {
         changeEmail(email);
         changePassword(password);
         changeNickName(nickname);
+    }
+
+    // 비밀번호 해시화
+    public Member encode(final PasswordEncoder encoder) {
+        password = UserPassword.encode(password.userPassword(), encoder);
+        return this;
     }
 }
