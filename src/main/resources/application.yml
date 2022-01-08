@@ -14,6 +14,13 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/study?allowPublicKeyRetrieval=true&serverTimezone=UTC&useSSL=false&characterEncoding=utf8&characterSetResults=utf8&rewriteBatchedStatements=true
+    username: root
+    password: "!qotjrdyd1"
+
 
 jwt:
   header: Authorization
