@@ -1,6 +1,7 @@
 package team.backend.goWithMe.domain.trip.entity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 
 @Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "trip")
 public class Trip extends BaseTimeEntity {
 
@@ -21,13 +23,26 @@ public class Trip extends BaseTimeEntity {
 
     // TODO arrival에서 arrivalName으로 수정함
     @Embedded
+    @Column(name = "arrival_name")
     private TripArrivalName arrivalName;
 
     @Embedded
+    @Column(name = "arrival_count")
     private TripArrivalCount arrivalCount;
 
     @Embedded
+    @Column(name = "arrival_img")
     private TripArrivalImg arrivalImg;
+
+    private Trip(TripArrivalName arrivalName, TripArrivalCount arrivalCount, TripArrivalImg arrivalImg) {
+        this.arrivalName = arrivalName;
+        this.arrivalCount = arrivalCount;
+        this.arrivalImg = arrivalImg;
+    }
+
+    public static Trip createTrip(TripArrivalName arrivalName, TripArrivalCount arrivalCount, TripArrivalImg arrivalImg) {
+        return new Trip(arrivalName, arrivalCount, arrivalImg);
+    }
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
@@ -36,20 +51,11 @@ public class Trip extends BaseTimeEntity {
 //    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL)
 //    private List<TimeTable> timeTables = new ArrayList<>();
 
-//    protected Trip(String tripName, String arrival,
-//                   Long arrivalCount, String arrivalImg, Member member, @Nullable List<TimeTable> timeTables) {
-//        this.tripName = tripName;
-//        this.arrival = arrival;
-//        this.arrivalCount = arrivalCount;
-//        this.arrivalImg = arrivalImg;
-//        this.member = member;
-//        this.timeTables = timeTables;
-//    }
 
     //===== 비즈니스 메서드 =====//
 
-    public TripArrivalCount increaseArrivalCount() {
-        return arrivalCount.addOne();
+    public void increaseArrivalCount() {
+        arrivalCount.addOne();
     }
 
     public void resetArrivalCount() {
