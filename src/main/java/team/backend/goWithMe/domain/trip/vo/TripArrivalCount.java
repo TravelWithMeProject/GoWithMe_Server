@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class TripArrivalCount {
 
+    @NotNull
     private Long arrivalCount;
 
     public static TripArrivalCount newArrivalCount() {
@@ -20,11 +22,10 @@ public class TripArrivalCount {
 
     @JsonValue
     public Long arrivalCount() {
-        return arrivalCount;
+        return this.arrivalCount;
     }
 
-    public TripArrivalCount addOne() {
-        arrivalCount += 1;
-        return new TripArrivalCount(arrivalCount);
+    public void addOne() {
+        this.arrivalCount += 1L;
     }
 }

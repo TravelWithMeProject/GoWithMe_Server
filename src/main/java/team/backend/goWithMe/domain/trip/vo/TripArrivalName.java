@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 import team.backend.goWithMe.global.error.exception.InvalidValueException;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class TripArrivalName {
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
     public static TripArrivalName from(String arrivalName) {
@@ -24,7 +24,7 @@ public class TripArrivalName {
 
     @JsonValue
     public String arrivalName() {
-        return name;
+        return this.name;
     }
 
     private static void validateTripArrivalName(String arrivalName) {

@@ -6,23 +6,23 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class TripArrivalImg {
 
-    @NotEmpty
+    @NotBlank
     private String arrivalImgUrl;
 
-    public TripArrivalImg from(String arrivalImgUrl) {
+    public static TripArrivalImg from(String arrivalImgUrl) {
         return new TripArrivalImg(arrivalImgUrl);
     }
 
     @JsonValue
     public String arrivalImg() {
-        return arrivalImgUrl;
+        return this.arrivalImgUrl;
     }
 
 }

@@ -55,7 +55,7 @@ public class Trip extends BaseTimeEntity {
     //===== 비즈니스 메서드 =====//
 
     public void increaseArrivalCount() {
-        arrivalCount.addOne();
+        this.arrivalCount.addOne();
     }
 
     public void resetArrivalCount() {
