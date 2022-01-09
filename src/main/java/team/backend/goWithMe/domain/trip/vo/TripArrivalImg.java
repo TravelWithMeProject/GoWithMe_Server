@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotBlank;
 public class TripArrivalImg {
 
     @NotBlank
+    @Column(name = "arrival_img")
     private String arrivalImgUrl;
 
     public static TripArrivalImg from(String arrivalImgUrl) {

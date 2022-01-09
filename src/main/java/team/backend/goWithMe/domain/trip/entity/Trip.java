@@ -21,17 +21,13 @@ public class Trip extends BaseTimeEntity {
     @Column(name = "trip_id")
     private Long id;
 
-    // TODO arrival에서 arrivalName으로 수정함
     @Embedded
-    @Column(name = "arrival_name")
     private TripArrivalName arrivalName;
 
     @Embedded
-    @Column(name = "arrival_count")
     private TripArrivalCount arrivalCount;
 
     @Embedded
-    @Column(name = "arrival_img")
     private TripArrivalImg arrivalImg;
 
     private Trip(TripArrivalName arrivalName, TripArrivalCount arrivalCount, TripArrivalImg arrivalImg) {

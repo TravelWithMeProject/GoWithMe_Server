@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.global.error.exception.InvalidValueException;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 
@@ -15,7 +16,8 @@ import javax.validation.constraints.NotBlank;
 public class TripArrivalName {
 
     @NotBlank
-    private String name;
+    @Column(name = "arrival_name", length = 50)
+    private String arrivalName;
 
     public static TripArrivalName from(String arrivalName) {
         validateTripArrivalName(arrivalName);
@@ -24,7 +26,7 @@ public class TripArrivalName {
 
     @JsonValue
     public String arrivalName() {
-        return this.name;
+        return this.arrivalName;
     }
 
     private static void validateTripArrivalName(String arrivalName) {

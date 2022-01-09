@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class TripArrivalCount {
 
     @NotNull
+    @Column(name = "arrival_count")
     private Long arrivalCount;
 
     public static TripArrivalCount newArrivalCount() {
