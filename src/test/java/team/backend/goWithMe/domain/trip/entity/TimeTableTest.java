@@ -96,6 +96,21 @@ class TimeTableTest {
     }
 
     @Test
+    @DisplayName("시간표 내용 초기화 테스트")
+    public void resetTableContentTest() throws Exception {
+        // given
+        String oldContent = timeTable.getContent().tableContent();
+        // when
+        timeTable.resetTableContent();
+        // then
+        String resetContent = timeTable.getContent().tableContent();
+
+        assertNotEquals(oldContent, resetContent);
+        assertEquals(OLD_CONTENT, oldContent);
+        assertEquals("", resetContent);
+    }
+
+    @Test
     @DisplayName("전체 일정 시작 지점 변경 테스트")
     public void changeTotalPeriodStartTest() throws Exception {
         // given
@@ -129,6 +144,7 @@ class TimeTableTest {
     }
 
     @Test
+    @DisplayName("일정 끝 지점 변경 테스트")
     public void changeTotalPeriodEndTest() throws Exception {
         // given
         LocalDateTime oldTotalEnd = timeTable.getTotalEnd();
