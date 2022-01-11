@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import team.backend.goWithMe.domain.trip.exception.TripNameValidException;
 import team.backend.goWithMe.global.error.exception.InvalidValueException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
+
+import static team.backend.goWithMe.global.error.exception.CommonErrorCode.INVALID_INPUT_VALUE;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,7 +35,7 @@ public class TripArrivalName {
 
     private static void validateTripArrivalName(String arrivalName) {
         if (arrivalName == null || arrivalName.isBlank()) {
-            throw new InvalidValueException("여행지 명은 필수입니다.");
+            throw new TripNameValidException("여행지 명은 필수입니다.", INVALID_INPUT_VALUE);
         }
     }
 }

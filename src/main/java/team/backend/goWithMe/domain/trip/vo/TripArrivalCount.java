@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

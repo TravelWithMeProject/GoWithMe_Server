@@ -1,14 +1,13 @@
 package team.backend.goWithMe.domain.trip.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
 import team.backend.goWithMe.domain.trip.vo.TripArrivalCount;
 import team.backend.goWithMe.domain.trip.vo.TripArrivalImg;
 import team.backend.goWithMe.domain.trip.vo.TripArrivalName;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Entity @Getter
@@ -22,6 +21,7 @@ public class Trip extends BaseTimeEntity {
     private Long id;
 
     @Embedded
+    @NotNull
     private TripArrivalName arrivalName;
 
     @Embedded
@@ -36,7 +36,9 @@ public class Trip extends BaseTimeEntity {
         this.arrivalImg = arrivalImg;
     }
 
-    public static Trip createTrip(TripArrivalName arrivalName, TripArrivalCount arrivalCount, TripArrivalImg arrivalImg) {
+    public static Trip createTrip(@NonNull TripArrivalName arrivalName,
+                                  @NonNull TripArrivalCount arrivalCount,
+                                  @NonNull TripArrivalImg arrivalImg) {
         return new Trip(arrivalName, arrivalCount, arrivalImg);
     }
 
@@ -49,7 +51,6 @@ public class Trip extends BaseTimeEntity {
 
 
     //===== 비즈니스 메서드 =====//
-
     public void increaseArrivalCount() {
         this.arrivalCount.addOne();
     }
