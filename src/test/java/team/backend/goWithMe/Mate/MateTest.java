@@ -1,13 +1,16 @@
 package team.backend.goWithMe.Mate;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import org.junit.jupiter.api.DisplayName;
+
 import team.backend.goWithMe.mate.domain.MateList;
 import team.backend.goWithMe.mate.vo.MateEmail;
 import team.backend.goWithMe.mate.vo.MateNickName;
 import team.backend.goWithMe.mate.vo.MateProfileImg;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MateTest {
 
@@ -25,48 +28,56 @@ public class MateTest {
 
         final MateList mateList = MateListBuilder.build(mateEmail, mateNickName, mateProfileImg);
 
-        Assertions.assertThat(mateList.getMateEmail()).isEqualTo(mateEmail);
-        Assertions.assertThat(mateList.getMateNickname()).isEqualTo(mateNickName);
-        Assertions.assertThat(mateList.getMateProfileImg()).isEqualTo(mateProfileImg);
+        assertThat(mateList.getMateEmail()).isEqualTo(mateEmail);
+        assertThat(mateList.getMateNickname()).isEqualTo(mateNickName);
+        assertThat(mateList.getMateProfileImg()).isEqualTo(mateProfileImg);
 
     }
 
     @Test
-    @DisplayName("이메일 변경 테스트")
-    public void changeEmailTest() {
-        final MateList mateList = MateListBuilder.build();
+    @DisplayName("친구 목록 변경 테스트")
+    public void updateMateListTest() {
 
-        final String value = "shinsw645@naver.com";
+        final String value = "shin";
         final MateEmail mateEmail = MateEmail.from(value);
-
-        mateList.changeEmail(mateEmail);
-
-        Assertions.assertThat(mateList.getMateEmail()).isEqualTo(mateEmail);
-    }
-
-    @Test
-    @DisplayName("닉네임 변경 테스트")
-    public void changeNickNameTest() {
-        final MateList mateList = MateListBuilder.build();
 
         final String nickname = "ssw";
         final MateNickName mateNickName = MateNickName.from(nickname);
 
-        mateList.changeNickName(mateNickName);
-
-        Assertions.assertThat(mateList.getMateNickname()).isEqualTo(mateNickName);
-    }
-
-    @Test
-    @DisplayName("프로필 이미지 변경 테스트")
-    public void changeMateProfileImgTest() {
-        final MateList mateList = MateListBuilder.build();
-
-        final String img = "dfqf";
+        final String img = "dfdf";
         final MateProfileImg mateProfileImg = MateProfileImg.from(img);
 
-        mateList.changeMateProfileImg(mateProfileImg);
+        final MateList mateList = MateList.builder()
+                .mateEmail(mateEmail)
+                .mateNickName(mateNickName)
+                .mateProfileImg(mateProfileImg)
+                .build();
 
-        Assertions.assertThat(mateList.getMateProfileImg()).isEqualTo(mateProfileImg);
+        String name1 = mateList.getMateNickname().mateNickname();
+        String email1 = mateList.getMateEmail().mateEmail();
+        String img1 = mateList.getMateProfileImg().mateProfileImg();
+
+        final String value2 = "sang";
+        final MateEmail mateEmail2 = MateEmail.from(value2);
+
+        final String nickname2 = "aaa";
+        final MateNickName mateNickName2 = MateNickName.from(nickname2);
+
+        final String img2 = "zzzz";
+        final MateProfileImg mateProfileImg2 = MateProfileImg.from(img2);
+
+        mateList.update(mateEmail2, mateNickName2 , mateProfileImg2);
+
+        String email2 = mateList.getMateEmail().mateEmail();
+        String name2 = mateList.getMateNickname().mateNickname();
+        String profileImg2 = mateList.getMateProfileImg().mateProfileImg();
+
+        assertEquals(name1, "ssw");
+        assertEquals(name2, "aaa");
+        assertEquals(email1, "shin");
+        assertEquals(email2, "sang");
+        assertEquals(img1, "dfdf");
+        assertEquals(profileImg2, "zzzz");
     }
+
 }

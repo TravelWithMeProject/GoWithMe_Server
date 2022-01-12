@@ -25,7 +25,7 @@ public final class MateEmail {
     }
 
     @JsonValue
-    public String MateEmail() {
+    public String mateEmail() {
         return email;
     }
 }

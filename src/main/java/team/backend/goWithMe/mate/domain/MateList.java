@@ -1,5 +1,6 @@
 package team.backend.goWithMe.mate.domain;
 
+import io.jsonwebtoken.lang.Assert;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +37,9 @@ public class MateList {
 
     @Builder
     public MateList(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg) {
+        Assert.hasText(mateEmail.mateEmail(), "mateEmail must not be empty");
+        Assert.hasText(mateNickName.mateNickname(), "mateNickName must not be empty");
+        Assert.hasText(mateProfileImg.mateProfileImg(),"mateProfileImg must not be empty");
         this.mateEmail = mateEmail;
         this.mateNickname = mateNickName;
         this.mateProfileImg = mateProfileImg;
@@ -45,16 +49,21 @@ public class MateList {
 
     /*비즈니스 메서드*/
 
-    public void changeEmail(MateEmail mateEmail) {
+    private void changeEmail(MateEmail mateEmail) {
         this.mateEmail = mateEmail;
     }
 
-    public void changeNickName(MateNickName mateNickName) {
+    private void changeNickName(MateNickName mateNickName) {
         this.mateNickname = mateNickName;
     }
 
-    public void changeMateProfileImg(MateProfileImg mateProfileImg) {
+    private void changeMateProfileImg(MateProfileImg mateProfileImg) {
         this.mateProfileImg = mateProfileImg;
     }
 
+    public void update(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg) {
+        changeEmail(mateEmail);
+        changeNickName(mateNickName);
+        changeMateProfileImg(mateProfileImg);
+    }
 }

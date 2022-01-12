@@ -23,7 +23,7 @@ public class MateNickName {
     }
 
     @JsonValue
-    public String getMateNickname() {
+    public String mateNickname() {
         return mateNickname;
     }
 }

@@ -20,7 +20,7 @@ public class MateProfileImg {
         return new MateProfileImg(profileImage);
     }
     @JsonValue
-    public String getMateProfileImg() {
+    public String mateProfileImg() {
         return profileImage;
     }
 }
