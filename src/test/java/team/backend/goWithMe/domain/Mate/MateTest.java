@@ -1,4 +1,4 @@
-package team.backend.goWithMe.Mate;
+package team.backend.goWithMe.domain.Mate;
 
 import org.junit.Test;
 
