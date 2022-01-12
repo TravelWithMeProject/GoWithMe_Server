@@ -6,13 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.domain.trip.vo.TimeTableContent;
 import team.backend.goWithMe.domain.trip.vo.TimeTableName;
+import team.backend.goWithMe.domain.trip.vo.TimeTablePeriod;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
-import team.backend.goWithMe.global.error.exception.InvalidValueException;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.Duration;
-import java.time.LocalDateTime;
 
 @Entity @Getter
 @Table(name = "time_table")
@@ -30,32 +28,25 @@ public class TimeTable extends BaseTimeEntity {
     @Embedded
     private TimeTableContent content;
 
-    @NotNull
-    @Column(name = "total_start")
-    private LocalDateTime totalStart;
-
-    @NotNull
-    @Column(name = "total_end")
-    private LocalDateTime totalEnd;
+    @Embedded
+    private TimeTablePeriod totalPeriod;
 
     private TimeTable(TimeTableName tableName, TimeTableContent content,
-                     LocalDateTime totalStart, LocalDateTime totalEnd) {
+                      TimeTablePeriod totalPeriod) {
         this.tableName = tableName;
         this.content = content;
-        this.totalStart = totalStart;
-        this.totalEnd = totalEnd;
+        this.totalPeriod = totalPeriod;
     }
 
     public static TimeTable createTimeTable(TimeTableName tableName, TimeTableContent content,
-                                            LocalDateTime totalStart, LocalDateTime totalEnd) {
-        validateTotalPeriod(totalStart, totalEnd);
-        return new TimeTable(tableName, content, totalStart, totalEnd);
+                                            TimeTablePeriod totalPeriod) {
+        return new TimeTable(tableName, content, totalPeriod);
     }
 
     //===== 비즈니스 메서드 =====//
 
-    public Duration ofDuration() {
-        return Duration.between(this.totalStart, this.totalEnd);
+    public Duration ofDuration(TimeTablePeriod timeTablePeriod) {
+        return timeTablePeriod.ofDuration();
     }
 
     public void changeTableName(TimeTableName timeTableName) {
@@ -70,36 +61,14 @@ public class TimeTable extends BaseTimeEntity {
         this.content.resetContent();
     }
 
-    public void changeTotalPeriodStart(LocalDateTime newTotalStart) {
-        validateTotalPeriod(newTotalStart, this.totalEnd);
-        this.totalStart = newTotalStart;
+    public void changeTablePeriod(TimeTablePeriod timeTablePeriod) {
+        this.totalPeriod.changePeriod(timeTablePeriod.getStart(), timeTablePeriod.getEnd());
     }
 
-    public void changeTotalPeriodEnd(LocalDateTime newTotalEnd) {
-        validateTotalPeriod(this.totalStart, newTotalEnd);
-        this.totalEnd = newTotalEnd;
-    }
-
-    public void changeTotalPeriod(LocalDateTime newTotalStart, LocalDateTime newTotalEnd) {
-        validateTotalPeriod(newTotalStart, newTotalEnd);
-        this.totalStart = newTotalStart;
-        this.totalEnd = newTotalEnd;
-    }
-
-    public void changeTimeTable(TimeTableName name, TimeTableContent content,
-                                LocalDateTime periodStart, LocalDateTime periodEnd) {
+    public void changeTimeTable(TimeTableName name, TimeTableContent content, TimeTablePeriod timeTablePeriod) {
         changeTableName(name);
         changeTableContent(content);
-        changeTotalPeriod(periodStart, periodEnd);
-    }
-
-    private static void validateTotalPeriod(LocalDateTime totalStart, LocalDateTime totalEnd) {
-        if (totalStart.isAfter(totalEnd)) {
-            throw new InvalidValueException("전체일정 시작 시점과 끝 시점이 반대입니다.");
-        }
-        if (totalStart.isEqual(totalEnd)) {
-            throw new InvalidValueException("전체일정이 0(끝지점과 시작지점이 같음)이 될 수 없습니다.");
-        }
+        changeTablePeriod(timeTablePeriod);
     }
 
 }
