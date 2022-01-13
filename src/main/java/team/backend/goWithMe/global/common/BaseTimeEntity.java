@@ -23,7 +23,7 @@ public class BaseTimeEntity {
     @Column(name = "update_time")
     private LocalDateTime updateTime;
 
-    @Column(name = "deleted_tem")
+    @Column(name = "deleted_time")
     private LocalDateTime deletedTime;
 
     protected void recordDeletedTime(final LocalDateTime deletedTime) {
