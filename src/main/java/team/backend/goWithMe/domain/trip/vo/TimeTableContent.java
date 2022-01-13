@@ -10,6 +10,7 @@ import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Access(AccessType.FIELD)
 @Embeddable
@@ -25,13 +26,28 @@ public class TimeTableContent {
         return new TimeTableContent(content);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.content);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof TimeTableContent))
+            return false;
+        TimeTableContent timeTableContent = (TimeTableContent)o;
+        return Objects.equals(this.content, timeTableContent.content);
+    }
+
     @JsonValue
     public String tableContent() {
         return this.content;
     }
 
-    public void resetContent() {
-        this.content = "";
+    public TimeTableContent resetContent() {
+        return new TimeTableContent("");
     }
 
     public boolean isBlank() {

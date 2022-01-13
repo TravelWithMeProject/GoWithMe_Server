@@ -10,6 +10,7 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static team.backend.goWithMe.global.error.exception.ErrorCode.INVALID_INPUT_VALUE;
 
@@ -44,6 +45,22 @@ public class TimeTablePeriod implements IPeriod {
     @Override
     public Duration ofDuration() {
         return Duration.between(totalStart, totalEnd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.totalStart, this.totalEnd);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof TimeTablePeriod))
+            return false;
+        TimeTablePeriod timeTablePeriod = (TimeTablePeriod)o;
+        return this.totalStart == timeTablePeriod.totalStart &&
+                this.totalEnd == timeTablePeriod.totalEnd;
     }
 
     @Override

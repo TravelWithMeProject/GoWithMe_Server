@@ -56,7 +56,7 @@ public class TimeTable extends BaseTimeEntity {
     }
 
     public void resetTableContent() {
-        this.content.resetContent();
+        this.content = this.content.resetContent();
     }
 
     public void changeTablePeriod(TimeTablePeriod timeTablePeriod) {
