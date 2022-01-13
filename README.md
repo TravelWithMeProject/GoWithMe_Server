@@ -49,7 +49,7 @@ https://www.erdcloud.com/d/GcshAdANHYPJ3tcF8
 
 ### Agile
 
-[!Agile](https://t1.daumcdn.net/cfile/tistory/25431136588F026E1D)
+![Agile](https://t1.daumcdn.net/cfile/tistory/25431136588F026E1D)
 
 위 사항을 지키기위해 저희 팀은 애자일 방법론을 도입하여 개발하고 있습니다. 요구사항이 들어오면 개발을 하고 단위 테스트를 진행하여 기능에 대한 검증을 합니다. 테스트를 마쳤다면 PR을
 올리게 됩니다. 그렇다면 이제 리뷰를 통해 필요한 부분을 리펙토링을 해야합니다. 단순 기능 구현이 아니기에 테스트 후에 코드를 클린 코드로 수정 후 저희는 개발팀은 다시 테스트를 진행하고
