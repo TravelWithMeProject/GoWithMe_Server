@@ -3,6 +3,7 @@ package team.backend.goWithMe.domain.trip.entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import team.backend.goWithMe.domain.trip.exception.TimeTableNameValidException;
 import team.backend.goWithMe.domain.trip.exception.TimeTablePeriodValidException;
 import team.backend.goWithMe.domain.trip.vo.TimeTableContent;
 import team.backend.goWithMe.domain.trip.vo.TimeTableName;
@@ -29,6 +30,46 @@ class TimeTableTest {
         TimeTablePeriod timeTablePeriod = TimeTablePeriod.between(OLD_PERIOD_START, OLD_PERIOD_END);
         this.timeTable = TimeTable.createTimeTable(timeTableName, timeTableContent,
                 timeTablePeriod);
+    }
+
+    @Test
+    @DisplayName("VO 객체 증명 테스트1 - 값이 같으면 같은 객체")
+    public void voEqualsTest1() throws Exception {
+        // given
+        TimeTablePeriod period = TimeTablePeriod.between(OLD_PERIOD_START, OLD_PERIOD_END);
+        TimeTableContent content = TimeTableContent.from(OLD_CONTENT);
+
+        // when
+        TimeTableName a = TimeTableName.from("a");
+        TimeTableName b = TimeTableName.from("a");
+
+        TimeTable aTable = TimeTable.createTimeTable(a, content, period);
+        TimeTable bTable = TimeTable.createTimeTable(b, content, period);
+        // then
+        assertNotEquals(aTable, bTable);
+        assertEquals(a, b);
+        assertEquals(aTable.getTableName(), bTable.getTableName());
+        assertEquals(aTable.getContent(), bTable.getContent());
+        assertEquals(aTable.getTotalPeriod(), bTable.getTotalPeriod());
+    }
+
+    @Test
+    @DisplayName("VO 객체 증명 테스트2 - 값이 다르면 다른 객체")
+    public void voEqualsTest2() throws Exception {
+        // given
+        TimeTablePeriod period = TimeTablePeriod.between(OLD_PERIOD_START, OLD_PERIOD_END);
+        TimeTableContent content = TimeTableContent.from(OLD_CONTENT);
+
+        // when
+        TimeTableName a = TimeTableName.from("a");
+        TimeTableName b = TimeTableName.from("b");
+
+        TimeTable aTable = TimeTable.createTimeTable(a, content, period);
+        TimeTable bTable = TimeTable.createTimeTable(b, content, period);
+        // then
+        assertNotEquals(aTable, bTable);
+        assertNotEquals(a, b);
+        assertNotEquals(aTable.getTableName(), bTable.getTableName());
     }
 
     @Test
@@ -74,16 +115,16 @@ class TimeTableTest {
     @DisplayName("시간표 명 변경 테스트")
     public void changeTimeTableNameTest() throws Exception {
         // given
-        String oldTableName = timeTable.getTableName().arrivalName();
+        TimeTableName oldTableName = timeTable.getTableName();
 
         // when
         timeTable.changeTableName(TimeTableName.from("일정2"));
 
         // then
-        String newTableName = timeTable.getTableName().arrivalName();
+        TimeTableName newTableName = timeTable.getTableName();
         assertNotEquals(oldTableName, newTableName);
-        assertEquals(OLD_NAME, oldTableName);
-        assertEquals("일정2", newTableName);
+        assertEquals(OLD_NAME, oldTableName.arrivalName());
+        assertEquals("일정2", newTableName.arrivalName());
     }
 
     @Test
@@ -91,8 +132,9 @@ class TimeTableTest {
     public void changeTimeTableNameToNullTest() throws Exception {
         // given
         // when, then
-        assertThrows(InvalidValueException.class, () -> timeTable.changeTableName(TimeTableName.from(null)));
-        assertThrows(InvalidValueException.class, () ->
+        assertThrows(TimeTableNameValidException.class, () ->
+                timeTable.changeTableName(TimeTableName.from(null)));
+        assertThrows(TimeTableNameValidException.class, () ->
                 timeTable.changeTableName(TimeTableName.from(null)),
                 "시간표 명은 필수입니다."
         );
@@ -103,7 +145,8 @@ class TimeTableTest {
     public void changeTimeTableNameToBlankTest() throws Exception {
         // given
         // when, then
-        assertThrows(InvalidValueException.class, () -> timeTable.changeTableName(TimeTableName.from("")));
+        assertThrows(TimeTableNameValidException.class, () ->
+                timeTable.changeTableName(TimeTableName.from("")));
     }
 
     @Test
@@ -111,32 +154,32 @@ class TimeTableTest {
     public void changeTableContentTest() throws Exception {
         // given
         final String NEW_CONTENT = "새 일정은 이러이러해~";
-        String oldContent = timeTable.getContent().tableContent();
+        TimeTableContent oldContent = timeTable.getContent();
 
         // when
         timeTable.changeTableContent(TimeTableContent.from(NEW_CONTENT));
 
         // then
-        String newContent = timeTable.getContent().tableContent();
+        TimeTableContent newContent = timeTable.getContent();
 
         assertNotEquals(oldContent, newContent);
-        assertEquals(OLD_CONTENT, oldContent);
-        assertEquals(NEW_CONTENT, newContent);
+        assertEquals(OLD_CONTENT, oldContent.tableContent());
+        assertEquals(NEW_CONTENT, newContent.tableContent());
     }
 
     @Test
     @DisplayName("시간표 내용 초기화 테스트")
     public void resetTableContentTest() throws Exception {
         // given
-        String oldContent = timeTable.getContent().tableContent();
+        TimeTableContent oldContent = timeTable.getContent();
         // when
         timeTable.resetTableContent();
         // then
-        String resetContent = timeTable.getContent().tableContent();
+        TimeTableContent resetContent = timeTable.getContent();
 
         assertNotEquals(oldContent, resetContent);
-        assertEquals(OLD_CONTENT, oldContent);
-        assertEquals("", resetContent);
+        assertEquals(OLD_CONTENT, oldContent.tableContent());
+        assertEquals("", resetContent.tableContent());
     }
 
     @Test
