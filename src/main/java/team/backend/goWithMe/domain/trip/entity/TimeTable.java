@@ -1,9 +1,6 @@
 package team.backend.goWithMe.domain.trip.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import team.backend.goWithMe.domain.trip.vo.TimeTableContent;
 import team.backend.goWithMe.domain.trip.vo.TimeTableName;
 import team.backend.goWithMe.domain.trip.vo.TimeTablePeriod;
@@ -38,15 +35,16 @@ public class TimeTable extends BaseTimeEntity {
         this.totalPeriod = totalPeriod;
     }
 
-    public static TimeTable createTimeTable(TimeTableName tableName, TimeTableContent content,
-                                            TimeTablePeriod totalPeriod) {
+    public static TimeTable createTimeTable(@NonNull TimeTableName tableName,
+                                            @NonNull TimeTableContent content,
+                                            @NonNull TimeTablePeriod totalPeriod) {
         return new TimeTable(tableName, content, totalPeriod);
     }
 
     //===== 비즈니스 메서드 =====//
 
-    public Duration ofDuration(TimeTablePeriod timeTablePeriod) {
-        return timeTablePeriod.ofDuration();
+    public Duration ofDuration() {
+        return this.totalPeriod.ofDuration();
     }
 
     public void changeTableName(TimeTableName timeTableName) {
