@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,5 +23,18 @@ public class MateProfileImg {
     @JsonValue
     public String mateProfileImg() {
         return profileImage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MateProfileImg that = (MateProfileImg) o;
+        return Objects.equals(profileImage, that.profileImage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(profileImage);
     }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Embeddable
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,5 +26,18 @@ public class MateNickName {
     @JsonValue
     public String mateNickname() {
         return mateNickname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MateNickName that = (MateNickName) o;
+        return Objects.equals(mateNickname, that.mateNickname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mateNickname);
     }
 }
