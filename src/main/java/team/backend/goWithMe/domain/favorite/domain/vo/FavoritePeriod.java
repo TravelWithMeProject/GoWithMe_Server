@@ -13,7 +13,7 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class FavoritePeriod {
+public final class FavoritePeriod {
 
     @Column(name = "start_time", nullable = false)
     private LocalDate startTime;
