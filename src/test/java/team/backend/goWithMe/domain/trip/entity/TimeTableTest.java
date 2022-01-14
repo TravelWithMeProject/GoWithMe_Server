@@ -3,12 +3,11 @@ package team.backend.goWithMe.domain.trip.entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.trip.exception.TimeTableNameValidException;
-import team.backend.goWithMe.domain.trip.exception.TimeTablePeriodValidException;
+import team.backend.goWithMe.domain.trip.exception.TimeTableNameInvalidException;
+import team.backend.goWithMe.domain.trip.exception.TimeTablePeriodInvalidException;
 import team.backend.goWithMe.domain.trip.vo.TimeTableContent;
 import team.backend.goWithMe.domain.trip.vo.TimeTableName;
 import team.backend.goWithMe.domain.trip.vo.TimeTablePeriod;
-import team.backend.goWithMe.global.error.exception.InvalidValueException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -132,9 +131,9 @@ class TimeTableTest {
     public void changeTimeTableNameToNullTest() throws Exception {
         // given
         // when, then
-        assertThrows(TimeTableNameValidException.class, () ->
+        assertThrows(TimeTableNameInvalidException.class, () ->
                 timeTable.changeTableName(TimeTableName.from(null)));
-        assertThrows(TimeTableNameValidException.class, () ->
+        assertThrows(TimeTableNameInvalidException.class, () ->
                 timeTable.changeTableName(TimeTableName.from(null)),
                 "시간표 명은 필수입니다."
         );
@@ -145,7 +144,7 @@ class TimeTableTest {
     public void changeTimeTableNameToBlankTest() throws Exception {
         // given
         // when, then
-        assertThrows(TimeTableNameValidException.class, () ->
+        assertThrows(TimeTableNameInvalidException.class, () ->
                 timeTable.changeTableName(TimeTableName.from("")));
     }
 
@@ -210,13 +209,13 @@ class TimeTableTest {
         LocalDateTime dateLaterThanTotalEnd4 = LocalDateTime.of(2023, 1, 10, 0, 0);
 
         // when, then
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(dateLaterThanTotalEnd1, OLD_PERIOD_START)));
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(dateLaterThanTotalEnd2, OLD_PERIOD_START)));
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(dateLaterThanTotalEnd3, OLD_PERIOD_START)));
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(dateLaterThanTotalEnd4, OLD_PERIOD_START)));
 
     }
@@ -250,11 +249,11 @@ class TimeTableTest {
         LocalDateTime dateEarlierThanTotalStart3 = LocalDateTime.of(2021, 12, 31, 23, 59);
 
         // when, then
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart1)));
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart2)));
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart3)));
 
     }
@@ -287,7 +286,7 @@ class TimeTableTest {
         LocalDateTime timeEndEarlierThanTimeStart = LocalDateTime.of(2022, 1, 1, 0, 0);
 
         // when, than
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(timeStart, timeEndEarlierThanTimeStart)));
     }
 
@@ -299,7 +298,7 @@ class TimeTableTest {
         LocalDateTime timeEndEqualToTimeStart = LocalDateTime.of(2022, 1, 1, 0, 0);
 
         // when, than
-        assertThrows(TimeTablePeriodValidException.class, () ->
+        assertThrows(TimeTablePeriodInvalidException.class, () ->
                 timeTable.changeTablePeriod(TimeTablePeriod.between(timeStart, timeEndEqualToTimeStart)));
     }
 

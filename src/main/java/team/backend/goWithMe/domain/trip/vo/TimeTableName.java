@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.trip.exception.TimeTableNameValidException;
-import team.backend.goWithMe.global.error.exception.InvalidValueException;
+import team.backend.goWithMe.domain.trip.exception.TimeTableNameInvalidException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Embeddable
@@ -49,7 +48,7 @@ public class TimeTableName {
 
     private static void validateTimeTableName(String tableName) {
         if (tableName == null || tableName.isBlank()) {
-            throw new TimeTableNameValidException("시간표 명은 필수입니다.");
+            throw new TimeTableNameInvalidException("시간표 명은 필수입니다.", ErrorCode.INVALID_INPUT_VALUE);
         }
     }
 }

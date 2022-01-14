@@ -8,6 +8,8 @@ import team.backend.goWithMe.global.common.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity @Getter
 @Table(name = "time_table")
@@ -27,6 +29,9 @@ public class TimeTable extends BaseTimeEntity {
 
     @Embedded
     private TimeTablePeriod totalPeriod;
+
+    @OneToMany(mappedBy = "timeTable", cascade = CascadeType.ALL) // member에 의해 maepped됐을 뿐이라는 표시
+    private List<Schedule> schedules = new ArrayList<>();
 
     private TimeTable(TimeTableName tableName, TimeTableContent content,
                       TimeTablePeriod totalPeriod) {
@@ -60,7 +65,7 @@ public class TimeTable extends BaseTimeEntity {
     }
 
     public void changeTablePeriod(TimeTablePeriod timeTablePeriod) {
-        this.totalPeriod.changePeriod(timeTablePeriod.getStart(), timeTablePeriod.getEnd());
+        this.totalPeriod.changePeriod(timeTablePeriod);
     }
 
     public void changeTimeTable(TimeTableName name, TimeTableContent content, TimeTablePeriod timeTablePeriod) {

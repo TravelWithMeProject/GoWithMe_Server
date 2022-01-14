@@ -47,7 +47,7 @@ public class TimeTableContent {
     }
 
     public TimeTableContent resetContent() {
-        return new TimeTableContent("");
+        return TimeTableContent.from("");
     }
 
     public boolean isBlank() {

@@ -3,7 +3,7 @@ package team.backend.goWithMe.domain.trip.vo;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.trip.exception.TimeTablePeriodValidException;
+import team.backend.goWithMe.domain.trip.exception.TimeTablePeriodInvalidException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -63,19 +63,18 @@ public class TimeTablePeriod implements IPeriod {
                 this.totalEnd == timeTablePeriod.totalEnd;
     }
 
-    @Override
-    public void changePeriod(LocalDateTime start, LocalDateTime end) {
-        validateTotalPeriod(start, end);
-        this.totalStart = start;
-        this.totalEnd = end;
+    public void changePeriod(TimeTablePeriod period) {
+        validateTotalPeriod(period.getStart(), period.getEnd());
+        this.totalStart = period.getStart();
+        this.totalEnd = period.getEnd();
     }
 
     private static void validateTotalPeriod(LocalDateTime totalStart, LocalDateTime totalEnd) {
         if (totalStart.isAfter(totalEnd)) {
-            throw new TimeTablePeriodValidException("전체일정 시작 시점과 끝 시점이 반대입니다.", INVALID_INPUT_VALUE);
+            throw new TimeTablePeriodInvalidException("전체일정 시작 시점과 끝 시점이 반대입니다.", INVALID_INPUT_VALUE);
         }
         if (totalStart.isEqual(totalEnd)) {
-            throw new TimeTablePeriodValidException("전체일정이 0(끝지점과 시작지점이 같음)이 될 수 없습니다.", INVALID_INPUT_VALUE);
+            throw new TimeTablePeriodInvalidException("전체일정이 0(끝지점과 시작지점이 같음)이 될 수 없습니다.", INVALID_INPUT_VALUE);
         }
     }
 }

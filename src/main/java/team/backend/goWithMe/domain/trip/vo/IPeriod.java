@@ -4,11 +4,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public interface IPeriod {
-    public abstract LocalDateTime getStart();
 
-    public abstract LocalDateTime getEnd();
+    LocalDateTime getStart();
 
-    public abstract Duration ofDuration();
+    LocalDateTime getEnd();
+
+    Duration ofDuration();
 
 //    public void changeTotalPeriodStart(LocalDateTime newTotalStart) {
 //        validateTotalPeriod(newTotalStart, this.totalEnd);
@@ -20,5 +21,4 @@ public interface IPeriod {
 //        this.totalEnd = newTotalEnd;
 //    }
 
-    public abstract void changePeriod(LocalDateTime start, LocalDateTime end);
 }
