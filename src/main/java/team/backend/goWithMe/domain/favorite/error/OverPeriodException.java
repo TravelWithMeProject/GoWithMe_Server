@@ -1,4 +1,4 @@
-package team.backend.goWithMe.domain.favorite.domain.error;
+package team.backend.goWithMe.domain.favorite.error;
 
 public class OverPeriodException extends FavoriteBusinessException {
 

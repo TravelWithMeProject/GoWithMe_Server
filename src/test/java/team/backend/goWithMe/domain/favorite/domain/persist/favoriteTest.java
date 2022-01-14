@@ -2,7 +2,7 @@ package team.backend.goWithMe.domain.favorite.domain.persist;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.favorite.domain.error.OverPeriodException;
+import team.backend.goWithMe.domain.favorite.error.OverPeriodException;
 import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoritePeriod;
