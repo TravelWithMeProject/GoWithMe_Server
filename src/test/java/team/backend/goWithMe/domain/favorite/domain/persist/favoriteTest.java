@@ -2,7 +2,7 @@ package team.backend.goWithMe.domain.favorite.domain.persist;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.favorite.domain.error.WrongPeriodException;
+import team.backend.goWithMe.domain.favorite.domain.error.OverPeriodException;
 import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoritePeriod;
@@ -45,7 +45,7 @@ class favoriteTest {
         FavoritePeriod givenPeriod = FavoritePeriod.of(givenStart, givenEnd);
 
         // then
-        assertThrows(WrongPeriodException.class, () -> {
+        assertThrows(OverPeriodException.class, () -> {
             Favorite favorite = Favorite.createFavorite(givenArrival, givenHome, givenPeriod);
         });
     }

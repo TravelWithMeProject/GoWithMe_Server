@@ -1,10 +1,8 @@
 package team.backend.goWithMe.domain.favorite.domain.persist;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.favorite.domain.error.WrongPeriodException;
+import team.backend.goWithMe.domain.favorite.domain.error.OverPeriodException;
 import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoritePeriod;
@@ -40,8 +38,8 @@ public class Favorite {
      */
     public static Favorite createFavorite(final FavoriteArrival favoriteArrival, final Accommodation accommodation,
                                           final FavoritePeriod favoritePeriod) {
-        if (favoritePeriod.isPeriod(favoritePeriod.startTime(), favoritePeriod.endTime())) {
-            throw new WrongPeriodException("시작 날짜가 마지막 날짜 보다 앞서있습니다.");
+        if (favoritePeriod.overPeriod(favoritePeriod.startTime(), favoritePeriod.endTime())) {
+            throw new OverPeriodException("시작 날짜가 마지막 날짜 보다 앞서있습니다.");
         }
 
         return new Favorite(favoriteArrival, accommodation, favoritePeriod);
@@ -50,8 +48,8 @@ public class Favorite {
     public void updateFavorite(final FavoriteArrival favoriteArrival, final Accommodation accommodation,
                                final FavoritePeriod favoritePeriod) {
 
-        if (favoritePeriod.isPeriod(favoritePeriod.startTime(), favoritePeriod.endTime())) {
-            throw new WrongPeriodException("시작 날짜가 마지막 날짜 보다 앞서있습니다.");
+        if (favoritePeriod.overPeriod(favoritePeriod.startTime(), favoritePeriod.endTime())) {
+            throw new OverPeriodException("시작 날짜가 마지막 날짜 보다 앞서있습니다.");
         }
 
         changeArrival(favoriteArrival);

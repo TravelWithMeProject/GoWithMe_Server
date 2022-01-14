@@ -25,7 +25,7 @@ public class FavoritePeriod {
         return new FavoritePeriod(startTime, endTime);
     }
 
-    public boolean isPeriod(final LocalDate startTime, final LocalDate endTime) {
+    public boolean overPeriod(final LocalDate startTime, final LocalDate endTime) {
         return startTime.isAfter(endTime);
     }
 
