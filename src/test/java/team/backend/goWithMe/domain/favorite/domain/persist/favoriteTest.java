@@ -2,6 +2,7 @@ package team.backend.goWithMe.domain.favorite.domain.persist;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import team.backend.goWithMe.domain.favorite.domain.error.WrongPeriodException;
 import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoritePeriod;
@@ -31,5 +32,21 @@ class favoriteTest {
         // then
         assertThat(favorite.getFavoriteArrival()).isEqualTo(FavoriteArrival.from("canada"));
         assertThat(favorite.getAccommodation()).isEqualTo(Accommodation.from("guestHouse"));
+    }
+
+    @Test
+    @DisplayName("여행 시작기간이 종료기간보다 길면 WrongPeriodException이 발생한다.")
+    void wrongPeriod() {
+        //given
+        FavoriteArrival givenArrival = FavoriteArrival.from("U.S.A");
+        Accommodation givenHome = Accommodation.from("hotel");
+        LocalDate givenStart = LocalDate.of(2022, 3, 2);
+        LocalDate givenEnd = LocalDate.of(2022, 2, 2);
+        FavoritePeriod givenPeriod = FavoritePeriod.of(givenStart, givenEnd);
+
+        // then
+        assertThrows(WrongPeriodException.class, () -> {
+            Favorite favorite = Favorite.createFavorite(givenArrival, givenHome, givenPeriod);
+        });
     }
 }
