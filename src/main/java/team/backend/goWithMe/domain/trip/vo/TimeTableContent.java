@@ -16,7 +16,7 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class TimeTableContent {
+public final class TimeTableContent {
 
     @NotNull
     @Column(name = "content", columnDefinition = "TEXT")
@@ -28,7 +28,7 @@ public class TimeTableContent {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.content);
+        return Objects.hash(this.tableContent());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TimeTableContent {
         if (!(o instanceof TimeTableContent))
             return false;
         TimeTableContent timeTableContent = (TimeTableContent)o;
-        return Objects.equals(this.content, timeTableContent.content);
+        return Objects.equals(this.tableContent(), timeTableContent.content);
     }
 
     @JsonValue
@@ -50,9 +50,9 @@ public class TimeTableContent {
         return TimeTableContent.from("");
     }
 
-    public boolean isBlank() {
-        return this.content.length() == 0;
-    }
+//    public boolean isBlank() {
+//        return this.content.length() == 0;
+//    }
 
 
 }

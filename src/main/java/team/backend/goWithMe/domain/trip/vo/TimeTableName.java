@@ -15,7 +15,7 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class TimeTableName {
+public final class TimeTableName {
 
     @NotBlank
     @Column(name = "table_name", length = 50) // 한글 기준 25자 제한
@@ -28,7 +28,7 @@ public class TimeTableName {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.tableName);
+        return Objects.hash(timeTableName());
     }
 
     @Override
@@ -38,11 +38,11 @@ public class TimeTableName {
         if (!(o instanceof TimeTableName))
             return false;
         TimeTableName name = (TimeTableName)o;
-        return Objects.equals(this.tableName, name.tableName);
+        return Objects.equals(timeTableName(), name.tableName);
     }
 
     @JsonValue
-    public String arrivalName() {
+    public String timeTableName() {
         return this.tableName;
     }
 

@@ -17,7 +17,7 @@ import static team.backend.goWithMe.global.error.exception.ErrorCode.INVALID_INP
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class TimeTablePeriod implements IPeriod {
+public final class TimeTablePeriod{
 
     @NotNull
     @Column(name = "total_start")
@@ -32,24 +32,21 @@ public class TimeTablePeriod implements IPeriod {
         return new TimeTablePeriod(totalStart, totalEnd);
     }
 
-    @Override
-    public LocalDateTime getStart() {
+    public LocalDateTime totalPeriodStart() {
         return totalStart;
     }
 
-    @Override
-    public LocalDateTime getEnd() {
+    public LocalDateTime totalPeriodEnd() {
         return totalEnd;
     }
 
-    @Override
     public Duration ofDuration() {
         return Duration.between(totalStart, totalEnd);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.totalStart, this.totalEnd);
+        return Objects.hash(this.totalPeriodStart(), this.totalPeriodEnd());
     }
 
     @Override
@@ -59,14 +56,14 @@ public class TimeTablePeriod implements IPeriod {
         if (!(o instanceof TimeTablePeriod))
             return false;
         TimeTablePeriod timeTablePeriod = (TimeTablePeriod)o;
-        return this.totalStart == timeTablePeriod.totalStart &&
-                this.totalEnd == timeTablePeriod.totalEnd;
+        return this.totalPeriodStart() == timeTablePeriod.totalStart &&
+                this.totalPeriodEnd() == timeTablePeriod.totalEnd;
     }
 
     public void changePeriod(TimeTablePeriod period) {
-        validateTotalPeriod(period.getStart(), period.getEnd());
-        this.totalStart = period.getStart();
-        this.totalEnd = period.getEnd();
+        validateTotalPeriod(period.totalPeriodStart(), period.totalPeriodEnd());
+        this.totalStart = period.totalPeriodStart();
+        this.totalEnd = period.totalPeriodEnd();
     }
 
     private static void validateTotalPeriod(LocalDateTime totalStart, LocalDateTime totalEnd) {
