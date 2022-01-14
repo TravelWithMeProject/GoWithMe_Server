@@ -12,7 +12,7 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class MateProfileImg {
+public final class MateProfileImg {
 
     @Column(name = "profile_url", nullable = false)
     private String profileImage;
@@ -30,11 +30,11 @@ public class MateProfileImg {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MateProfileImg that = (MateProfileImg) o;
-        return Objects.equals(profileImage, that.profileImage);
+        return Objects.equals(mateProfileImg(), that.profileImage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(profileImage);
+        return Objects.hash(mateProfileImg());
     }
 }

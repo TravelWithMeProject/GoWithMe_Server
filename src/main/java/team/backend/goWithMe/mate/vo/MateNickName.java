@@ -13,7 +13,7 @@ import java.util.Objects;
 @Embeddable
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MateNickName {
+public final class MateNickName {
 
     @Column(name = "nickName", nullable = false)
     @NotBlank(message = "친구 별명은 필수 입력 사항입니다.")
@@ -33,11 +33,11 @@ public class MateNickName {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MateNickName that = (MateNickName) o;
-        return Objects.equals(mateNickname, that.mateNickname);
+        return Objects.equals(mateNickname(), that.mateNickname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mateNickname);
+        return Objects.hash(mateNickname());
     }
 }

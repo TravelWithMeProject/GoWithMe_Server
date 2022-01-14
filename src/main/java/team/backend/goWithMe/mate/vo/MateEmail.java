@@ -35,11 +35,11 @@ public final class MateEmail {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MateEmail mateEmail = (MateEmail) o;
-        return Objects.equals(email, mateEmail.email);
+        return Objects.equals(mateEmail(), mateEmail.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email);
+        return Objects.hash(mateEmail());
     }
 }

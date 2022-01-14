@@ -37,9 +37,9 @@ public class MateList {
 
     @Builder
     public MateList(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg) {
-        Assert.hasText(mateEmail.mateEmail(), "mateEmail must not be empty");
-        Assert.hasText(mateNickName.mateNickname(), "mateNickName must not be empty");
-        Assert.hasText(mateProfileImg.mateProfileImg(),"mateProfileImg must not be empty");
+        Assert.hasText(mateEmail.mateEmail(),"이메일이 없습니다.");
+        Assert.hasText(mateNickName.mateNickname(), "닉네임이 없습니다.");
+        Assert.hasText(mateProfileImg.mateProfileImg(),"프로필 이미지가 없습니다.");
         this.mateEmail = mateEmail;
         this.mateNickname = mateNickName;
         this.mateProfileImg = mateProfileImg;
@@ -48,6 +48,12 @@ public class MateList {
 //    private List<Mate> team.backend.goWithMe.mate = new ArrayList<>();
 
     /*비즈니스 메서드*/
+
+    public void updateMateList(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg) {
+        changeEmail(mateEmail);
+        changeNickName(mateNickName);
+        changeMateProfileImg(mateProfileImg);
+    }
 
     private void changeEmail(MateEmail mateEmail) {
         this.mateEmail = mateEmail;
@@ -61,9 +67,5 @@ public class MateList {
         this.mateProfileImg = mateProfileImg;
     }
 
-    public void update(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg) {
-        changeEmail(mateEmail);
-        changeNickName(mateNickName);
-        changeMateProfileImg(mateProfileImg);
-    }
+
 }

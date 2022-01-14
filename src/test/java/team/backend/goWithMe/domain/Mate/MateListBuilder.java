@@ -8,8 +8,7 @@ import team.backend.goWithMe.mate.vo.MateProfileImg;
 public class MateListBuilder {
 
     public static MateList build() {
-        final String value = "shinsw6455@naver.com";
-        final MateEmail mateEmail = MateEmail.from(value);
+        final MateEmail mateEmail = MateEmail.from("shinsw6455@naver.com");
         final MateNickName mateNickName = MateNickName.from("ssw");
         final MateProfileImg mateProfileImg = MateProfileImg.from("dfdf");
         return createMateList(mateEmail, mateNickName, mateProfileImg);
