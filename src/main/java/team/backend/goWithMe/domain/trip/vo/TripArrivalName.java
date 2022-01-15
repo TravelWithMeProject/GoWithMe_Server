@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import team.backend.goWithMe.domain.trip.exception.TripNameValidException;
-import team.backend.goWithMe.global.error.exception.InvalidValueException;
+import team.backend.goWithMe.domain.trip.exception.TimeTableNameInvalidException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -35,7 +33,7 @@ public class TripArrivalName {
 
     private static void validateTripArrivalName(String arrivalName) {
         if (arrivalName == null || arrivalName.isBlank()) {
-            throw new TripNameValidException("여행지 명은 필수입니다.", INVALID_INPUT_VALUE);
+            throw new TimeTableNameInvalidException("여행지 명은 필수입니다.", INVALID_INPUT_VALUE);
         }
     }
 }
