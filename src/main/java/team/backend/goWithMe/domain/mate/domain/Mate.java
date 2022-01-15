@@ -1,4 +1,4 @@
-package team.backend.goWithMe.mate.domain;
+package team.backend.goWithMe.domain.mate.domain;
 
 import javax.persistence.*;
 
