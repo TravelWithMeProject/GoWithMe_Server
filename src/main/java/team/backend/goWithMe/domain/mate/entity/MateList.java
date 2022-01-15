@@ -1,13 +1,13 @@
-package team.backend.goWithMe.mate.domain;
+package team.backend.goWithMe.domain.mate.entity;
 
 import io.jsonwebtoken.lang.Assert;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.mate.vo.MateEmail;
-import team.backend.goWithMe.mate.vo.MateNickName;
-import team.backend.goWithMe.mate.vo.MateProfileImg;
+import team.backend.goWithMe.domain.mate.vo.MateEmail;
+import team.backend.goWithMe.domain.mate.vo.MateNickName;
+import team.backend.goWithMe.domain.mate.vo.MateProfileImg;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -45,7 +45,7 @@ public class MateList {
         this.mateProfileImg = mateProfileImg;
     }
 //    @OneToMany(mappedBy = "mateList")
-//    private List<Mate> team.backend.goWithMe.mate = new ArrayList<>();
+//    private List<Mate> team.backend.goWithMe.domain.mate = new ArrayList<>();
 
     /*비즈니스 메서드*/
 

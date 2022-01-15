@@ -4,11 +4,10 @@ import org.junit.Test;
 
 import org.junit.jupiter.api.DisplayName;
 
-import team.backend.goWithMe.mate.domain.Mate;
-import team.backend.goWithMe.mate.domain.MateList;
-import team.backend.goWithMe.mate.vo.MateEmail;
-import team.backend.goWithMe.mate.vo.MateNickName;
-import team.backend.goWithMe.mate.vo.MateProfileImg;
+import team.backend.goWithMe.domain.mate.entity.MateList;
+import team.backend.goWithMe.domain.mate.vo.MateEmail;
+import team.backend.goWithMe.domain.mate.vo.MateNickName;
+import team.backend.goWithMe.domain.mate.vo.MateProfileImg;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
