@@ -1,13 +1,13 @@
-package team.backend.goWithMe.domain.mate.entity;
+package team.backend.goWithMe.domain.mate.domain.persist;
 
 import io.jsonwebtoken.lang.Assert;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.mate.vo.MateEmail;
-import team.backend.goWithMe.domain.mate.vo.MateNickName;
-import team.backend.goWithMe.domain.mate.vo.MateProfileImg;
+import team.backend.goWithMe.domain.mate.domain.vo.MateEmail;
+import team.backend.goWithMe.domain.mate.domain.vo.MateNickName;
+import team.backend.goWithMe.domain.mate.domain.vo.MateProfileImg;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

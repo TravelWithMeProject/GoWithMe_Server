@@ -1,9 +1,9 @@
 package team.backend.goWithMe.domain.Mate;
 
-import team.backend.goWithMe.domain.mate.entity.MateList;
-import team.backend.goWithMe.domain.mate.vo.MateEmail;
-import team.backend.goWithMe.domain.mate.vo.MateNickName;
-import team.backend.goWithMe.domain.mate.vo.MateProfileImg;
+import team.backend.goWithMe.domain.mate.domain.persist.MateList;
+import team.backend.goWithMe.domain.mate.domain.vo.MateEmail;
+import team.backend.goWithMe.domain.mate.domain.vo.MateNickName;
+import team.backend.goWithMe.domain.mate.domain.vo.MateProfileImg;
 
 public class MateListBuilder {
 

@@ -1,4 +1,4 @@
-package team.backend.goWithMe.domain.mate.entity;
+package team.backend.goWithMe.domain.mate.domain.persist;
 
 import java.io.Serializable;
 
