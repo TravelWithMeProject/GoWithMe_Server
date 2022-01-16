@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.domain.trip.exception.TimeTableNameInvalidException;
+import team.backend.goWithMe.global.error.exception.CommonErrorCode;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
@@ -48,7 +49,7 @@ public final class TimeTableName {
 
     private static void validateTimeTableName(String tableName) {
         if (tableName == null || tableName.isBlank()) {
-            throw new TimeTableNameInvalidException("시간표 명은 필수입니다.", ErrorCode.INVALID_INPUT_VALUE);
+            throw new TimeTableNameInvalidException("시간표 명은 필수입니다.", CommonErrorCode.INVALID_INPUT_VALUE);
         }
     }
 }
