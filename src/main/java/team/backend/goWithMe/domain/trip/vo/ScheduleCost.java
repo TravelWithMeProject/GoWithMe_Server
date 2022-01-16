@@ -23,11 +23,11 @@ public final class ScheduleCost {
         return this.amount;
     }
 
-    public ScheduleCost plus(IMoney amount) {
+    public ScheduleCost plus(ScheduleCost amount) {
         return new ScheduleCost(this.amount += amount.getAmount());
     }
 
-    public ScheduleCost minus(IMoney amount) {
+    public ScheduleCost minus(ScheduleCost amount) {
         return new ScheduleCost(this.amount -= amount.getAmount());
     }
 
@@ -35,15 +35,15 @@ public final class ScheduleCost {
         return new ScheduleCost(this.amount = (long)(this.amount * ratio));
     }
 
-    public boolean isLessThan(IMoney other) {
+    public boolean isLessThan(ScheduleCost other) {
         return amount.compareTo(other.getAmount()) < 0;
     }
 
-    public boolean isGreaterThan(IMoney other) {
+    public boolean isGreaterThan(ScheduleCost other) {
         return amount.compareTo(other.getAmount()) > 0;
     }
 
-    public boolean isEqualTo(IMoney other) {
+    public boolean isEqualTo(ScheduleCost other) {
         return amount.compareTo(other.getAmount()) == 0;
     }
 }
