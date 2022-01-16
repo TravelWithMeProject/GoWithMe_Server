@@ -10,7 +10,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ScheduleCost {
+public final class ScheduleCost {
 
     @Column(name = "schedule_cost")
     private Long amount;

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ScheduleTitle {
+public final class ScheduleTitle {
 
     @NotBlank
     @Column(name = "schedule_title", length = 50) // 한글 기준 25자 제한

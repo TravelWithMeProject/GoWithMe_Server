@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class SchedulePeriod{
+public final class SchedulePeriod{
 
     @NotNull
     @Column(name = "detail_start")

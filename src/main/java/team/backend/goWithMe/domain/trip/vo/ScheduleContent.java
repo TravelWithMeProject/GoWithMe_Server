@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ScheduleContent {
+public final class ScheduleContent {
 
     @NotNull
     @Column(name = "schedule_content", columnDefinition = "TEXT")
