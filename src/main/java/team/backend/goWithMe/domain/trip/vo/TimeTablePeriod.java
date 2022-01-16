@@ -1,5 +1,6 @@
 package team.backend.goWithMe.domain.trip.vo;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static team.backend.goWithMe.global.error.exception.ErrorCode.INVALID_INPUT_VALUE;
+import static team.backend.goWithMe.global.error.exception.CommonErrorCode.INVALID_INPUT_VALUE;
+
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,10 +34,12 @@ public final class TimeTablePeriod{
         return new TimeTablePeriod(totalStart, totalEnd);
     }
 
+    @JsonValue
     public LocalDateTime totalPeriodStart() {
         return totalStart;
     }
 
+    @JsonValue
     public LocalDateTime totalPeriodEnd() {
         return totalEnd;
     }
