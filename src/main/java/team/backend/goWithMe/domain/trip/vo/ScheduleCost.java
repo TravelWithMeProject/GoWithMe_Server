@@ -1,11 +1,13 @@
 package team.backend.goWithMe.domain.trip.vo;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,16 +21,32 @@ public final class ScheduleCost {
         return new ScheduleCost(amount);
     }
 
-    public Long getAmount() {
+    @JsonValue
+    public Long amount() {
         return this.amount;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof ScheduleCost))
+            return false;
+        ScheduleCost cost = (ScheduleCost)o;
+        return amount().equals(cost.amount);
+    }
+
     public ScheduleCost plus(ScheduleCost amount) {
-        return new ScheduleCost(this.amount += amount.getAmount());
+        return new ScheduleCost(this.amount += amount.amount());
     }
 
     public ScheduleCost minus(ScheduleCost amount) {
-        return new ScheduleCost(this.amount -= amount.getAmount());
+        return new ScheduleCost(this.amount -= amount.amount());
     }
 
     public ScheduleCost times(double ratio) {
@@ -36,14 +54,14 @@ public final class ScheduleCost {
     }
 
     public boolean isLessThan(ScheduleCost other) {
-        return amount.compareTo(other.getAmount()) < 0;
+        return amount.compareTo(other.amount()) < 0;
     }
 
     public boolean isGreaterThan(ScheduleCost other) {
-        return amount.compareTo(other.getAmount()) > 0;
+        return amount.compareTo(other.amount()) > 0;
     }
 
     public boolean isEqualTo(ScheduleCost other) {
-        return amount.compareTo(other.getAmount()) == 0;
+        return amount.compareTo(other.amount()) == 0;
     }
 }

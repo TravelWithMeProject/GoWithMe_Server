@@ -1,5 +1,6 @@
 package team.backend.goWithMe.domain.trip.vo;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,12 +26,30 @@ public final class SchedulePeriod{
     @Column(name = "detail_end")
     private LocalDateTime detailEnd;
 
+    @JsonValue
     public LocalDateTime scheduleDetailStart() {
         return this.detailStart;
     }
 
+    @JsonValue
     public LocalDateTime scheduleDetailEnd() {
         return this.detailEnd;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.scheduleDetailStart(), this.scheduleDetailEnd());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof SchedulePeriod))
+            return false;
+        SchedulePeriod period = (SchedulePeriod)o;
+        return Objects.equals(this.scheduleDetailStart(), period.detailStart) &&
+                Objects.equals(this.scheduleDetailEnd(), period.detailEnd);
     }
 
     public static SchedulePeriod between(LocalDateTime detailStart, LocalDateTime detailEnd, TimeTablePeriod totalPeriod) {

@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,6 +30,21 @@ public final class ScheduleTitle {
     @JsonValue
     public String scheduleTitle() {
         return this.title;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.scheduleTitle());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof ScheduleTitle))
+            return false;
+        ScheduleTitle title = (ScheduleTitle)o;
+        return Objects.equals(this.scheduleTitle(), title.title);
     }
 
     private static void validateScheduleTitle(String scheduleTitle) {

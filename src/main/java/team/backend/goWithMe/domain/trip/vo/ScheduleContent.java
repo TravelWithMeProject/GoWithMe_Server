@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,7 +28,23 @@ public final class ScheduleContent {
         return this.scheduleContent;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(scheduleContent());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof ScheduleContent))
+            return false;
+        ScheduleContent content = (ScheduleContent)o;
+        return Objects.equals(scheduleContent(), content.scheduleContent);
+    }
+
     public ScheduleContent clearScheduleContent() {
         return new ScheduleContent("");
     }
+
 }
