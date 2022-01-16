@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import team.backend.goWithMe.domain.favorite.domain.error.OverPeriodException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -22,10 +23,14 @@ public final class FavoritePeriod {
     private LocalDate endTime;
 
     public static FavoritePeriod of(final LocalDate startTime, final LocalDate endTime) {
+        if (overPeriod(startTime, endTime)) {
+            throw new OverPeriodException("시작 날짜가 마지막 날짜 보다 앞서있습니다.");
+        }
+
         return new FavoritePeriod(startTime, endTime);
     }
 
-    public boolean overPeriod(final LocalDate startTime, final LocalDate endTime) {
+    private static boolean overPeriod(final LocalDate startTime, final LocalDate endTime) {
         return startTime.isAfter(endTime);
     }
 

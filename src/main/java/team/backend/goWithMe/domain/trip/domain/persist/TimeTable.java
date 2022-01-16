@@ -1,15 +1,13 @@
-package team.backend.goWithMe.domain.trip.entity;
+package team.backend.goWithMe.domain.trip.domain.persist;
 
 import lombok.*;
-import team.backend.goWithMe.domain.trip.vo.TimeTableContent;
-import team.backend.goWithMe.domain.trip.vo.TimeTableName;
-import team.backend.goWithMe.domain.trip.vo.TimeTablePeriod;
+import team.backend.goWithMe.domain.trip.domain.vo.TimeTableContent;
+import team.backend.goWithMe.domain.trip.domain.vo.TimeTableName;
+import team.backend.goWithMe.domain.trip.domain.vo.TimeTablePeriod;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity @Getter
 @Table(name = "time_table")
@@ -30,8 +28,8 @@ public class TimeTable extends BaseTimeEntity {
     @Embedded
     private TimeTablePeriod totalPeriod;
 
-    @OneToMany(mappedBy = "timeTable", cascade = CascadeType.ALL) // member에 의해 maepped됐을 뿐이라는 표시
-    private List<Schedule> schedules = new ArrayList<>();
+//    @OneToMany(mappedBy = "timeTable", cascade = CascadeType.ALL) // member에 의해 maepped됐을 뿐이라는 표시
+//    private List<Schedule> schedules = new ArrayList<>();
 
     public static TimeTable createTimeTable(@NonNull TimeTableName tableName,
                                             @NonNull TimeTableContent content,
@@ -47,8 +45,6 @@ public class TimeTable extends BaseTimeEntity {
     }
 
     //===== 비즈니스 메서드 =====//
-
-
     public void changeTimeTable(TimeTableName name, TimeTableContent content, TimeTablePeriod timeTablePeriod) {
         changeTableName(name);
         changeTableContent(content);
@@ -74,7 +70,4 @@ public class TimeTable extends BaseTimeEntity {
     private void changeTablePeriod(TimeTablePeriod timeTablePeriod) {
         this.totalPeriod.changePeriod(timeTablePeriod);
     }
-
-
-
 }

@@ -1,4 +1,4 @@
-package team.backend.goWithMe.domain.trip.vo;
+package team.backend.goWithMe.domain.trip.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;

@@ -1,10 +1,10 @@
-package team.backend.goWithMe.domain.trip.entity;
+package team.backend.goWithMe.domain.trip.domain.persist;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.trip.exception.ScheduleTitleInvalidException;
-import team.backend.goWithMe.domain.trip.vo.*;
+import team.backend.goWithMe.domain.trip.error.ScheduleTitleInvalidException;
+import team.backend.goWithMe.domain.trip.domain.vo.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

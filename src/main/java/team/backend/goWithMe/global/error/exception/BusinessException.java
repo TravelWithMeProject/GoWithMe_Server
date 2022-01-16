@@ -2,7 +2,7 @@ package team.backend.goWithMe.global.error.exception;
 
 public class BusinessException extends RuntimeException {
 
-    private CommonErrorCode commonErrorCode;
+    private final CommonErrorCode commonErrorCode;
 
     public BusinessException(String message, CommonErrorCode commonErrorCode) {
         super(message);

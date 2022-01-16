@@ -1,13 +1,13 @@
-package team.backend.goWithMe.domain.trip.entity;
+package team.backend.goWithMe.domain.trip.domain.persist;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.trip.exception.TimeTableNameInvalidException;
-import team.backend.goWithMe.domain.trip.exception.TimeTablePeriodInvalidException;
-import team.backend.goWithMe.domain.trip.vo.TimeTableContent;
-import team.backend.goWithMe.domain.trip.vo.TimeTableName;
-import team.backend.goWithMe.domain.trip.vo.TimeTablePeriod;
+import team.backend.goWithMe.domain.trip.error.TimeTableNameInvalidException;
+import team.backend.goWithMe.domain.trip.error.TimeTablePeriodInvalidException;
+import team.backend.goWithMe.domain.trip.domain.vo.TimeTableContent;
+import team.backend.goWithMe.domain.trip.domain.vo.TimeTableName;
+import team.backend.goWithMe.domain.trip.domain.vo.TimeTablePeriod;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

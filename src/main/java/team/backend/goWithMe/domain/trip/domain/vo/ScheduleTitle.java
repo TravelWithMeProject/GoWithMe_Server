@@ -1,16 +1,14 @@
-package team.backend.goWithMe.domain.trip.vo;
+package team.backend.goWithMe.domain.trip.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.trip.exception.ScheduleTitleInvalidException;
-import team.backend.goWithMe.global.error.exception.InvalidValueException;
+import team.backend.goWithMe.domain.trip.error.ScheduleTitleInvalidException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Embeddable

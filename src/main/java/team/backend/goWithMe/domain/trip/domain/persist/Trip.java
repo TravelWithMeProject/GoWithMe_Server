@@ -1,11 +1,10 @@
-package team.backend.goWithMe.domain.trip.entity;
+package team.backend.goWithMe.domain.trip.domain.persist;
 
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
-import team.backend.goWithMe.domain.trip.vo.TripArrivalCount;
-import team.backend.goWithMe.domain.trip.vo.TripArrivalImg;
-import team.backend.goWithMe.domain.trip.vo.TripArrivalName;
+import team.backend.goWithMe.domain.trip.domain.vo.TripArrivalCount;
+import team.backend.goWithMe.domain.trip.domain.vo.TripArrivalImg;
+import team.backend.goWithMe.domain.trip.domain.vo.TripArrivalName;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 

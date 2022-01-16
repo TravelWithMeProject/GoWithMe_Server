@@ -1,10 +1,10 @@
-package team.backend.goWithMe.domain.trip.vo;
+package team.backend.goWithMe.domain.trip.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.trip.exception.TimeTableNameInvalidException;
+import team.backend.goWithMe.domain.trip.error.TimeTableNameInvalidException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -1,7 +1,7 @@
-package team.backend.goWithMe.domain.trip.entity;
+package team.backend.goWithMe.domain.trip.domain.persist;
 
 import lombok.*;
-import team.backend.goWithMe.domain.trip.vo.*;
+import team.backend.goWithMe.domain.trip.domain.vo.*;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
 
 import javax.persistence.*;
