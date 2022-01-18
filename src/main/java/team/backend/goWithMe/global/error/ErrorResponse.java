@@ -1,25 +1,25 @@
-package team.backend.goWithMe.domain.member.error.exception;
+package team.backend.goWithMe.global.error;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.member.error.UserErrorCode;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserErrorResponse {
+public class ErrorResponse {
 
     private String message;
     private int status;
     private String code;
 
-    private UserErrorResponse(final UserErrorCode code) {
+    private ErrorResponse(final ErrorCode code) {
         this.message = code.message();
         this.status = code.status();
         this.code = code.code();
     }
 
-    public static UserErrorResponse of(UserErrorCode userErrorCode) {
-        return new UserErrorResponse(userErrorCode);
+    public static ErrorResponse of(ErrorCode commonErrorCode) {
+        return new ErrorResponse(commonErrorCode);
     }
 }

@@ -1,20 +1,16 @@
 package team.backend.goWithMe.global.error.exception;
 
+// Business root Exception
 public class BusinessException extends RuntimeException {
 
-    private final CommonErrorCode commonErrorCode;
+    private final ErrorCode ErrorCode;
 
-    public BusinessException(String message, CommonErrorCode commonErrorCode) {
+    public BusinessException(String message, ErrorCode errorCode) {
         super(message);
-        this.commonErrorCode = commonErrorCode;
+        this.ErrorCode = errorCode;
     }
 
-    public BusinessException(CommonErrorCode commonErrorCode) {
-        super(commonErrorCode.message());
-        this.commonErrorCode = commonErrorCode;
-    }
-
-    public CommonErrorCode getErrorCode() {
-        return commonErrorCode;
+    public ErrorCode getErrorCode() {
+        return ErrorCode;
     }
 }
