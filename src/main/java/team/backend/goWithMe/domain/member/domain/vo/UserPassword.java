@@ -5,9 +5,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import team.backend.goWithMe.domain.member.error.UserErrorCode;
 import team.backend.goWithMe.domain.member.error.exception.PasswordMissMatchException;
 import team.backend.goWithMe.domain.member.error.exception.PasswordNullException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -34,18 +34,31 @@ public final class UserPassword {
 
     private static void validateBlank(String rawPassword) {
         if (Objects.isNull(rawPassword) || rawPassword.isBlank()) {
-            throw new PasswordNullException(UserErrorCode.PASSWORD_NULL_ERROR.message());
+            throw new PasswordNullException(ErrorCode.PASSWORD_NULL_ERROR.message(), ErrorCode.PASSWORD_NULL_ERROR);
         }
     }
 
     public void matches(final UserPassword other, final PasswordEncoder passwordEncoder) {
         if (!passwordEncoder.matches(other.password, this.password)) {
-            throw new PasswordMissMatchException(UserErrorCode.PASSWORD_MISS_MATCH.message());
+            throw new PasswordMissMatchException(ErrorCode.PASSWORD_MISS_MATCH.message(), ErrorCode.PASSWORD_MISS_MATCH);
         }
     }
 
     @JsonValue
     public String userPassword() {
         return password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserPassword userPassword = (UserPassword) o;
+        return Objects.equals(userPassword(), userPassword.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userPassword());
     }
 }

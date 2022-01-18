@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Embeddable
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -18,12 +19,25 @@ public final class UserNickName {
     @Column(unique = true, nullable = false, length = 20)
     private String nickname;
 
-    public static UserNickName from(String nickname) {
+    public static UserNickName from(final String nickname) {
         return new UserNickName(nickname);
     }
 
     @JsonValue
     public String userNickname() {
         return nickname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserNickName userNickName = (UserNickName) o;
+        return Objects.equals(userNickname(), userNickName.nickname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userNickname());
     }
 }
