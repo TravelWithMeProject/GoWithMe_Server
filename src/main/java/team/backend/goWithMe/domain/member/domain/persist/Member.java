@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -69,6 +69,12 @@ public class Member extends BaseTimeEntity {
     /**
      * 비즈 니스 로직
      */
+    public void update(final UserEmail email, final UserPassword password, final UserNickName nickname) {
+        changeEmail(email);
+        changePassword(password);
+        changeNickName(nickname);
+    }
+
     private void changeEmail(UserEmail email) {
         this.email = email;
     }
@@ -79,12 +85,6 @@ public class Member extends BaseTimeEntity {
 
     private void changeNickName(UserNickName nickname) {
         this.nickname = nickname;
-    }
-
-    public void update(final UserEmail email, final UserPassword password, final UserNickName nickname) {
-        changeEmail(email);
-        changePassword(password);
-        changeNickName(nickname);
     }
 
     // 비밀번호 해시화
