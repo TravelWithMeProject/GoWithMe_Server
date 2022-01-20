@@ -1,17 +1,15 @@
 package team.backend.goWithMe.domain.trip.error.exception;
 
-import team.backend.goWithMe.domain.trip.error.TimeTableErrorCode;
-import team.backend.goWithMe.domain.trip.error.exception.TimeTableBusinessException;
-import team.backend.goWithMe.global.error.exception.CommonErrorCode;
-import team.backend.goWithMe.global.error.exception.InvalidValueException;
+
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 public class ScheduleTitleInvalidException extends TimeTableBusinessException {
 
-    public ScheduleTitleInvalidException(String message, TimeTableErrorCode errorCode) {
+    public ScheduleTitleInvalidException(String message, ErrorCode errorCode) {
         super(message, errorCode);
     }
 
-    public ScheduleTitleInvalidException(TimeTableErrorCode errorCode) {
+    public ScheduleTitleInvalidException(ErrorCode errorCode) {
         super(errorCode);
     }
 }

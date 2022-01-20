@@ -1,22 +1,22 @@
 package team.backend.goWithMe.domain.trip.error.exception;
 
-import team.backend.goWithMe.domain.trip.error.TimeTableErrorCode;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 public class TimeTableBusinessException extends RuntimeException{
 
-    private final TimeTableErrorCode timeTableErrorCode;
+    private final ErrorCode errorCode;
 
-    public TimeTableBusinessException(String message, TimeTableErrorCode errorCode) {
+    public TimeTableBusinessException(String message, ErrorCode errorCode) {
         super(message);
-        this.timeTableErrorCode = errorCode;
+        this.errorCode = errorCode;
     }
 
-    public TimeTableBusinessException(TimeTableErrorCode errorCode) {
+    public TimeTableBusinessException(ErrorCode errorCode) {
         super(errorCode.message());
-        this.timeTableErrorCode = errorCode;
+        this.errorCode = errorCode;
     }
 
-    public TimeTableErrorCode getTimeTableErrorCode() {
-        return timeTableErrorCode;
+    public ErrorCode getErrorCode() {
+        return errorCode;
     }
 }
