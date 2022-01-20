@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static team.backend.goWithMe.global.error.exception.CommonErrorCode.INVALID_INPUT_VALUE;
+import static team.backend.goWithMe.global.error.exception.ErrorCode.INVALID_INPUT_VALUE;
 
 
 @Embeddable

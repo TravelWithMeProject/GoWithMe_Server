@@ -1,8 +1,11 @@
 package team.backend.goWithMe.domain.member.error.exception;
 
-public class PasswordNullException extends UserBusinessException {
+import team.backend.goWithMe.global.error.exception.BusinessException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
-    public PasswordNullException(String message) {
-        super(message);
+public class PasswordNullException extends BusinessException {
+
+    public PasswordNullException(String message, ErrorCode errorCode) {
+        super(message, errorCode);
     }
 }

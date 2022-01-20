@@ -1,8 +1,11 @@
 package team.backend.goWithMe.domain.member.error.exception;
 
-public class PasswordMissMatchException extends UserBusinessException {
+import team.backend.goWithMe.global.error.exception.BusinessException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
-    public PasswordMissMatchException(String message) {
-        super(message);
+public class PasswordMissMatchException extends BusinessException {
+
+    public PasswordMissMatchException(String message, ErrorCode errorCode) {
+        super(message, errorCode);
     }
 }
