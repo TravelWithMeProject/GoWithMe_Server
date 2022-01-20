@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.trip.error.TimeTableErrorCode;
-import team.backend.goWithMe.domain.trip.error.exception.TimeTablePeriodInvalidException;
+import team.backend.goWithMe.domain.trip.error.TimeTablePeriodInvalidException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,6 +12,8 @@ import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static team.backend.goWithMe.global.error.exception.ErrorCode.INVALID_INPUT_VALUE;
 
 
 @Embeddable
@@ -71,10 +72,10 @@ public final class TimeTablePeriod{
 
     private static void validateTotalPeriod(LocalDateTime totalStart, LocalDateTime totalEnd) {
         if (totalStart.isAfter(totalEnd)) {
-            throw new TimeTablePeriodInvalidException("전체일정 시작 시점과 끝 시점이 반대입니다.", TimeTableErrorCode.PERIOD_MISMATCH_ERROR);
+            throw new TimeTablePeriodInvalidException("전체일정 시작 시점과 끝 시점이 반대입니다.", INVALID_INPUT_VALUE);
         }
         if (totalStart.isEqual(totalEnd)) {
-            throw new TimeTablePeriodInvalidException("전체일정이 0(끝지점과 시작지점이 같음)이 될 수 없습니다.", TimeTableErrorCode.PERIOD_MISMATCH_ERROR);
+            throw new TimeTablePeriodInvalidException("전체일정이 0(끝지점과 시작지점이 같음)이 될 수 없습니다.", INVALID_INPUT_VALUE);
         }
     }
 }

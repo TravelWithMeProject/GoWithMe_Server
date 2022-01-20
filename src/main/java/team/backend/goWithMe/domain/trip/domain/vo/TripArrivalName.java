@@ -10,7 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 
-import static team.backend.goWithMe.global.error.exception.CommonErrorCode.INVALID_INPUT_VALUE;
+import static team.backend.goWithMe.global.error.exception.ErrorCode.INVALID_INPUT_VALUE;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -7,7 +7,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import team.backend.goWithMe.global.error.exception.BusinessException;
-import team.backend.goWithMe.global.error.exception.CommonErrorCode;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import java.nio.file.AccessDeniedException;
 
@@ -16,34 +16,34 @@ import java.nio.file.AccessDeniedException;
 public class GlobalException {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    protected ResponseEntity<CommonErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("handleHttpRequestMethodNotSupportedException", e);
 
-        final CommonErrorResponse response = CommonErrorResponse.of(CommonErrorCode.METHOD_NOT_ALLOWED);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED);
         return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    protected ResponseEntity<CommonErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+    protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
         log.error("handleAccessDeniedException", e);
 
-        final CommonErrorResponse response = CommonErrorResponse.of(CommonErrorCode.HANDLE_ACCESS_DENIED);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(CommonErrorCode.HANDLE_ACCESS_DENIED.status()));
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.HANDLE_ACCESS_DENIED);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.HANDLE_ACCESS_DENIED.status()));
     }
 
     @ExceptionHandler(BusinessException.class)
-    protected ResponseEntity<CommonErrorResponse> handleBusinessException(BusinessException e) {
+    protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         log.error("handleBusinessException", e);
 
-        final CommonErrorCode commonErrorCode = e.getErrorCode();
-        final CommonErrorResponse response = CommonErrorResponse.of(commonErrorCode);
+        final ErrorCode commonErrorCode = e.getErrorCode();
+        final ErrorResponse response = ErrorResponse.of(commonErrorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(commonErrorCode.status()));
     }
 
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<CommonErrorResponse> handleException(Exception e) {
+    protected ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("handleEntityNotFoundException", e);
-        final CommonErrorResponse response = CommonErrorResponse.of(CommonErrorCode.INTERNAL_SERVER_ERROR);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
