@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.trip.error.TimeTablePeriodInvalidException;
+import team.backend.goWithMe.domain.trip.error.exception.TimeTablePeriodInvalidException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
