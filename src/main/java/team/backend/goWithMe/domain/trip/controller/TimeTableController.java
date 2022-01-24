@@ -32,24 +32,6 @@ public class TimeTableController {
 
     private final TimeTableService timeTableService;
 
-    //===== Dummy Data for Postman Test =====//
-    private final MemberRepository memberRepository;
-
-    @PostConstruct
-    public void init() {
-        memberRepository.save(Member
-                .builder()
-                .name(UserName.from("정의재"))
-                .birth(LocalDate.of(2021, 1, 1))
-                .nickname(UserNickName.from("JJ"))
-                .email(UserEmail.from("abc@naver.com"))
-                .password(UserPassword.from("1234"))
-                .roleType(RoleType.USER)
-                .profileImage(UserProfileImage.from("sampleURL"))
-                .build());
-    }
-    //======================//
-
     @GetMapping("/{memberId}/{timeTableId}")
     @ApiOperation(value = "특정 시간표 가져오기", notes = "시간표 id값을 통해 해당 시간표를 가져오는 API")
     public ResponseEntity<TimeTableDTO> timeTable(
@@ -111,5 +93,4 @@ public class TimeTableController {
 
         return httpHeaders;
     }
-
 }
