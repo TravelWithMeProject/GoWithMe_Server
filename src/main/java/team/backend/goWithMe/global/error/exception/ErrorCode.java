@@ -23,6 +23,8 @@ public enum ErrorCode {
     // travle domain
 
     // Mate domain
+    MATE_EMAIL_DUPLICATION(400, "ML001", "중복된 이메일입니다."),
+    NO_SUCH_MATE(404, "ML002", "해당 id의 Mate가 없습니다.");
 
     private final String code;
     private final String message;
