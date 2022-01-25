@@ -17,8 +17,8 @@ public enum ErrorCode {
     EMAIL_DUPLICATION(400, "M001", "중복된 이메일 입니다."),
     LOGIN_INPUT_INVALID(400, "M002", "다시 로그인 시도해 주세요"),
     PASSWORD_NULL_ERROR(400, "M003", "올바른 비밀번호 입력이 아닙니다."),
-    PASSWORD_MISS_MATCH(400, "M004", "비밀번호가 일치하지 않습니다.")
-    ;
+    PASSWORD_MISS_MATCH(400, "M004", "비밀번호가 일치하지 않습니다."),
+
 
     // travle domain
 
