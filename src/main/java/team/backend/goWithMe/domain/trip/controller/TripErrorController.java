@@ -6,42 +6,41 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import team.backend.goWithMe.domain.trip.dto.response.TimeTableErrorResponseDTO;
 import team.backend.goWithMe.domain.trip.error.exception.*;
 import team.backend.goWithMe.global.error.ErrorResponse;
 
 import java.nio.charset.StandardCharsets;
 
-@RestControllerAdvice(basePackages = "team.backend.goWithMe.domain.trip")
+@RestControllerAdvice(basePackages = "team.backend.goWithMe.domain")
 public class TripErrorController {
 
     @ExceptionHandler(TimeTableNameInvalidException.class)
-    public ResponseEntity<TimeTableErrorResponseDTO> wrongTimeTableOwnerIdHandler(TimeTableNameInvalidException e) {
-        TimeTableErrorResponseDTO dto = new TimeTableErrorResponseDTO(e.getMessage(), e.getErrorCode());
+    public ResponseEntity<ErrorResponse> wrongTimeTableOwnerIdHandler(TimeTableNameInvalidException e) {
+        ErrorResponse response = ErrorResponse.of(e.getErrorCode());
 
-        return new ResponseEntity<>(dto, header(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, header(), HttpStatus.BAD_REQUEST);
     }
 
 
     @ExceptionHandler(WrongTimeTableOwnerIdException.class)
-    public ResponseEntity<TimeTableErrorResponseDTO> wrongTimeTableOwnerIdHandler(WrongTimeTableOwnerIdException e) {
-        TimeTableErrorResponseDTO dto = new TimeTableErrorResponseDTO(e.getMessage(), e.getErrorCode());
+    public ResponseEntity<ErrorResponse> wrongTimeTableOwnerIdHandler(WrongTimeTableOwnerIdException e) {
+        ErrorResponse response = ErrorResponse.of(e.getErrorCode());
 
-        return new ResponseEntity<>(dto, header(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, header(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(TimeTablePeriodInvalidException.class)
-    public ResponseEntity<TimeTableErrorResponseDTO> timeTablePeriodInvalidHandler(TimeTablePeriodInvalidException e) {
-        TimeTableErrorResponseDTO dto = new TimeTableErrorResponseDTO(e.getMessage(), e.getErrorCode());
+    public ResponseEntity<ErrorResponse> timeTablePeriodInvalidHandler(TimeTablePeriodInvalidException e) {
+        ErrorResponse response = ErrorResponse.of(e.getErrorCode());
 
-        return new ResponseEntity<>(dto, header(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, header(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoSuchTimeTableException.class)
-    public ResponseEntity<TimeTableErrorResponseDTO> noSuchTimeTableHandler(NoSuchTimeTableException e) {
-        TimeTableErrorResponseDTO dto = new TimeTableErrorResponseDTO(e.getMessage(), e.getErrorCode());
+    public ResponseEntity<ErrorResponse> noSuchTimeTableHandler(NoSuchTimeTableException e) {
+        ErrorResponse response = ErrorResponse.of(e.getErrorCode());
 
-        return new ResponseEntity<>(dto, header(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, header(), HttpStatus.NOT_FOUND);
     }
 
     private HttpHeaders header() {
@@ -56,8 +55,8 @@ public class TripErrorController {
      */
     @ExceptionHandler(NoSuchMemberException.class)
     public ResponseEntity<ErrorResponse> noMemberHandler(NoSuchMemberException e) {
-        ErrorResponse dto = ErrorResponse.of(e.getErrorCode());
+        ErrorResponse response = ErrorResponse.of(e.getErrorCode());
 
-        return new ResponseEntity<>(dto, header(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, header(), HttpStatus.NOT_FOUND);
     }
 }
