@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,5 +28,18 @@ public final class UserEmail {
     @JsonValue
     public String userEmail() {
         return email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEmail userEmail = (UserEmail) o;
+        return Objects.equals(userEmail(), userEmail.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userEmail());
     }
 }
