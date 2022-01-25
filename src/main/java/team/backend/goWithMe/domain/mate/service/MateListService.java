@@ -30,15 +30,18 @@ public class MateListService {
         return mateList;
     }
 
+    @Transactional
     public void deleteById(Long mateListId) {
         mateListRepository.deleteById(mateListId);
     }
 
+    @Transactional
     public MateList save(MateList mateList) {
         mateListRepository.save(mateList);
         return mateList;
     }
 
+    @Transactional
     public void updateById(Long mateListId, MateList updateMateList) {
         Optional<MateList> mateList = mateListRepository.findById(mateListId);
         if(mateList.isPresent()) {
