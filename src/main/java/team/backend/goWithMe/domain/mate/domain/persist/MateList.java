@@ -1,10 +1,7 @@
 package team.backend.goWithMe.domain.mate.domain.persist;
 
 import io.jsonwebtoken.lang.Assert;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import team.backend.goWithMe.domain.mate.domain.vo.MateEmail;
 import team.backend.goWithMe.domain.mate.domain.vo.MateNickName;
 import team.backend.goWithMe.domain.mate.domain.vo.MateProfileImg;
@@ -43,6 +40,10 @@ public class MateList {
         this.mateEmail = mateEmail;
         this.mateNickname = mateNickName;
         this.mateProfileImg = mateProfileImg;
+    }
+
+    public static MateList createMate(@NonNull MateEmail mateEmail, @NonNull MateNickName mateNickname, @NonNull MateProfileImg mateProfileImg) {
+        return new MateList(mateEmail, mateNickname, mateProfileImg);
     }
 //    @OneToMany(mappedBy = "mateList")
 //    private List<Mate> team.backend.goWithMe.domain.mate = new ArrayList<>();
