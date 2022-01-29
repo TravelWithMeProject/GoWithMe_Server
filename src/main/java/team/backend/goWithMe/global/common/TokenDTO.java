@@ -1,27 +1,17 @@
 package team.backend.goWithMe.global.common;
 
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class TokenDTO {
 
-    private Long userId;
-    private String email;
-    private String name;
-    private String password;
-    private String imgUrl;
+    private AccessToken accessToken;
+    private RefreshToken refreshToken;
 
-    @Builder
-    public TokenDTO(Long userId, String email, String name, String password, String imgUrl) {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.imgUrl = imgUrl;
+    public static TokenDTO create(final AccessToken accessToken, final RefreshToken refreshToken) {
+        return new TokenDTO(accessToken, refreshToken);
     }
-
-    // 정적 팩토리 메서드
-//    public static TokenProvider from(Member member) {}
 }

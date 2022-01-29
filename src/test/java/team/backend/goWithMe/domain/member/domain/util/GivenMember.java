@@ -24,7 +24,7 @@ public class GivenMember {
                 .email(email)
                 .password(password)
                 .name(name)
-                .roleType(roleType)
+                .roleType(RoleType.USER)
                 .nickname(nickName)
                 .birth(birth)
                 .profileImage(profileImage)

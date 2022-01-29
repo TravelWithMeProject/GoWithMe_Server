@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.domain.favorite.domain.error.OverPeriodException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -24,7 +25,7 @@ public final class FavoritePeriod {
 
     public static FavoritePeriod of(final LocalDate startTime, final LocalDate endTime) {
         if (overPeriod(startTime, endTime)) {
-            throw new OverPeriodException("시작 날짜가 마지막 날짜 보다 앞서있습니다.");
+            throw new OverPeriodException(ErrorCode.OVER_PERIOD_ERROR);
         }
 
         return new FavoritePeriod(startTime, endTime);

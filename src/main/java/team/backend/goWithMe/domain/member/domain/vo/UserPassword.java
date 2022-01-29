@@ -34,13 +34,13 @@ public final class UserPassword {
 
     private static void validateBlank(String rawPassword) {
         if (Objects.isNull(rawPassword) || rawPassword.isBlank()) {
-            throw new PasswordNullException(ErrorCode.PASSWORD_NULL_ERROR.message(), ErrorCode.PASSWORD_NULL_ERROR);
+            throw new PasswordNullException(ErrorCode.PASSWORD_NULL_ERROR);
         }
     }
 
     public void matches(final UserPassword other, final PasswordEncoder passwordEncoder) {
         if (!passwordEncoder.matches(other.password, this.password)) {
-            throw new PasswordMissMatchException(ErrorCode.PASSWORD_MISS_MATCH.message(), ErrorCode.PASSWORD_MISS_MATCH);
+            throw new PasswordMissMatchException(ErrorCode.PASSWORD_MISS_MATCH);
         }
     }
 

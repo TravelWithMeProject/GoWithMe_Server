@@ -1,7 +1,6 @@
 package team.backend.goWithMe.global.common;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +12,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import team.backend.goWithMe.domain.member.domain.persist.Member;
+import team.backend.goWithMe.domain.member.domain.persist.MemberRepository;
+import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
+import team.backend.goWithMe.domain.member.error.exception.MemberNotFoundException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -27,15 +31,22 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
 
     private final String secret;
-    private final long tokenValidityInMilliseconds;
+    private final long accessTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds;
+
+    private final MemberRepository memberRepository;
 
     private Key key;
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds) {
+            @Value("${jwt.accessToken-validity-in-seconds}") long accessTokenValidityInMilliseconds,
+            @Value("${jwt.refreshToken-validity-in-seconds}") long refreshTokenValidityInMilliseconds,
+            MemberRepository memberRepository) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
+        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -44,20 +55,36 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(Authentication authentication) {
+    public TokenDTO createToken(String email, Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Member member = memberRepository.findByEmail(UserEmail.from(email)).orElseThrow(() -> {
+            throw new MemberNotFoundException(ErrorCode.USER_NOT_FOUND);
+        });
 
-        return Jwts.builder()
-                .setSubject(authentication.getName())
+        String accessToken = Jwts.builder()
+                .claim("email", member.getEmail().userEmail())
+                .claim("nickname", member.getNickname().userNickname())
                 .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(new Date(now + accessTokenValidityInMilliseconds))
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
                 .compact();
+
+        String refreshToken = Jwts.builder()
+                .claim("email", member.getEmail().userEmail())
+                .claim("nickname", member.getNickname().userNickname())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(new Date(now + refreshTokenValidityInMilliseconds))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        AccessToken newAccessToken = AccessToken.from(accessToken);
+        RefreshToken newRefreshToken = RefreshToken.from(refreshToken);
+
+        return TokenDTO.create(newAccessToken, newRefreshToken);
     }
 
     public Authentication getAuthentication(String token) {

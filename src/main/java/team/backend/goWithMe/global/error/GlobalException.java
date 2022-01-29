@@ -35,9 +35,9 @@ public class GlobalException {
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         log.error("handleBusinessException", e);
 
-        final ErrorCode commonErrorCode = e.getErrorCode();
-        final ErrorResponse response = ErrorResponse.of(commonErrorCode);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(commonErrorCode.status()));
+        final ErrorCode errorCode = e.getErrorCode();
+        final ErrorResponse response = ErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.status()));
     }
 
     @ExceptionHandler(Exception.class)

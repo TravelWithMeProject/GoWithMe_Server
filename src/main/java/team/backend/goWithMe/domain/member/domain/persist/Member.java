@@ -1,10 +1,6 @@
 package team.backend.goWithMe.domain.member.domain.persist;
 
-import io.jsonwebtoken.lang.Assert;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import team.backend.goWithMe.domain.member.domain.vo.*;
@@ -19,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
@@ -46,16 +42,8 @@ public class Member extends BaseTimeEntity {
     private UserProfileImage profileImage;
 
     @Builder
-    public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType, UserNickName nickname, LocalDate birth, UserProfileImage profileImage) {
-
-        // null 방지 검증 로직
-        Assert.hasText(email.userEmail());
-        Assert.hasText(password.userPassword());
-        Assert.hasText(name.userName());
-        Assert.hasText(roleType.name());
-        Assert.hasText(nickname.userNickname());
-        Assert.hasText(profileImage.userProfileImage());
-
+    public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType,
+                  UserNickName nickname, LocalDate birth, UserProfileImage profileImage) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -65,14 +53,17 @@ public class Member extends BaseTimeEntity {
         this.profileImage = profileImage;
     }
 
-
     /**
      * 비즈 니스 로직
      */
-    public void update(final UserEmail email, final UserPassword password, final UserNickName nickname) {
+    public Member update(final UserEmail email, final UserPassword password,
+                       final UserNickName nickname, final UserProfileImage profileImage) {
         changeEmail(email);
         changePassword(password);
         changeNickName(nickname);
+        changeProfile(profileImage);
+
+        return this;
     }
 
     private void changeEmail(UserEmail email) {
@@ -86,6 +77,8 @@ public class Member extends BaseTimeEntity {
     private void changeNickName(UserNickName nickname) {
         this.nickname = nickname;
     }
+
+    private void changeProfile(UserProfileImage profileImage) { this.profileImage = profileImage; }
 
     // 비밀번호 해시화
     public Member encode(final PasswordEncoder encoder) {

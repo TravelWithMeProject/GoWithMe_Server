@@ -1,8 +1,11 @@
 package team.backend.goWithMe.domain.favorite.domain.error;
 
-public class OverPeriodException extends FavoriteBusinessException {
+import team.backend.goWithMe.global.error.exception.BusinessException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
-    public OverPeriodException(String message) {
-        super(message);
+public class OverPeriodException extends BusinessException {
+
+    public OverPeriodException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

@@ -3,9 +3,9 @@ package team.backend.goWithMe.domain.member.error.exception;
 import team.backend.goWithMe.global.error.exception.BusinessException;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
 
-public class PasswordNullException extends BusinessException {
+public class DuplicateEmailException extends BusinessException {
 
-    public PasswordNullException(ErrorCode errorCode) {
+    public DuplicateEmailException(ErrorCode errorCode) {
         super(errorCode);
     }
 }
