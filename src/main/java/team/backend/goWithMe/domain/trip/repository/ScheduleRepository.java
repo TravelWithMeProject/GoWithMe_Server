@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import team.backend.goWithMe.domain.trip.domain.persist.Schedule;
-import team.backend.goWithMe.domain.trip.domain.persist.TimeTable;
 
 import java.util.List;
 
