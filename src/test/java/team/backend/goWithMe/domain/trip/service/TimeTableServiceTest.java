@@ -1,6 +1,5 @@
 package team.backend.goWithMe.domain.trip.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,6 @@ import team.backend.goWithMe.domain.trip.domain.vo.TimeTablePeriod;
 import team.backend.goWithMe.domain.trip.dto.request.TimeTableCreateDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableListDTO;
-import team.backend.goWithMe.domain.trip.dto.response.TimeTableSuccessDTO;
 import team.backend.goWithMe.domain.trip.error.exception.NoSuchMemberException;
 import team.backend.goWithMe.domain.trip.error.exception.NoSuchTimeTableException;
 import team.backend.goWithMe.domain.trip.error.exception.WrongTimeTableOwnerIdException;
@@ -71,7 +69,7 @@ class TimeTableServiceTest {
         given(timeTableRepository.findById(fakeTimeTableId)).willReturn(Optional.of(timeTable));
 
         // when
-        Long savedTimeTableId = timeTableService.saveTimeTable(timeTableCreateDTO);
+        Long savedTimeTableId = timeTableService.createTimeTable(timeTableCreateDTO);
 
         // then
         TimeTable findTimeTable = timeTableRepository.findById(savedTimeTableId).get();
@@ -98,7 +96,7 @@ class TimeTableServiceTest {
         given(timeTableRepository.save(any())).willReturn(timeTable);
         given(timeTableRepository.findById(fakeTimeTableId)).willReturn(Optional.of(timeTable));
 
-        Long savedTimeTableId = timeTableService.saveTimeTable(timeTableCreateDTO);
+        Long savedTimeTableId = timeTableService.createTimeTable(timeTableCreateDTO);
 
         // when
         TimeTableDTO timeTableDTO = timeTableService.findTimeTable(member.getId(), savedTimeTableId);
@@ -128,7 +126,7 @@ class TimeTableServiceTest {
         given(timeTableRepository.findById(fakeTimeTableId)).willReturn(Optional.of(timeTable));
         given(timeTableRepository.findById(wrongTimeTableId))
                 .willThrow(new NoSuchTimeTableException(ErrorCode.NO_SUCH_TIMETABLE));
-        Long savedTimeTableId = timeTableService.saveTimeTable(timeTableCreateDTO);
+        Long savedTimeTableId = timeTableService.createTimeTable(timeTableCreateDTO);
 
         // when, then
         TimeTableDTO foundTimeTableDTO = timeTableService.findTimeTable(member.getId(), savedTimeTableId);
@@ -153,7 +151,7 @@ class TimeTableServiceTest {
 
         given(timeTableRepository.save(any())).willReturn(timeTable);
         given(timeTableRepository.findById(fakeTimeTableId)).willReturn(Optional.of(timeTable));
-        Long savedTimeTableId = timeTableService.saveTimeTable(timeTableCreateDTO);
+        Long savedTimeTableId = timeTableService.createTimeTable(timeTableCreateDTO);
 
         // when, then
         Long wrongUserId = 9L;
@@ -175,7 +173,7 @@ class TimeTableServiceTest {
         ReflectionTestUtils.setField(timeTable, "id", fakeTimeTableId);
 
         given(timeTableRepository.save(any())).willReturn(timeTable);
-        timeTableService.saveTimeTable(timeTableCreateDTO);
+        timeTableService.createTimeTable(timeTableCreateDTO);
 
         // when, then
         Long wrongUserId = 9L;
@@ -198,7 +196,7 @@ class TimeTableServiceTest {
         ReflectionTestUtils.setField(timeTable, "id", fakeTimeTableId);
 
         given(timeTableRepository.save(any())).willReturn(timeTable);
-        timeTableService.saveTimeTable(timeTableCreateDTO);
+        timeTableService.createTimeTable(timeTableCreateDTO);
 
         given(timeTableRepository.findByUserId(fakeUserId)).willReturn(Collections.singletonList(timeTable));
 
@@ -232,8 +230,8 @@ class TimeTableServiceTest {
         ReflectionTestUtils.setField(timeTable2, "id", fakeTimeTableId2);
 
         given(timeTableRepository.save(any())).willReturn(timeTable1);
-        timeTableService.saveTimeTable(timeTableCreateDTO_1);
-        timeTableService.saveTimeTable(timeTableCreateDTO_1);
+        timeTableService.createTimeTable(timeTableCreateDTO_1);
+        timeTableService.createTimeTable(timeTableCreateDTO_1);
 
         given(timeTableRepository.findByUserId(fakeUserId)).willReturn(Arrays.asList(timeTable1, timeTable2));
 
@@ -278,7 +276,7 @@ class TimeTableServiceTest {
         Long fakeUserId = 11L;
         ReflectionTestUtils.setField(member, "id", fakeUserId);
         Long nonExistentUserId = 0L;
-        given(memberRepository.findById(nonExistentUserId)).willThrow(new NoSuchMemberException(ErrorCode.NO_SUCH_MEMBER));
+        given(memberRepository.findById(nonExistentUserId)).willThrow(new NoSuchMemberException(ErrorCode.NO_SUCH_MEMBER_IN_TIMETABLE));
 
         // when, then
         assertThrows(NoSuchMemberException.class, () -> timeTableService.findTimeTablesByMemberId(nonExistentUserId));
@@ -302,12 +300,9 @@ class TimeTableServiceTest {
         given(timeTableRepository.findById(fakeTimeTableId)).willReturn(Optional.of(timeTable));
         given(scheduleRepository.findByTimeTableId(timeTable.getId())).willReturn(Collections.emptyList());
 
-        Long savedTimeTableId = timeTableService.saveTimeTable(timeTableCreateDTO);
-        // when
-        TimeTableSuccessDTO timeTableSuccessDTO = timeTableService.deleteTimeTable(member.getId(), savedTimeTableId);
-
-        // then
-        assertThat(timeTableSuccessDTO.isSuccess()).isEqualTo(true);
+        Long savedTimeTableId = timeTableService.createTimeTable(timeTableCreateDTO);
+        // when, then
+        assertDoesNotThrow(() -> timeTableService.deleteTimeTable(member.getId(), savedTimeTableId));
     }
 
     @Test
@@ -327,7 +322,7 @@ class TimeTableServiceTest {
         given(timeTableRepository.save(any())).willReturn(timeTable);
         given(timeTableRepository.findById(fakeTimeTableId)).willReturn(Optional.of(timeTable));
 
-        Long savedTimeTableId = timeTableService.saveTimeTable(timeTableCreateDTO);
+        Long savedTimeTableId = timeTableService.createTimeTable(timeTableCreateDTO);
         // when, then
         Long nonExistentUserId = 0L;
         assertThrows(WrongTimeTableOwnerIdException.class, () -> timeTableService.deleteTimeTable(nonExistentUserId, savedTimeTableId));
@@ -349,7 +344,7 @@ class TimeTableServiceTest {
 
         given(timeTableRepository.save(any())).willReturn(timeTable);
 
-        timeTableService.saveTimeTable(timeTableCreateDTO);
+        timeTableService.createTimeTable(timeTableCreateDTO);
         // when, then
         Long nonExistentUserId = 0L;
         Long nonExistentTimeTableId = 0L;
@@ -372,7 +367,7 @@ class TimeTableServiceTest {
 
         given(timeTableRepository.save(any())).willReturn(timeTable);
 
-        timeTableService.saveTimeTable(timeTableCreateDTO);
+        timeTableService.createTimeTable(timeTableCreateDTO);
         // when, then
         Long nonExistentTimeTableId = 0L;
         assertThrows(NoSuchTimeTableException.class, () -> timeTableService.deleteTimeTable(member.getId(), nonExistentTimeTableId));
@@ -395,7 +390,7 @@ class TimeTableServiceTest {
         given(timeTableRepository.save(any())).willReturn(timeTable);
         given(timeTableRepository.findById(fakeTimeTableId)).willReturn(Optional.of(timeTable));
 
-        timeTableService.saveTimeTable(timeTableCreateDTO);
+        timeTableService.createTimeTable(timeTableCreateDTO);
 
         // when
         final String NEW_TIMETABLE_NAME = "New 시간표 이름";
@@ -423,7 +418,7 @@ class TimeTableServiceTest {
 
         given(timeTableRepository.save(any())).willReturn(timeTable);
 
-        timeTableService.saveTimeTable(timeTableCreateDTO);
+        timeTableService.createTimeTable(timeTableCreateDTO);
 
         // when
         final String NEW_TIMETABLE_NAME = "New 시간표 이름";
@@ -434,13 +429,6 @@ class TimeTableServiceTest {
         assertThrows(NoSuchTimeTableException.class, () ->
                 timeTableService.updateTimeTable(nonExistentTimeTableId, timeTableCreateDTOForUpdate));
     }
-
-
-
-
-
-
-
 
     /**
      * 시간표 엔티티 생성용 함수 for Test

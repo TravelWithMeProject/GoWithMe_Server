@@ -56,10 +56,10 @@ public class TimeTable extends BaseTimeEntity {
             }
 
             //===== 비즈니스 메서드 =====//
-            public void changeTimeTable(TimeTableName name, TimeTableContent content, TimeTablePeriod timeTablePeriod) {
-                changeTableName(name);
-                changeTableContent(content);
-                changeTablePeriod(timeTablePeriod);
+            public void changeTimeTable(TimeTable timeTable) {
+                changeTableName(timeTable.getTableName());
+                changeTableContent(timeTable.getContent());
+                changeTablePeriod(timeTable.getTotalPeriod());
             }
 
             public Duration ofDuration() {
