@@ -1,5 +1,6 @@
 package team.backend.goWithMe.domain.favorite.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public final class Accommodation {
         return new Accommodation(accommodation);
     }
 
+    @JsonValue
     public String accommodation() {
         return accommodation;
     }

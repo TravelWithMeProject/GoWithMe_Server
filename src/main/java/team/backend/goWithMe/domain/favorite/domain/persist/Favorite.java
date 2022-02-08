@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoritePeriod;
+import team.backend.goWithMe.domain.member.domain.persist.Member;
 
 import javax.persistence.*;
 
@@ -18,13 +19,17 @@ public class Favorite {
     private Long id;
 
     @Embedded
-    private FavoriteArrival favoriteArrival;
+    private FavoriteArrival favoriteArrival; // 도착지
 
     @Embedded
-    private Accommodation accommodation;
+    private Accommodation accommodation; // 숙박 유형
 
     @Embedded
-    private FavoritePeriod favoritePeriod;
+    private FavoritePeriod favoritePeriod; // 앞으로 여행 계획
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private Favorite(final FavoriteArrival favoriteArrival, final Accommodation accommodation, final FavoritePeriod favoritePeriod) {
         this.favoriteArrival = favoriteArrival;
@@ -40,12 +45,11 @@ public class Favorite {
         return new Favorite(favoriteArrival, accommodation, favoritePeriod);
     }
 
-    public void updateFavorite(final FavoriteArrival favoriteArrival, final Accommodation accommodation,
-                               final FavoritePeriod favoritePeriod) {
+    public void updateFavorite(final Favorite favorite) {
 
-        changeArrival(favoriteArrival);
-        changeAccommodation(accommodation);
-        changeFavoritePeriod(favoritePeriod);
+        changeArrival(favorite.getFavoriteArrival());
+        changeAccommodation(favorite.getAccommodation());
+        changeFavoritePeriod(favorite.getFavoritePeriod());
     }
 
     private void changeArrival(FavoriteArrival favoriteArrival) {

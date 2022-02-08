@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.favorite.domain.error.OverPeriodException;
+import team.backend.goWithMe.domain.favorite.error.OverPeriodException;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
