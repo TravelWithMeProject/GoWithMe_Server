@@ -5,8 +5,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Objects;
 
 @Embeddable
@@ -14,7 +15,9 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class Title {
 
-    @NotNull(message = "null은 안됩니다.")
+//    @NotNull(message = "null은 안됩니다.")
+    @NotBlank(message = "null 혹은 null string은 불가합니다.")
+    @Size(min = 10, max = 50)
     private String title;
 
     public static Title from(final String title) {

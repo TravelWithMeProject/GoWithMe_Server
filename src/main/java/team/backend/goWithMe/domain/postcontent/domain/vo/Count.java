@@ -5,28 +5,23 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Embeddable
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class Content {
+public class Count {
 
-//    @NotNull(message = "null은 안됩니다.")
-    @NotBlank(message = "null 혹은 null string은 불가합니다.")
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    private Long count;
 
-    public static Content from(final String content) {
-        return new Content(content);
+    public static Count from(final Long count) {
+        return new Count(count);
     }
 
     @JsonValue
-    public String content() {
-        return content;
+    public Long count() {
+        return count;
     }
 
     @Override
@@ -39,12 +34,12 @@ public final class Content {
         if(obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        Content content = (Content) obj;
-        return Objects.equals(content(), content.content());
+        Count count = (Count) obj;
+        return Objects.equals(count(), count.count());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(content());
+        return Objects.hash(count());
     }
 }
