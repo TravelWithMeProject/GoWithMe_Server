@@ -1,10 +1,15 @@
 package team.backend.goWithMe.domain.postcontent.domain.persist;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import team.backend.goWithMe.domain.postcontent.domain.vo.Content;
 import team.backend.goWithMe.domain.postcontent.domain.vo.Count;
 import team.backend.goWithMe.domain.postcontent.domain.vo.Title;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,39 +24,10 @@ public class PostContentTest {
         Title givenTitle = Title.from("게시글 제목 테스트");
         Content givenContent = Content.from("게시글 내용 테스트");
         Count givenCount = Count.from(100L);
-        Category givenCategory = Category.sample;
+        Category givenCategory = null;
+
 
         //then
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(null, null, null, null));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(givenTitle, null, null, null));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(null, givenContent, null, null));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(null, null, givenCount, null));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(null, null, null, givenCategory));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(givenTitle, givenContent, null, null));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(givenTitle, null, givenCount, null));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(givenTitle, null, null, givenCategory));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(null, givenContent, givenCount, null));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(null, givenContent, null, givenCategory));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(null, null, givenCount, givenCategory));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(null, givenContent, givenCount, givenCategory));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(givenTitle, null, givenCount, givenCategory));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(givenTitle, givenContent, null, givenCategory));
-        assertThrows(NullPointerException.class, () ->
-                PostContent.createPostContent(givenTitle, givenContent, givenCount, null));
         assertDoesNotThrow(() ->
                 PostContent.createPostContent(givenTitle, givenContent, givenCount, givenCategory));
     }
@@ -70,8 +46,8 @@ public class PostContentTest {
         Count countA = Count.from(100L);
         Count countB = Count.from(100L);
 
-        PostContent postContentA = PostContent.createPostContent(titleA, contentA, countA, Category.sample);
-        PostContent postContentB = PostContent.createPostContent(titleB, contentB, countB, Category.sample);
+        PostContent postContentA = PostContent.createPostContent(titleA, contentA, countA, null);
+        PostContent postContentB = PostContent.createPostContent(titleB, contentB, countB, null);
 
         //then
         assertEquals(titleA, titleB);
@@ -96,8 +72,8 @@ public class PostContentTest {
         Count countA = Count.from(100L);
         Count countB = Count.from(1000L);
 
-        PostContent postContentA = PostContent.createPostContent(titleA, contentA, countA, Category.sample);
-        PostContent postContentB = PostContent.createPostContent(titleB, contentB, countB, Category.sample);
+        PostContent postContentA = PostContent.createPostContent(titleA, contentA, countA, null);
+        PostContent postContentB = PostContent.createPostContent(titleB, contentB, countB, null);
 
         //then
         assertNotEquals(titleA, titleB);
@@ -109,32 +85,4 @@ public class PostContentTest {
 
     }
 
-//    @Test
-//    @DisplayName("게시글 빌더 성공 테스트 : 성공")
-//    public void builderPostContentSuccessTest() {
-//
-//        PostContent postContent = PostContent.createPostContent(TITLE, CONTENT, CATEGORY);
-//
-//        //then
-//        assertThat(postContent.getTitle().title()).isEqualTo("게시글 테스트 제목");
-//        assertThat(postContent.getContent().content()).isEqualTo("게시글 테스트 내용");
-//        assertThat(postContent.getCategory()).isEqualTo(Category.sample);
-//    }
-//
-//    @Test
-//    @DisplayName("게시글 빌더 실패 테스트 : 실패")
-//    public void builderPostContentFailTest() {
-//
-//        //given
-//        Title givenTitle = Title.from("게시글 테스트 제목");
-//        Content givenContent = Content.from("게시글 테스트 내용");
-//
-//        //then
-//        assertThrows(NullPointerException.class, () -> {
-//           PostContent.builder()
-//                   .title(givenTitle)
-//                   .content(givenContent)
-//                   .build();
-//        });
-//    }
 }

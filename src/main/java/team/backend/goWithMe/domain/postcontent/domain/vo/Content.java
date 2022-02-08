@@ -15,7 +15,6 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class Content {
 
-//    @NotNull(message = "null은 안됩니다.")
     @NotBlank(message = "null 혹은 null string은 불가합니다.")
     @Column(columnDefinition = "TEXT")
     private String content;

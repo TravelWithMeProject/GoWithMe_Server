@@ -11,7 +11,7 @@ import java.util.Objects;
 @Embeddable
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Count {
+public final class Count {
 
     private Long count;
 
