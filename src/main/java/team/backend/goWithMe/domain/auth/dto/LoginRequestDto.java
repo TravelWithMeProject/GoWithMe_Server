@@ -23,8 +23,4 @@ public class LoginRequestDto {
 
     @JsonProperty("password")
     private UserPassword password;
-
-    public static LoginRequestDto createLogin(final UserEmail email, final UserPassword password) {
-        return new LoginRequestDto(email, password);
-    }
 }

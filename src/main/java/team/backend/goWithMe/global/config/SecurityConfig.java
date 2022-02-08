@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 import team.backend.goWithMe.global.common.TokenProvider;
 import team.backend.goWithMe.global.jwt.JwtAccessDeniedHandler;
@@ -49,7 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**")
                 .antMatchers("/js/**")
                 .antMatchers("/h2-console") // h2로 데이터베이스 테스트
-                .antMatchers("/images/**");
+                .antMatchers("/images/**")
+                .antMatchers("/swagger-ui/**")
+
+                // swagger
+                .antMatchers( "/v3/api-docs", "/configuration/ui", "/swagger-resources",
+                        "/configuration/security",
+                        "/swagger-ui.html", "/webjars/**","/swagger/**");
     }
 
     @Override
@@ -58,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .csrf().disable()
-                .addFilter(corsFilter) // 인증 시 모든 요청에 대해 허용함 Cors 체제에서 탈출
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
@@ -66,6 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                         .antMatchers(HttpMethod.POST,"/api/v1/member/join").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/v1/member/reissue").permitAll()
+                        .antMatchers("/swagger-resources/**").permitAll()
                         .anyRequest().authenticated();
 
         http
