@@ -1,8 +1,6 @@
 package team.backend.goWithMe.global.error.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.http.HttpStatus;
-import team.backend.goWithMe.domain.favorite.domain.error.OverPeriodException;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorCode {
@@ -20,17 +18,20 @@ public enum ErrorCode {
     USER_NOT_FOUND(400, "M002", "다시 로그인 시도해 주세요"),
     PASSWORD_NULL_ERROR(400, "M003", "올바른 비밀번호 입력이 아닙니다."),
     PASSWORD_MISS_MATCH(400, "M004", "비밀번호가 일치하지 않습니다."),
+    MEMBER_NOT_FOUND(400, "M005", "해당 회원을 찾을 수 없습니다."),
 
     // Token
     Token_NOT_FOUND(401, "T001", "유효하지 않은 토큰입니다."),
+    UN_AUTHORIZATION_ERROR(401, "T002", "이미 탈퇴한 회원입니다."),
 
     // Favorite
-    OVER_PERIOD_ERROR(400, "F001", "날짜 입력이 잘못 되었습니다.")
+    OVER_PERIOD_ERROR(400, "F001", "날짜 입력이 잘못 되었습니다."),
+    NOT_FOUND_FAVORITE(400, "F002", "해당 개체를 찾을 수 없습니다.")
 
     ;
 
 
-    // travle domain
+    // travel domain
 
     // Mate domain
 
