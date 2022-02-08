@@ -11,12 +11,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
 import team.backend.goWithMe.domain.member.domain.persist.MemberRepository;
 import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
 import team.backend.goWithMe.domain.member.error.exception.MemberNotFoundException;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
+import team.backend.goWithMe.global.jwt.error.UnAuthorizationException;
+import team.backend.goWithMe.global.redis.RedisService;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -28,12 +31,13 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider implements InitializingBean {
 
-    private static final String AUTHORITIES_KEY = "auth";
+    private static final String AUTHORITIES_KEY = "role";
 
     private final String secret;
     private final long accessTokenValidityInMilliseconds;
     private final long refreshTokenValidityInMilliseconds;
 
+    private final RedisService redisService;
     private final MemberRepository memberRepository;
 
     private Key key;
@@ -42,15 +46,17 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.accessToken-validity-in-seconds}") long accessTokenValidityInMilliseconds,
             @Value("${jwt.refreshToken-validity-in-seconds}") long refreshTokenValidityInMilliseconds,
-            MemberRepository memberRepository) {
+            MemberRepository memberRepository,
+            RedisService redisService) {
         this.secret = secret;
-        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
-        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
+        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds * 1000;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
         this.memberRepository = memberRepository;
+        this.redisService = redisService;
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -60,7 +66,10 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        log.info("authorities : {}", authorities);
+
         long now = (new Date()).getTime();
+
         Member member = memberRepository.findByEmail(UserEmail.from(email)).orElseThrow(() -> {
             throw new MemberNotFoundException(ErrorCode.USER_NOT_FOUND);
         });
@@ -74,9 +83,9 @@ public class TokenProvider implements InitializingBean {
                 .compact();
 
         String refreshToken = Jwts.builder()
+                .claim(AUTHORITIES_KEY, authorities)
                 .claim("email", member.getEmail().userEmail())
                 .claim("nickname", member.getNickname().userNickname())
-                .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(new Date(now + refreshTokenValidityInMilliseconds))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -95,18 +104,24 @@ public class TokenProvider implements InitializingBean {
                 .parseClaimsJws(token)
                 .getBody();
 
-        List<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+        List<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = new User(String.valueOf(claims.get("email")), "", authorities);
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
+            if (redisService.getBlackList(token) != null) {
+                throw new UnAuthorizationException(ErrorCode.UN_AUTHORIZATION_ERROR);
+            }
+
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");

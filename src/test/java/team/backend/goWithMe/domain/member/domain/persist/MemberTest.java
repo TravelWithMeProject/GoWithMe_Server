@@ -52,7 +52,11 @@ class MemberTest {
         UserNickName updateNickName = UserNickName.from("GOLF");
         UserProfileImage updateProfile = UserProfileImage.from("/develop");
 
-        member.update(updateEmail, updatePassword, updateNickName, updateProfile);
+        Member updatedMember = createMember(updateEmail, updatePassword, USER_NAME, ROLE_TYPE, updateNickName, USER_BIRTH,
+                updateProfile);
+
+
+        member.update(updatedMember);
 
         assertThat(member.getEmail()).isEqualTo(updateEmail);
         assertThat(member.getPassword()).isEqualTo(updatePassword);

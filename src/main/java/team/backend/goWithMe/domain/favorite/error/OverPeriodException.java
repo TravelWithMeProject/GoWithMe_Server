@@ -1,4 +1,4 @@
-package team.backend.goWithMe.domain.favorite.domain.error;
+package team.backend.goWithMe.domain.favorite.error;
 
 import team.backend.goWithMe.global.error.exception.BusinessException;
 import team.backend.goWithMe.global.error.exception.ErrorCode;

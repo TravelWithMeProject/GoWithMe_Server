@@ -1,8 +1,10 @@
 package team.backend.goWithMe.domain.member.domain.persist;
 
+import io.jsonwebtoken.lang.Assert;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import team.backend.goWithMe.domain.favorite.domain.persist.Favorite;
 import team.backend.goWithMe.domain.member.domain.vo.*;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
 
@@ -11,7 +13,6 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
@@ -41,9 +42,16 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private UserProfileImage profileImage;
 
+    @OneToOne(mappedBy = "member_id")
+    private Favorite favorite;
+
+//    @OneToMany(mappedBy = "mate_id")
+//    private Mate mate;
+
     @Builder
     public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType,
                   UserNickName nickname, LocalDate birth, UserProfileImage profileImage) {
+
         this.email = email;
         this.password = password;
         this.name = name;
@@ -56,14 +64,11 @@ public class Member extends BaseTimeEntity {
     /**
      * 비즈 니스 로직
      */
-    public Member update(final UserEmail email, final UserPassword password,
-                       final UserNickName nickname, final UserProfileImage profileImage) {
-        changeEmail(email);
-        changePassword(password);
-        changeNickName(nickname);
-        changeProfile(profileImage);
-
-        return this;
+    public void update(final Member member) {
+        changeEmail(member.email);
+        changePassword(member.password);
+        changeNickName(member.nickname);
+        changeProfile(member.profileImage);
     }
 
     private void changeEmail(UserEmail email) {
