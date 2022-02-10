@@ -1,12 +1,10 @@
 package team.backend.goWithMe.domain.member.domain.persist;
 
 import io.jsonwebtoken.lang.Assert;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import team.backend.goWithMe.domain.favorite.domain.persist.Favorite;
 import team.backend.goWithMe.domain.member.domain.vo.*;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
 
@@ -15,11 +13,10 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
@@ -45,16 +42,15 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private UserProfileImage profileImage;
 
-    @Builder
-    public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType, UserNickName nickname, LocalDate birth, UserProfileImage profileImage) {
+    @OneToOne(mappedBy = "member_id")
+    private Favorite favorite;
 
-        // null 방지 검증 로직
-        Assert.hasText(email.userEmail());
-        Assert.hasText(password.userPassword());
-        Assert.hasText(name.userName());
-        Assert.hasText(roleType.name());
-        Assert.hasText(nickname.userNickname());
-        Assert.hasText(profileImage.userProfileImage());
+//    @OneToMany(mappedBy = "mate_id")
+//    private Mate mate;
+
+    @Builder
+    public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType,
+                  UserNickName nickname, LocalDate birth, UserProfileImage profileImage) {
 
         this.email = email;
         this.password = password;
@@ -65,14 +61,14 @@ public class Member extends BaseTimeEntity {
         this.profileImage = profileImage;
     }
 
-
     /**
      * 비즈 니스 로직
      */
-    public void update(final UserEmail email, final UserPassword password, final UserNickName nickname) {
-        changeEmail(email);
-        changePassword(password);
-        changeNickName(nickname);
+    public void update(final Member member) {
+        changeEmail(member.email);
+        changePassword(member.password);
+        changeNickName(member.nickname);
+        changeProfile(member.profileImage);
     }
 
     private void changeEmail(UserEmail email) {
@@ -86,6 +82,8 @@ public class Member extends BaseTimeEntity {
     private void changeNickName(UserNickName nickname) {
         this.nickname = nickname;
     }
+
+    private void changeProfile(UserProfileImage profileImage) { this.profileImage = profileImage; }
 
     // 비밀번호 해시화
     public Member encode(final PasswordEncoder encoder) {

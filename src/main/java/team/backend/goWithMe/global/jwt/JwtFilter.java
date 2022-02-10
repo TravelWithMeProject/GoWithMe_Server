@@ -27,17 +27,24 @@ public class JwtFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest servletRequest = (HttpServletRequest) request;
+
+        log.debug("request : {}", servletRequest);
+
         String jwt = resolveToken(servletRequest);
 
+        log.debug("jwt : {}", jwt);
+
         String requestURI = servletRequest.getRequestURI();
+
+        log.info("doFilter 들어옴");
 
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            log.debug("{} 인정 정보 저장, uri : {}", authentication.getName(), requestURI);
+            log.info("{} 인정 정보 저장, uri : {}", authentication.getName(), requestURI);
         } else {
-            log.debug("유효한 JWT 토큰이 없습니다. uri: {}", requestURI);
+            log.info("유효한 JWT 토큰이 없습니다. uri: {}", requestURI);
         }
 
         chain.doFilter(request, response);
@@ -45,6 +52,8 @@ public class JwtFilter extends GenericFilterBean {
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+
+        log.info("token : {}", bearerToken);
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);

@@ -18,7 +18,7 @@ public final class UserEmail {
 
     @Email(message = "이메일 형식이 아닙니다.")
     @NotBlank(message = "이메일은 필수 입력사항 입니다.")
-    @Column(unique = true, nullable = false, length = 30)
+    @Column(unique = true, nullable = false, length = 60)
     private String email;
 
     public static UserEmail from(final String email) {

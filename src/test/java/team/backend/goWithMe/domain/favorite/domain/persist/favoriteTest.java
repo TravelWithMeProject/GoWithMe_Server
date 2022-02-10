@@ -2,7 +2,7 @@ package team.backend.goWithMe.domain.favorite.domain.persist;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.favorite.domain.error.OverPeriodException;
+import team.backend.goWithMe.domain.favorite.error.OverPeriodException;
 import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
 import team.backend.goWithMe.domain.favorite.domain.vo.FavoritePeriod;
@@ -26,12 +26,17 @@ class favoriteTest {
 
         Favorite favorite = Favorite.createFavorite(givenArrival, givenHome, givenPeriod);
 
+        FavoriteArrival updateArrival = FavoriteArrival.from("canada");
+        Accommodation updateAccommodation = Accommodation.from("guestHouse");
+
+        Favorite update = Favorite.createFavorite(updateArrival, updateAccommodation, givenPeriod);
+
         // when
-        favorite.updateFavorite(FavoriteArrival.from("canada"), Accommodation.from("guestHouse"), givenPeriod);
+        favorite.updateFavorite(update);
 
         // then
-        assertThat(favorite.getFavoriteArrival()).isEqualTo(FavoriteArrival.from("canada"));
-        assertThat(favorite.getAccommodation()).isEqualTo(Accommodation.from("guestHouse"));
+        assertThat(favorite.getFavoriteArrival().favoriteArrival()).isEqualTo("canada");
+        assertThat(favorite.getAccommodation().accommodation()).isEqualTo("guestHouse");
     }
 
     @Test

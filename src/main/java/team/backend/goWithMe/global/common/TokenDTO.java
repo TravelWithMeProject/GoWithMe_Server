@@ -1,27 +1,25 @@
 package team.backend.goWithMe.global.common;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Getter @Setter
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenDTO {
 
-    private Long userId;
-    private String email;
-    private String name;
-    private String password;
-    private String imgUrl;
+    @JsonProperty("accessToken")
+    private AccessToken accessToken;
 
-    @Builder
-    public TokenDTO(Long userId, String email, String name, String password, String imgUrl) {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.imgUrl = imgUrl;
+    @JsonProperty("refreshToken")
+    private RefreshToken refreshToken;
+
+    public static TokenDTO create(final AccessToken accessToken, final RefreshToken refreshToken) {
+        return new TokenDTO(accessToken, refreshToken);
     }
-
-    // 정적 팩토리 메서드
-//    public static TokenProvider from(Member member) {}
 }
