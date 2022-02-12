@@ -5,6 +5,7 @@ import lombok.*;
 import team.backend.goWithMe.domain.mate.domain.vo.MateEmail;
 import team.backend.goWithMe.domain.mate.domain.vo.MateNickName;
 import team.backend.goWithMe.domain.mate.domain.vo.MateProfileImg;
+import team.backend.goWithMe.domain.member.domain.persist.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,25 +33,29 @@ public class MateList {
     @Embedded
     private LocalDateTime birth;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Member member;
+
     @Builder
-    public MateList(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg) {
+    public MateList(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg, LocalDateTime birth, Member member) {
         Assert.hasText(mateEmail.mateEmail(),"이메일이 없습니다.");
         Assert.hasText(mateNickName.mateNickname(), "닉네임이 없습니다.");
         Assert.hasText(mateProfileImg.mateProfileImg(),"프로필 이미지가 없습니다.");
         this.mateEmail = mateEmail;
         this.mateNickname = mateNickName;
         this.mateProfileImg = mateProfileImg;
+        this.birth = birth;
+        this.member = member;
     }
 
-    public static MateList createMate(@NonNull MateEmail mateEmail, @NonNull MateNickName mateNickname, @NonNull MateProfileImg mateProfileImg) {
-        return new MateList(mateEmail, mateNickname, mateProfileImg);
+    public static MateList createMate(@NonNull MateEmail mateEmail, @NonNull MateNickName mateNickname, @NonNull MateProfileImg mateProfileImg, @NonNull LocalDateTime birth, @NonNull Member member) {
+        return new MateList(mateEmail, mateNickname, mateProfileImg, birth, member);
     }
-//    @OneToMany(mappedBy = "mateList")
-//    private List<Mate> team.backend.goWithMe.domain.mate = new ArrayList<>();
 
     /*비즈니스 메서드*/
 
-    public void updateMateList(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg) {
+    public void updateMateList(MateEmail mateEmail, MateNickName mateNickName, MateProfileImg mateProfileImg, Member member) {
         changeEmail(mateEmail);
         changeNickName(mateNickName);
         changeMateProfileImg(mateProfileImg);

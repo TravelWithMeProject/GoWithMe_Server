@@ -1,5 +1,6 @@
 package team.backend.goWithMe.domain.mate.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class MateListController {
     private final MateService mateListService;
 
     //findById
-    @GetMapping("/{mateId}")
+    @GetMapping("/{id}")
     public ResponseEntity<MateResponseDto> getMate (@PathVariable Long id) {
         MateResponseDto mateDTO = mateListService.findById(id);
         return new ResponseEntity<MateResponseDto>(mateDTO, HttpStatus.OK);
@@ -26,30 +27,33 @@ public class MateListController {
 
     //findAll
     @GetMapping("/mateList")
-    public ResponseEntity<List<MateResponseDto>> getMateList() {
+    public ResponseEntity<List<MateResponseDto>> getMateAll() {
         List<MateResponseDto> mate = mateListService.findAll();
         return new ResponseEntity<List<MateResponseDto>>(mate, HttpStatus.OK);
     }
 
     //save
-    @PostMapping
+    @PostMapping("/save")
+    @ApiOperation(value = "친구 저장", notes = "친구 정보를 저장한다.")
     public ResponseEntity<MateRequestDto> saveMate(@RequestBody MateRequestDto mateSaveRequestDto) {
         mateListService.save(mateSaveRequestDto);
         return new ResponseEntity<MateRequestDto>(mateSaveRequestDto, HttpStatus.OK);
     }
 
     //update
-    @PutMapping("/{mateId}")
-    public ResponseEntity<MateRequestDto> updateMate(@PathVariable Long id, @RequestBody MateRequestDto mateSaveRequestDto) {
+    @PutMapping("/{id}")
+    @ApiOperation(value = "친구 수정", notes = "친구 정보를 수정한다.")
+    public ResponseEntity<Void> updateMate(@PathVariable Long id, @RequestBody MateRequestDto mateSaveRequestDto) {
         mateListService.update(id, mateSaveRequestDto);
-        return new ResponseEntity<MateRequestDto>(mateSaveRequestDto, HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     //delete
-    @DeleteMapping("/")
-    public ResponseEntity<MateRequestDto> deleteMate(@PathVariable Long id, @RequestBody MateRequestDto mateSaveRequestDto) {
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "친구 삭제", notes = "친구 정보를 삭제한다.")
+    public ResponseEntity<Void> deleteMate(@PathVariable Long id) {
         mateListService.delete(id);
-        return new ResponseEntity<MateRequestDto>(mateSaveRequestDto, HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
 }
