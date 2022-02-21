@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
@@ -13,11 +14,13 @@ import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
 import team.backend.goWithMe.domain.member.domain.vo.UserNickName;
 import team.backend.goWithMe.domain.member.domain.vo.UserPassword;
 import team.backend.goWithMe.domain.member.domain.vo.UserProfileImage;
+import team.backend.goWithMe.global.common.AccessToken;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Slf4j
 @ApiModel
 @JsonTypeName("user")
+@Getter
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class MemberUpdateDTO {
 
@@ -36,6 +39,9 @@ public class MemberUpdateDTO {
     @JsonProperty("profile")
     @ApiModelProperty(example = "/user/image/new_image.jpeg")
     private UserProfileImage profileImage;
+
+    @JsonProperty("accessToken")
+    private AccessToken accessToken;
 
     public Member toEntity() {
         return Member.builder()
