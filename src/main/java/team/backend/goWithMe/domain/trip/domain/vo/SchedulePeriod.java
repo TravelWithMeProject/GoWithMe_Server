@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.domain.trip.error.SchedulePeriodInvalidException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -70,19 +71,19 @@ public final class SchedulePeriod{
         validateDetailPeriodInTotalPeriod(detailStart, totalPeriod);
         validateDetailPeriodInTotalPeriod(detailEnd, totalPeriod);
         if (detailStart.isAfter(detailEnd)) {
-            throw new SchedulePeriodInvalidException("세부일정 시작 지점은 끝 시점보다 늦을 수 없습니다.");
+            throw new SchedulePeriodInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
         if (detailEnd.isBefore(detailStart)) {
-            throw new SchedulePeriodInvalidException("세부일정 끝 시점은 시작 시점보다 빠를 수 없습니다.");
+            throw new SchedulePeriodInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
     private static void validateDetailPeriodInTotalPeriod(LocalDateTime detailOne, TimeTablePeriod totalPeriod) {
         if (detailOne.isBefore(totalPeriod.totalPeriodStart())) {
-            throw new SchedulePeriodInvalidException("세부일정은 전체일정보다 빠를 수 없습니다.");
+            throw new SchedulePeriodInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
         if (detailOne.isAfter(totalPeriod.totalPeriodEnd())) {
-            throw new SchedulePeriodInvalidException("세부일정은 전체일정보다 늦을 수 없습니다.");
+            throw new SchedulePeriodInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 }
