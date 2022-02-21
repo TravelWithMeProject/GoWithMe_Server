@@ -15,7 +15,7 @@ public final class RefreshToken {
     private String refreshToken;
 
     @JsonValue
-    public final String refreshToken() {
+    public String refreshToken() {
         return refreshToken;
     }
 
