@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
 import team.backend.goWithMe.domain.member.domain.persist.MemberRepository;
@@ -19,7 +20,7 @@ import team.backend.goWithMe.global.error.exception.ErrorCode;
 import java.util.Collections;
 
 @Slf4j
-@Component("userDetailsService")
+@Service
 @RequiredArgsConstructor
 public class CustomMemberDetailService implements UserDetailsService {
 
@@ -36,7 +37,7 @@ public class CustomMemberDetailService implements UserDetailsService {
     private UserDetails createUserDetails(Member member) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + member.getRoleType());
 
-        return new User(member.getEmail().userEmail(), member.getPassword().userPassword()
-                , Collections.singleton(grantedAuthority));
+        return new User(member.getEmail().userEmail(),
+                member.getPassword().userPassword(), Collections.singleton(grantedAuthority));
     }
 }

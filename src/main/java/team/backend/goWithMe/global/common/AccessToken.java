@@ -15,7 +15,7 @@ public final class AccessToken {
     private String accessToken;
 
     @JsonValue
-    public final String accessToken() {
+    public String accessToken() {
         return accessToken;
     }
 

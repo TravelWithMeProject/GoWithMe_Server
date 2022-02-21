@@ -48,7 +48,7 @@ public final class TimeTableName {
 
     private static void validateTimeTableName(String tableName) {
         if (tableName == null || tableName.isBlank()) {
-            throw new TimeTableNameInvalidException("시간표 명은 필수입니다.", ErrorCode.INVALID_INPUT_VALUE);
+            throw new TimeTableNameInvalidException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }
 }

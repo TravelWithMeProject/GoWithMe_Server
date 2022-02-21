@@ -20,7 +20,7 @@ public enum ErrorCode {
     PASSWORD_MISS_MATCH(400, "M004", "비밀번호가 일치하지 않습니다."),
     MEMBER_NOT_FOUND(400, "M005", "해당 회원을 찾을 수 없습니다."),
 
-    // Token
+    // Token, Auth
     Token_NOT_FOUND(401, "T001", "유효하지 않은 토큰입니다."),
     UN_AUTHORIZATION_ERROR(401, "T002", "이미 탈퇴한 회원입니다."),
 

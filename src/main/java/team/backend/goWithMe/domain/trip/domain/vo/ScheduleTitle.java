@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.domain.trip.error.ScheduleTitleInvalidException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -47,7 +48,7 @@ public final class ScheduleTitle {
 
     private static void validateScheduleTitle(String scheduleTitle) {
         if (scheduleTitle == null || scheduleTitle.isBlank()) {
-            throw new ScheduleTitleInvalidException("세부 스케줄 이름은 필수입니다.");
+            throw new ScheduleTitleInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
