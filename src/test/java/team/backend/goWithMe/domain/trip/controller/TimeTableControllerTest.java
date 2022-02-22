@@ -1,6 +1,5 @@
 package team.backend.goWithMe.domain.trip.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,13 +19,9 @@ import team.backend.goWithMe.domain.trip.dto.request.TimeTableCreateDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableIdDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableListDTO;
-import team.backend.goWithMe.domain.trip.dto.response.TimeTableSuccessDTO;
-import team.backend.goWithMe.domain.trip.error.exception.NoSuchMemberException;
 import team.backend.goWithMe.domain.trip.service.TimeTableService;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -68,7 +63,7 @@ class TimeTableControllerTest {
         TimeTableCreateDTO timeTableDTO = new TimeTableCreateDTO(MEMBER_ID, TIMETABLE_NAME,
                 TIMETABLE_CONTENT, TIMETABLE_PERIOD_START, TIMETABLE_PERIOD_END);
         Long sampleTimeTableId = 1L;
-        when(timeTableService.saveTimeTable(any())).thenReturn(sampleTimeTableId);
+        when(timeTableService.createTimeTable(any())).thenReturn(sampleTimeTableId);
 
 
         // when
@@ -151,7 +146,6 @@ class TimeTableControllerTest {
                 TIMETABLE_CONTENT, TIMETABLE_PERIOD_START, TIMETABLE_PERIOD_END);
         Long sampleTimeTableId = 1L;
         TimeTableIdDTO timeTableIdDTO = new TimeTableIdDTO(true, sampleTimeTableId);
-        when(timeTableService.updateTimeTable(any(), any())).thenReturn(sampleTimeTableId);
 
         TimeTableCreateDTO timeTableDTO4Update = new TimeTableCreateDTO(MEMBER_ID, TIMETABLE_NAME,
                 "새 컨텐츠 is ...", TIMETABLE_PERIOD_START, TIMETABLE_PERIOD_END);
@@ -170,17 +164,13 @@ class TimeTableControllerTest {
     @DisplayName("시간표 삭제 테스트")
     public void deleteTimeTableTest() throws Exception {
         // given
-        TimeTableSuccessDTO timeTableSuccessDTO = new TimeTableSuccessDTO(true);
         long sampleTimeTableId = 1L;
-        when(timeTableService.deleteTimeTable(any(), any())).thenReturn(timeTableSuccessDTO);
-
 
         // when, then
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/timeTable/" + MEMBER_ID + "/" + sampleTimeTableId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(timeTableSuccessDTO.isSuccess()));
+                .andExpect(status().isOk());
     }
 
 
@@ -189,7 +179,7 @@ class TimeTableControllerTest {
         TimeTableCreateDTO timeTableDTO = new TimeTableCreateDTO(MEMBER_ID, TIMETABLE_NAME,
                 TIMETABLE_CONTENT, TIMETABLE_PERIOD_START, TIMETABLE_PERIOD_END);
         Long sampleTimeTableId = 1L;
-        when(timeTableService.saveTimeTable(any())).thenReturn(sampleTimeTableId);
+        when(timeTableService.createTimeTable(any())).thenReturn(sampleTimeTableId);
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/timeTable/create")
                         .contentType(MediaType.APPLICATION_JSON)

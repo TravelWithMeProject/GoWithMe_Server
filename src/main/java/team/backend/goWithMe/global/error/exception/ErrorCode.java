@@ -32,7 +32,17 @@ public enum ErrorCode {
     INVALID_TITLE_OR_NAME(400, "TT001", "제목은 반드시 값이 입력되어야 합니다."),
     PERIOD_MISMATCH_ERROR(400, "TT002", "기간 설정에 오류가 있습니다."),
     WRONG_TIMETABLE_OWNER(400, "TT003", "시간표를 소유한 사용자 아이디가 일치하지 않습니다."),
-    NO_SUCH_TIMETABLE(404, "TT004", "해당 id의 TimeTable이 없습니다.")
+    NO_SUCH_TIMETABLE(404, "TT004", "해당 id의 TimeTable이 없습니다."),
+
+
+    // travel domain
+    INVALID_TITLE_OR_NAME(400, "T001", "제목은 반드시 값이 입력되어야 합니다."),
+    PERIOD_MISMATCH_ERROR(400, "T002", "기간 설정에 오류가 있습니다."),
+    WRONG_TIMETABLE_OWNER(400, "T003", "시간표를 소유한 사용자 아이디가 일치하지 않습니다."),
+    NO_SUCH_TIMETABLE(404, "T004", "해당 id의 TimeTable이 없습니다."),
+    NO_SUCH_SCHEDULE(404, "T005", "해당 iddml Schedule이 없습니다."),
+    WRONG_SCHEDULE_OWNER(400, "T005", "해당 세부 일정을 소유한 시간표 아이디가 일치하지 않습니다."),
+    NO_SUCH_MEMBER_IN_TIMETABLE(404, "T006", "해당 id의 Member가 없습니다.(시간표 관련)")
 
     ;
 

@@ -1,33 +1,24 @@
 package team.backend.goWithMe.domain.trip.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.backend.goWithMe.domain.member.domain.persist.Member;
-import team.backend.goWithMe.domain.member.domain.persist.RoleType;
-import team.backend.goWithMe.domain.member.domain.vo.*;
 import team.backend.goWithMe.domain.trip.dto.request.TimeTableCreateDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableIdDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableListDTO;
-import team.backend.goWithMe.domain.trip.dto.response.TimeTableSuccessDTO;
-import team.backend.goWithMe.domain.trip.repository.MemberRepository;
 import team.backend.goWithMe.domain.trip.service.TimeTableService;
 
-import javax.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import javax.validation.Valid;
 
 @RestController
-@Tag(name = "TimeTableController", description = "시간표(전체 일정) API")
+@Api("시간표(전체일정) 관련 API")
 @RequiredArgsConstructor
-@RequestMapping("/timeTable")
+@RequestMapping("/api/v1/timeTable")
 public class TimeTableController {
 
     private final TimeTableService timeTableService;
@@ -39,9 +30,7 @@ public class TimeTableController {
             @PathVariable Long memberId,
             @ApiParam(value = "시간표 id", required = true, example = "3")
             @PathVariable Long timeTableId) {
-        TimeTableDTO dto = timeTableService.findTimeTable(memberId, timeTableId);
-
-        return new ResponseEntity<>(dto, header(), HttpStatus.OK);
+        return new ResponseEntity<>(timeTableService.findTimeTable(memberId, timeTableId), HttpStatus.OK);
     }
 
     @GetMapping("/{memberId}")
@@ -49,48 +38,35 @@ public class TimeTableController {
     public ResponseEntity<TimeTableListDTO> timeTableList(
             @ApiParam(value = "사용자 id", required = true, example = "2")
             @PathVariable Long memberId) {
-        TimeTableListDTO dto = timeTableService.findTimeTablesByMemberId(memberId);
-
-        return new ResponseEntity<>(dto, header(), HttpStatus.OK);
+        return new ResponseEntity<>(timeTableService.findTimeTablesByMemberId(memberId), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     @ApiOperation(value = "시간표 생성", notes = "시간표(전체 일정)를 생성하는 API")
-    public ResponseEntity<TimeTableIdDTO> createTimeTable(@RequestBody TimeTableCreateDTO dto) {
-        Long savedTimeTableId = timeTableService.saveTimeTable(dto);
-        TimeTableIdDTO responseDTO = new TimeTableIdDTO(true, savedTimeTableId);
+    public ResponseEntity<TimeTableIdDTO> createTimeTable(@RequestBody @Valid TimeTableCreateDTO dto) {
+        Long savedTimeTableId = timeTableService.createTimeTable(dto);
 
-        return new ResponseEntity<>(responseDTO, header(), HttpStatus.OK);
+        return new ResponseEntity<>(new TimeTableIdDTO(true, savedTimeTableId), HttpStatus.OK);
     }
 
     @PutMapping("/{timeTableId}")
     @ApiOperation(value = "시간표 업데이트", notes = "시간표(전체 일정)를 업데이트하는 API")
-    public ResponseEntity<TimeTableIdDTO> updateTimeTable(
+    public ResponseEntity<Void> updateTimeTable(
             @ApiParam(value = "시간표 id", required = true, example = "2")
             @PathVariable Long timeTableId,
-            @RequestBody TimeTableCreateDTO dto) {
-        Long updatedTimeTableId = timeTableService.updateTimeTable(timeTableId, dto);
-        TimeTableIdDTO idDTO = new TimeTableIdDTO(true, updatedTimeTableId);
-
-        return new ResponseEntity<>(idDTO, header(), HttpStatus.OK);
+            @RequestBody @Valid TimeTableCreateDTO dto) {
+        timeTableService.updateTimeTable(timeTableId, dto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{memberId}/{timeTableId}")
     @ApiOperation(value = "시간표 삭제", notes = "시간표(전체 일정)를 삭제하는 API")
-    public ResponseEntity<TimeTableSuccessDTO> deleteTimeTable(
+    public ResponseEntity<Void> deleteTimeTable(
             @ApiParam(value = "사용자 id", required = true, example = "1")
             @PathVariable Long memberId,
             @ApiParam(value = "시간표 id", required = true, example = "3")
             @PathVariable Long timeTableId) {
-        TimeTableSuccessDTO dto = timeTableService.deleteTimeTable(memberId, timeTableId);
-
-        return new ResponseEntity<>(dto, header(), HttpStatus.OK);
-    }
-
-    private HttpHeaders header() {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-
-        return httpHeaders;
+        timeTableService.deleteTimeTable(memberId, timeTableId);
+        return ResponseEntity.ok().build();
     }
 }

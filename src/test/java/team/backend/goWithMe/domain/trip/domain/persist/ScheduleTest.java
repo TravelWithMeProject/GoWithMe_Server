@@ -40,7 +40,7 @@ class ScheduleTest {
         TimeTableName timeTableName = TimeTableName.from("전체 일정");
         TimeTableContent timeTableContent = TimeTableContent.from("전체 일정 내용입니다");
         TimeTablePeriod timeTablePeriod = TimeTablePeriod.between(OLD_PERIOD_START.minusDays(1L), OLD_PERIOD_END.plusDays(1L));
-        this.timeTable = TimeTable.createTimeTable(timeTableName, timeTableContent, timeTablePeriod, this.member);
+        this.timeTable = TimeTable.createTimeTable(timeTableName, timeTableContent, timeTablePeriod, Member.builder().build());
 
         ScheduleTitle title = ScheduleTitle.from(OLD_NAME);
         ScheduleContent content = ScheduleContent.from(OLD_CONTENT);
@@ -287,4 +287,6 @@ class ScheduleTest {
         assertThat(newCost.amount()).isEqualTo(1000L);
         assertThat(oldCost.amount()).isEqualTo(OLD_COST);
     }
+
+
 }
