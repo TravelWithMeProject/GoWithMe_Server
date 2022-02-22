@@ -1,0 +1,24 @@
+package team.backend.goWithMe.domain.trip.dto.response;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@NoArgsConstructor
+@ApiModel
+public class TimeTableListDTO {
+    @ApiModelProperty(
+            value = "시간표 리스트",
+            required = true,
+            example = "[ { 시간표1 정보 }, { 시간표2 정보 }, ... ]")
+    private final List<TimeTableDTO> timeTableList = new ArrayList<>();
+
+    public void addTimeTable(TimeTableDTO timeTableDTO) {
+        timeTableList.add(timeTableDTO);
+    }
+}

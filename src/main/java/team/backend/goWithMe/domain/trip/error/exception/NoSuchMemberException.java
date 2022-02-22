@@ -1,0 +1,10 @@
+package team.backend.goWithMe.domain.trip.error.exception;
+
+import team.backend.goWithMe.global.error.exception.EntityNotFoundException;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
+
+public class NoSuchMemberException extends EntityNotFoundException {
+    public NoSuchMemberException(ErrorCode errorCode) {
+        super(errorCode);
+    }
+}

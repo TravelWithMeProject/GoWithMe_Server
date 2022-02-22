@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.trip.error.ScheduleTitleInvalidException;
+import team.backend.goWithMe.domain.trip.error.exception.ScheduleTitleInvalidException;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
@@ -48,7 +48,7 @@ public final class ScheduleTitle {
 
     private static void validateScheduleTitle(String scheduleTitle) {
         if (scheduleTitle == null || scheduleTitle.isBlank()) {
-            throw new ScheduleTitleInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new ScheduleTitleInvalidException(ErrorCode.INVALID_TITLE_OR_NAME);
         }
     }
 
