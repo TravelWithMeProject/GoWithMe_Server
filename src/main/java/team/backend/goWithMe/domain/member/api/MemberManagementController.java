@@ -65,7 +65,7 @@ public class MemberManagementController {
     // 회원 검색 (QueryDSL)
 
     // 회원 검색창 -> 자기랑 선호도가 맞는 회원을 갖고와야함 -> 회원 검색
-    @GetMapping("members/{id}")
+    @GetMapping("members/{memberId}")
     public ResponseEntity<List<MemberResponseDTO>> findAll(
             @PathVariable Long memberId,
             @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {

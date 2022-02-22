@@ -102,7 +102,7 @@ public class ScheduleService {
                 // 2) '<..>..[..]' 이 아니면,
                 if (!(newPeriodStart.isAfter(existingPeriodEnd) && newPeriodEnd.isAfter(existingPeriodEnd))) {
                     // 3) '<..[..>..]' 4) '[..<..]..>' 5) '[..<..>..]' 6) '<..[..]..>' 인 경우 throw
-                    throw new SchedulePeriodInvalidException("새 세부일정이 다른 세부일정과 겹칩니다.", ErrorCode.PERIOD_MISMATCH_ERROR);
+                    throw new SchedulePeriodInvalidException(ErrorCode.PERIOD_MISMATCH_ERROR);
                 }
             }
         });

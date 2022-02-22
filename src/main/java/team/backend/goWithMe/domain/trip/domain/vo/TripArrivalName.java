@@ -33,7 +33,7 @@ public class TripArrivalName {
 
     private static void validateTripArrivalName(String arrivalName) {
         if (arrivalName == null || arrivalName.isBlank()) {
-            throw new TimeTableNameInvalidException("여행지 명은 필수입니다.", INVALID_INPUT_VALUE);
+            throw new TimeTableNameInvalidException(INVALID_INPUT_VALUE);
         }
     }
 }

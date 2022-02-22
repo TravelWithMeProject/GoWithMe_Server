@@ -78,7 +78,7 @@ public class MemberManagementService {
 
     // 전체 회원 조회
     @Transactional(readOnly = true)
-    public List<MemberResponseDTO> findAll(Long id, Pageable pageable) {
+    public List<MemberResponseDTO> findAll(final Long id, final Pageable pageable) {
         List<Member> members;
 
         Member member = memberRepository.findById(id).orElseThrow(() ->
@@ -90,7 +90,6 @@ public class MemberManagementService {
         else {
             members = memberRepository.findAll();
         }
-
 
         return members.stream()
                 .map(MemberResponseDTO::create)

@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
+import team.backend.goWithMe.domain.member.domain.persist.MemberRepository;
 import team.backend.goWithMe.domain.trip.domain.persist.Schedule;
 import team.backend.goWithMe.domain.trip.domain.persist.TimeTable;
 import team.backend.goWithMe.domain.trip.dto.request.TimeTableCreateDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableDTO;
 import team.backend.goWithMe.domain.trip.dto.response.TimeTableListDTO;
 import team.backend.goWithMe.domain.trip.error.exception.*;
-import team.backend.goWithMe.domain.trip.repository.MemberRepository;
 import team.backend.goWithMe.domain.trip.repository.ScheduleRepository;
 import team.backend.goWithMe.domain.trip.repository.TimeTableRepository;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
@@ -75,7 +75,7 @@ public class TimeTableService {
         if (!timeTable.getMember().getId().equals(memberId)) {
             throw new WrongTimeTableOwnerIdException(ErrorCode.WRONG_TIMETABLE_OWNER);
         }
-        scheduleRepository.findByTimeTableId(timeTableId).forEach(scheduleRepository::delete);
+        scheduleRepository.deleteAll(scheduleRepository.findByTimeTableId(timeTableId));
         timeTableRepository.delete(timeTable);
     }
 
@@ -101,19 +101,13 @@ public class TimeTableService {
             Schedule earliestSchedule = scheduleList.get(0);
             if (dto.getTotalPeriodStart()
                     .isAfter(earliestSchedule.getSchedulePeriod().scheduleDetailStart())) {
-                throw new TimeTablePeriodInvalidException(
-                        "변경 예정인 전체 일정은 세부 일정 중 가장 빠른 것 보다 늦을 수 없습니다.",
-                        ErrorCode.PERIOD_MISMATCH_ERROR
-                );
+                throw new TimeTablePeriodInvalidException(ErrorCode.PERIOD_MISMATCH_ERROR);
             }
             // 세부일정 중 가장 마지막(나중) 것의 종료시간과 업데이트할 전체일정의 종료시간 비교
             Schedule latestSchedule = scheduleList.get(scheduleList.size() - 1);
             if (dto.getTotalPeriodEnd()
                     .isBefore(latestSchedule.getSchedulePeriod().scheduleDetailEnd())) {
-                throw new TimeTablePeriodInvalidException(
-                        "변경 예정인 전체 일정은 세부 일정 중 가장 느린 것 보다 빠를 수 없습니다.",
-                        ErrorCode.PERIOD_MISMATCH_ERROR
-                );
+                throw new TimeTablePeriodInvalidException(ErrorCode.PERIOD_MISMATCH_ERROR);
             }
         }
     }

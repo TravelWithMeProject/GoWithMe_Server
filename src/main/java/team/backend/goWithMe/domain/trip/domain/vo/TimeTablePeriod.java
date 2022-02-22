@@ -73,10 +73,10 @@ public final class TimeTablePeriod{
 
     private static void validateTotalPeriod(LocalDateTime totalStart, LocalDateTime totalEnd) {
         if (totalStart.isAfter(totalEnd)) {
-            throw new TimeTablePeriodInvalidException("전체일정 시작 시점과 끝 시점이 반대입니다.", PERIOD_MISMATCH_ERROR);
+            throw new TimeTablePeriodInvalidException(PERIOD_MISMATCH_ERROR);
         }
         if (totalStart.isEqual(totalEnd)) {
-            throw new TimeTablePeriodInvalidException("전체일정이 0(끝지점과 시작지점이 같음)이 될 수 없습니다.", PERIOD_MISMATCH_ERROR);
+            throw new TimeTablePeriodInvalidException(PERIOD_MISMATCH_ERROR);
         }
     }
 }

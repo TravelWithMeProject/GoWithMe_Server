@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
+import team.backend.goWithMe.domain.member.domain.persist.MemberRepository;
 import team.backend.goWithMe.domain.member.domain.persist.RoleType;
 import team.backend.goWithMe.domain.member.domain.vo.*;
 import team.backend.goWithMe.domain.trip.domain.persist.TimeTable;
@@ -20,7 +21,6 @@ import team.backend.goWithMe.domain.trip.dto.response.TimeTableListDTO;
 import team.backend.goWithMe.domain.trip.error.exception.NoSuchMemberException;
 import team.backend.goWithMe.domain.trip.error.exception.NoSuchTimeTableException;
 import team.backend.goWithMe.domain.trip.error.exception.WrongTimeTableOwnerIdException;
-import team.backend.goWithMe.domain.trip.repository.MemberRepository;
 import team.backend.goWithMe.domain.trip.repository.ScheduleRepository;
 import team.backend.goWithMe.domain.trip.repository.TimeTableRepository;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
@@ -200,7 +200,7 @@ class TimeTableServiceTest {
 
         given(timeTableRepository.findByUserId(fakeUserId)).willReturn(Collections.singletonList(timeTable));
 
-        // when
+        // whena
         TimeTableListDTO timeTableListDTO = timeTableService.findTimeTablesByMemberId(member.getId());
 
         // then
