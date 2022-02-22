@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import team.backend.goWithMe.domain.member.dto.*;
 import team.backend.goWithMe.global.common.TokenDTO;
 
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 import java.net.URI;
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class MemberManagementController {
     // 회원 검색 (QueryDSL)
 
     // 회원 검색창 -> 자기랑 선호도가 맞는 회원을 갖고와야함 -> 회원 검색
-    @GetMapping("members/{id}")
+    @GetMapping("members/{memberId}")
     public ResponseEntity<List<MemberResponseDTO>> findAll(
             @PathVariable Long memberId,
             @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {

@@ -2,6 +2,8 @@ package team.backend.goWithMe.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,11 +18,9 @@ import team.backend.goWithMe.domain.member.dto.MemberResponseDTO;
 import team.backend.goWithMe.domain.member.error.exception.DuplicateEmailException;
 import team.backend.goWithMe.domain.member.error.exception.MemberNotFoundException;
 import team.backend.goWithMe.global.common.AccessToken;
-import team.backend.goWithMe.global.common.TokenDTO;
 import team.backend.goWithMe.global.common.TokenProvider;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,21 +78,21 @@ public class MemberManagementService {
 
     // 전체 회원 조회
     @Transactional(readOnly = true)
-    public List<MemberResponseDTO> findAll(Long id, Pageable pageable) {
-        List<Member> members;
-
+    public List<MemberResponseDTO> findAll(final Long id, final Pageable pageable) {
         Member member = memberRepository.findById(id).orElseThrow(() ->
             new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
+        /**
+         * Favorite 설문지가 존재한다면 Favorite 정보를 갖고 조건에 부합하는 회원 만 갖고옴
+         * 존재하지 않는다면 findAll
+         */
         if (member.getFavorite() != null) {
-            members = memberQueryRepository.findAllByFavorite(member.getFavorite());
-        }
-        else {
-            members = memberRepository.findAll();
+            return memberQueryRepository.findAllByFavorite(member.getFavorite(), pageable).stream()
+                    .map(MemberResponseDTO::create)
+                    .collect(Collectors.toList());
         }
 
-
-        return members.stream()
+        return memberRepository.findAll(pageable).getContent().stream()
                 .map(MemberResponseDTO::create)
                 .collect(Collectors.toList());
     }
