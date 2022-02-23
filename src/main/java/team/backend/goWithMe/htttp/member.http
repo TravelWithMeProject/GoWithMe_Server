@@ -1,0 +1,29 @@
+### Login
+
+POST http://localhost:8080/api/v1/member/login
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "ilgolc@naver.com",
+    "password": "1234"
+  }
+}
+
+
+### Join
+
+POST http://localhost:8080/api/v1/member/join
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "ilgolc@naver.com",
+    "password": "1234",
+    "name": "ssar",
+    "nickname": "dfsdafasd",
+    "birth": "10-12-1999",
+    "profile": "asdfasdf"
+  }
+}
+
