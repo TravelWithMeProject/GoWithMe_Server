@@ -1,22 +1,20 @@
-package team.backend.goWithMe.domain.favorite.dto;
+package team.backend.goWithMe.domain.preference.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
-import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
+import team.backend.goWithMe.domain.preference.domain.persist.Preference;
+import team.backend.goWithMe.domain.preference.domain.vo.Accommodation;
+import team.backend.goWithMe.domain.preference.domain.vo.FavoriteArrival;
+import team.backend.goWithMe.domain.preference.domain.vo.FavoritePeriod;
 
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonTypeName("favorite")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-public class FavoriteFindDTO {
+public class PreferenceUpdateDTO {
 
     @JsonProperty("arrival")
     private FavoriteArrival favoriteArrival;
@@ -30,5 +28,8 @@ public class FavoriteFindDTO {
     @JsonProperty("endTime")
     private LocalDate endTime;
 
-
+    public Preference toEntity() {
+        FavoritePeriod favoritePeriod = FavoritePeriod.of(startTime, endTime);
+        return Preference.createSurvey(favoriteArrival, accommodation, favoritePeriod);
+    }
 }

@@ -1,4 +1,4 @@
-package team.backend.goWithMe.domain.favorite.error;
+package team.backend.goWithMe.domain.preference.error;
 
 public class FavoriteBusinessException extends RuntimeException {
 

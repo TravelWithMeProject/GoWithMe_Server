@@ -1,10 +1,9 @@
 package team.backend.goWithMe.domain.member.domain.persist;
 
-import io.jsonwebtoken.lang.Assert;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import team.backend.goWithMe.domain.favorite.domain.persist.Favorite;
+import team.backend.goWithMe.domain.preference.domain.persist.Preference;
 import team.backend.goWithMe.domain.member.domain.vo.*;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
 
@@ -17,7 +16,7 @@ import java.time.LocalDate;
 public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     private Long id;
 
     @Embedded
@@ -42,11 +41,9 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private UserProfileImage profileImage;
 
-    @OneToOne(mappedBy = "member_id")
-    private Favorite favorite;
-
-//    @OneToMany(mappedBy = "mate_id")
-//    private Mate mate;
+    @OneToOne
+    @JoinColumn(name = "preference_id")
+    private Preference favorite;
 
     @Builder
     public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType,
@@ -84,6 +81,10 @@ public class Member extends BaseTimeEntity {
     }
 
     private void changeProfile(UserProfileImage profileImage) { this.profileImage = profileImage; }
+
+    public void addFavorite(final Preference favorite) {
+        this.favorite = favorite;
+    }
 
     // 비밀번호 해시화
     public Member encode(final PasswordEncoder encoder) {

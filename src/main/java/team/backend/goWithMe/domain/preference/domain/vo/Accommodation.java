@@ -1,4 +1,4 @@
-package team.backend.goWithMe.domain.favorite.domain.vo;
+package team.backend.goWithMe.domain.preference.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;

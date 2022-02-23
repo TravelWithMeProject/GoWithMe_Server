@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import team.backend.goWithMe.domain.favorite.domain.persist.Favorite;
+import team.backend.goWithMe.domain.preference.domain.persist.Preference;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class MemberQueryRepository {
     private final JPAQueryFactory query;
 
     // 선호도 조사한 것을 기준으로 검색
-    public List<Member> findAllByFavorite(final Favorite memberFavorite, final Pageable pageable) {
+    public List<Member> findAllByFavorite(final Preference memberFavorite, final Pageable pageable) {
         return query.selectFrom(member)
                 .leftJoin(member.favorite)
                 .where(member.favorite.favoriteArrival.eq(memberFavorite.getFavoriteArrival())

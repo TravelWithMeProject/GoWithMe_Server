@@ -1,11 +1,11 @@
-package team.backend.goWithMe.domain.favorite.domain.persist;
+package team.backend.goWithMe.domain.preference.domain.persist;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.favorite.error.OverPeriodException;
-import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
-import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
-import team.backend.goWithMe.domain.favorite.domain.vo.FavoritePeriod;
+import team.backend.goWithMe.domain.preference.error.OverPeriodException;
+import team.backend.goWithMe.domain.preference.domain.vo.Accommodation;
+import team.backend.goWithMe.domain.preference.domain.vo.FavoriteArrival;
+import team.backend.goWithMe.domain.preference.domain.vo.FavoritePeriod;
 
 import java.time.LocalDate;
 
@@ -24,12 +24,12 @@ class favoriteTest {
         LocalDate givenEnd = LocalDate.of(2022, 2, 2);
         FavoritePeriod givenPeriod = FavoritePeriod.of(givenStart, givenEnd);
 
-        Favorite favorite = Favorite.createFavorite(givenArrival, givenHome, givenPeriod);
+        Preference favorite = Preference.createSurvey(givenArrival, givenHome, givenPeriod);
 
         FavoriteArrival updateArrival = FavoriteArrival.from("canada");
         Accommodation updateAccommodation = Accommodation.from("guestHouse");
 
-        Favorite update = Favorite.createFavorite(updateArrival, updateAccommodation, givenPeriod);
+        Preference update = Preference.createSurvey(updateArrival, updateAccommodation, givenPeriod);
 
         // when
         favorite.updateFavorite(update);
@@ -51,7 +51,7 @@ class favoriteTest {
 
         // then
         assertThrows(OverPeriodException.class, () -> {
-            Favorite favorite = Favorite.createFavorite(givenArrival, givenHome, givenPeriod);
+            Preference favorite = Preference.createSurvey(givenArrival, givenHome, givenPeriod);
         });
     }
 }

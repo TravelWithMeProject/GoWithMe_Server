@@ -1,21 +1,23 @@
-package team.backend.goWithMe.domain.favorite.domain.persist;
+package team.backend.goWithMe.domain.preference.domain.persist;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.favorite.domain.vo.Accommodation;
-import team.backend.goWithMe.domain.favorite.domain.vo.FavoriteArrival;
-import team.backend.goWithMe.domain.favorite.domain.vo.FavoritePeriod;
+import team.backend.goWithMe.domain.preference.domain.vo.Accommodation;
+import team.backend.goWithMe.domain.preference.domain.vo.FavoriteArrival;
+import team.backend.goWithMe.domain.preference.domain.vo.FavoritePeriod;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
+import team.backend.goWithMe.global.common.BaseTimeEntity;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class Favorite {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Preference extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "favorite_id")
+    @Id @GeneratedValue
+    @Column(name = "preference_id")
     private Long id;
 
     @Embedded
@@ -27,11 +29,8 @@ public class Favorite {
     @Embedded
     private FavoritePeriod favoritePeriod; // 앞으로 여행 계획
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    private Favorite(final FavoriteArrival favoriteArrival, final Accommodation accommodation, final FavoritePeriod favoritePeriod) {
+    private Preference(final FavoriteArrival favoriteArrival,
+                       final Accommodation accommodation, final FavoritePeriod favoritePeriod) {
         this.favoriteArrival = favoriteArrival;
         this.accommodation = accommodation;
         this.favoritePeriod = favoritePeriod;
@@ -40,12 +39,12 @@ public class Favorite {
     /**
      * 비즈니스 로직
      */
-    public static Favorite createFavorite(final FavoriteArrival favoriteArrival, final Accommodation accommodation,
+    public static Preference createSurvey(final FavoriteArrival favoriteArrival, final Accommodation accommodation,
                                           final FavoritePeriod favoritePeriod) {
-        return new Favorite(favoriteArrival, accommodation, favoritePeriod);
+        return new Preference(favoriteArrival, accommodation, favoritePeriod);
     }
 
-    public void updateFavorite(final Favorite favorite) {
+    public void updateFavorite(final Preference favorite) {
 
         changeArrival(favorite.getFavoriteArrival());
         changeAccommodation(favorite.getAccommodation());
