@@ -19,7 +19,7 @@ public class ErrorResponse {
         this.code = code.code();
     }
 
-    public static ErrorResponse of(ErrorCode commonErrorCode) {
-        return new ErrorResponse(commonErrorCode);
+    public static ErrorResponse of(ErrorCode errorCode) {
+        return new ErrorResponse(errorCode);
     }
 }
