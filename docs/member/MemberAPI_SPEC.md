@@ -10,7 +10,7 @@
 
 ### 1. Login
 
-- path : /api/v1/member/login
+- path : /api/v1/members/login
 
 
 - HttpMethod : POST
@@ -46,7 +46,7 @@
 
 ### 2. Logout *
 
-- path : /api/v1/member/logout
+- path : /api/v1/members/logout
 
 
 - HttpMethod : DELETE
@@ -76,7 +76,7 @@
 
 ### reissue
 
-- path : /api/v1/member/reissue
+- path : /api/v1/members/reissue
 
 
 - HttpMethod : POST
@@ -115,7 +115,7 @@
 
 ### 1. Join
 
-- path : /api/v1/member/join
+- path : /api/v1/members/join
 
 
 - HttpMethod : POST
@@ -163,16 +163,13 @@
 
 ### 2. FindOne *
 
-- path : /api/v1/member/{id}
+- path : /api/v1/members
 
 
 - HttpMethod : GET
 
 
 - contentType : application/json
-
-
-- RequestParam : id (**Required**)
 
 
 - SuccessStatus : 200 OK
@@ -198,7 +195,7 @@
 
 ### 3. Update *
 
-- path : /api/v1/member
+- path : /api/v1/members
 
 
 - HttpMethod : PATCH
@@ -213,26 +210,18 @@
 - Fail : 400, 401
 
 
--Request
-
-```JSON
-{
-  "user" : {
-        "email": "ilgolf@naver.com",
-        "password": "1230",
-        "nickname": "ssar",
-        "profile": "/users/desktop/kim.img",
-        "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImlsZ29sY0BuYXZlci5jb20iLCJuaWNrbmFtZSI6ImRmc2RhZmFzZCIsInJvbGUiOiJST0xFX1VTRVIiLCJleHAiOjE2NDUzNDg4MTN9.vZ9GQGz9AOsp7WWTxPl07Odz8h1D30_Wj90lFS-5zCQfVk4UkzpeeN3qgqywiIsDfBWlEtGtUZ9wIVBWpYFCSw"
-  }
-}
-```
+- Request : nothing
 
 
 - Response : nothing
 
+
+- Response : nothing
+
+
 ### 4. Delete *
 
-- path : /api/v1/member
+- path : /api/v1/members
 
 
 - HttpMethod : DELETE
@@ -247,13 +236,39 @@
 - Fail : 400, 401
 
 
-- Request
-
-```JSON
-    {
-      "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImlsZ29sY0BuYXZlci5jb20iLCJuaWNrbmFtZSI6ImRmc2RhZmFzZCIsInJvbGUiOiJST0xFX1VTRVIiLCJleHAiOjE2NDUzNDg4MTN9.vZ9GQGz9AOsp7WWTxPl07Odz8h1D30_Wj90lFS-5zCQfVk4UkzpeeN3qgqywiIsDfBWlEtGtUZ9wIVBWpYFCSw"
-    }
-```
+- Request : nothing
 
 
 - Response : nothing
+
+### FindAll *
+
+- path : /api/v1/members/findAll
+
+
+- HttpMethod : GET
+
+
+- contentType : application/json
+
+
+- SuccessStatus : 200 Created
+
+
+- Fail : 400, 401
+
+
+- Request : nothing
+
+
+- Response :
+
+```JSON
+{
+  "user" : {
+        "name": "kim",
+        "nickname": "ssar",
+        "profile": "/users/desktop/kim.img"
+  }
+}
+```
