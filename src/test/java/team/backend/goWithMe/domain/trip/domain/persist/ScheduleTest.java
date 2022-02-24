@@ -3,10 +3,14 @@ package team.backend.goWithMe.domain.trip.domain.persist;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.trip.error.ScheduleTitleInvalidException;
+import team.backend.goWithMe.domain.member.domain.persist.Member;
+import team.backend.goWithMe.domain.member.domain.persist.RoleType;
+import team.backend.goWithMe.domain.member.domain.vo.*;
+import team.backend.goWithMe.domain.trip.error.exception.ScheduleTitleInvalidException;
 import team.backend.goWithMe.domain.trip.domain.vo.*;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
@@ -15,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ScheduleTest {
     private Schedule schedule;
     private TimeTable timeTable;
+    private Member member;
     final private String OLD_NAME = "세부 일정";
     final private String OLD_CONTENT = "세부 일정은 이러이러 해~";
     final private LocalDateTime OLD_PERIOD_START = LocalDateTime.of(2022, 1, 1, 0, 0);
@@ -23,10 +28,19 @@ class ScheduleTest {
 
     @BeforeEach
     void init() {
+        this.member = Member.builder()
+                .name(UserName.from("정의재"))
+                .birth(LocalDate.of(2021, 1, 1))
+                .nickname(UserNickName.from("JJ"))
+                .email(UserEmail.from("abc@naver.com"))
+                .password(UserPassword.from("1234"))
+                .roleType(RoleType.USER)
+                .profileImage(UserProfileImage.from("sampleURL"))
+                .build();
         TimeTableName timeTableName = TimeTableName.from("전체 일정");
         TimeTableContent timeTableContent = TimeTableContent.from("전체 일정 내용입니다");
         TimeTablePeriod timeTablePeriod = TimeTablePeriod.between(OLD_PERIOD_START.minusDays(1L), OLD_PERIOD_END.plusDays(1L));
-        this.timeTable = TimeTable.createTimeTable(timeTableName, timeTableContent, timeTablePeriod);
+        this.timeTable = TimeTable.createTimeTable(timeTableName, timeTableContent, timeTablePeriod, Member.builder().build());
 
         ScheduleTitle title = ScheduleTitle.from(OLD_NAME);
         ScheduleContent content = ScheduleContent.from(OLD_CONTENT);
@@ -122,8 +136,14 @@ class ScheduleTest {
 
         // when
         ScheduleTitle newScheduleTitle = ScheduleTitle.from("새 제목");
-        schedule.changeSchedule(newScheduleTitle, schedule.getScheduleContent(),
-                schedule.getSchedulePeriod(), schedule.getScheduleCost());
+        Schedule editedSchedule = Schedule.createSchedule(
+                schedule.getTimeTable(),
+                newScheduleTitle,
+                schedule.getScheduleContent(),
+                schedule.getSchedulePeriod(),
+                schedule.getScheduleCost()
+        );
+        schedule.changeSchedule(editedSchedule);
 
         // then
         assertThat(newScheduleTitle).isNotEqualTo(oldScheduleTitle);
@@ -136,8 +156,15 @@ class ScheduleTest {
     public void changeScheduleTitleToNullTest() throws Exception {
         // when, then
         assertThrows(ScheduleTitleInvalidException.class, () ->
-                schedule.changeSchedule(ScheduleTitle.from(null), schedule.getScheduleContent(),
-                        schedule.getSchedulePeriod(), schedule.getScheduleCost()));
+                schedule.changeSchedule(Schedule.createSchedule(
+                        schedule.getTimeTable(),
+                        ScheduleTitle.from(null),
+                        schedule.getScheduleContent(),
+                        schedule.getSchedulePeriod(),
+                        schedule.getScheduleCost()
+                        )
+                )
+        );
     }
 
     @Test
@@ -146,8 +173,15 @@ class ScheduleTest {
         // given
         // when, then
         assertThrows(ScheduleTitleInvalidException.class, () ->
-                schedule.changeSchedule(ScheduleTitle.from(""), schedule.getScheduleContent(),
-                        schedule.getSchedulePeriod(), schedule.getScheduleCost()));
+                schedule.changeSchedule(Schedule.createSchedule(
+                        schedule.getTimeTable(),
+                        ScheduleTitle.from(""),
+                        schedule.getScheduleContent(),
+                        schedule.getSchedulePeriod(),
+                        schedule.getScheduleCost()
+                        )
+                )
+        );
     }
 
     @Test
@@ -156,8 +190,14 @@ class ScheduleTest {
         // given
         ScheduleContent oldContent = schedule.getScheduleContent();
         // when
-        schedule.changeSchedule(schedule.getScheduleTitle(), ScheduleContent.from("새 일정 내용"),
-                schedule.getSchedulePeriod(), schedule.getScheduleCost());
+        Schedule editedSchedule = Schedule.createSchedule(
+                schedule.getTimeTable(),
+                schedule.getScheduleTitle(),
+                ScheduleContent.from("새 일정 내용"),
+                schedule.getSchedulePeriod(),
+                schedule.getScheduleCost()
+        );
+        schedule.changeSchedule(editedSchedule);
 
         // then
         ScheduleContent newContent = schedule.getScheduleContent();
@@ -173,10 +213,19 @@ class ScheduleTest {
         SchedulePeriod oldPeriod = schedule.getSchedulePeriod();
         LocalDateTime newTimeStart = LocalDateTime.of(2022, 1, 2, 0, 0);
         // when
-        SchedulePeriod newSchedulePeriod = SchedulePeriod.between(newTimeStart,
+        SchedulePeriod newSchedulePeriod = SchedulePeriod.between(
+                newTimeStart,
                 schedule.getSchedulePeriod().scheduleDetailEnd(),
-                schedule.getTimeTable().getTotalPeriod());
-        schedule.changeSchedule(schedule.getScheduleTitle(), schedule.getScheduleContent(), newSchedulePeriod, schedule.getScheduleCost());
+                schedule.getTimeTable().getTotalPeriod()
+        );
+        Schedule editedSchedule = Schedule.createSchedule(
+                schedule.getTimeTable(),
+                schedule.getScheduleTitle(),
+                schedule.getScheduleContent(),
+                newSchedulePeriod,
+                schedule.getScheduleCost()
+        );
+        schedule.changeSchedule(editedSchedule);
 
         // then
         SchedulePeriod newPeriod = schedule.getSchedulePeriod();
@@ -198,7 +247,14 @@ class ScheduleTest {
                 schedule.getSchedulePeriod().scheduleDetailStart(),
                 newTimeEnd,
                 schedule.getTimeTable().getTotalPeriod());
-        schedule.changeSchedule(schedule.getScheduleTitle(), schedule.getScheduleContent(), newSchedulePeriod, schedule.getScheduleCost());
+        Schedule editedSchedule = Schedule.createSchedule(
+                schedule.getTimeTable(),
+                schedule.getScheduleTitle(),
+                schedule.getScheduleContent(),
+                newSchedulePeriod,
+                schedule.getScheduleCost()
+        );
+        schedule.changeSchedule(editedSchedule);
 
         // then
         SchedulePeriod newPeriod = schedule.getSchedulePeriod();
@@ -216,12 +272,14 @@ class ScheduleTest {
         ScheduleCost oldCost = schedule.getScheduleCost();
         // when
         ScheduleCost newScheduleCost = ScheduleCost.wons(1000L);
-        schedule.changeSchedule(
+        Schedule editedSchedule = Schedule.createSchedule(
+                schedule.getTimeTable(),
                 schedule.getScheduleTitle(),
                 schedule.getScheduleContent(),
                 schedule.getSchedulePeriod(),
                 newScheduleCost
         );
+        schedule.changeSchedule(editedSchedule);
 
         // then
         ScheduleCost newCost = schedule.getScheduleCost();

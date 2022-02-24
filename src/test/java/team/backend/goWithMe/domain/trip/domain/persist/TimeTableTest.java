@@ -3,19 +3,24 @@ package team.backend.goWithMe.domain.trip.domain.persist;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import team.backend.goWithMe.domain.trip.error.TimeTableNameInvalidException;
-import team.backend.goWithMe.domain.trip.error.TimeTablePeriodInvalidException;
+import team.backend.goWithMe.domain.member.domain.persist.Member;
+import team.backend.goWithMe.domain.member.domain.persist.RoleType;
+import team.backend.goWithMe.domain.member.domain.vo.*;
+import team.backend.goWithMe.domain.trip.error.exception.TimeTableNameInvalidException;
+import team.backend.goWithMe.domain.trip.error.exception.TimeTablePeriodInvalidException;
 import team.backend.goWithMe.domain.trip.domain.vo.TimeTableContent;
 import team.backend.goWithMe.domain.trip.domain.vo.TimeTableName;
 import team.backend.goWithMe.domain.trip.domain.vo.TimeTablePeriod;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TimeTableTest {
 
+    private Member member;
     private TimeTable timeTable;
     final private String OLD_NAME = "전체 일정";
     final private String OLD_CONTENT = "일정은 이러이러 해~";
@@ -24,11 +29,20 @@ class TimeTableTest {
 
     @BeforeEach
     void init() {
+        this.member = Member.builder()
+                .name(UserName.from("정의재"))
+                .birth(LocalDate.of(2021, 1, 1))
+                .nickname(UserNickName.from("JJ"))
+                .email(UserEmail.from("abc@naver.com"))
+                .password(UserPassword.from("1234"))
+                .roleType(RoleType.USER)
+                .profileImage(UserProfileImage.from("sampleURL"))
+                .build();
         TimeTableName timeTableName = TimeTableName.from(OLD_NAME);
         TimeTableContent timeTableContent = TimeTableContent.from(OLD_CONTENT);
         TimeTablePeriod timeTablePeriod = TimeTablePeriod.between(OLD_PERIOD_START, OLD_PERIOD_END);
         this.timeTable = TimeTable.createTimeTable(timeTableName, timeTableContent,
-                timeTablePeriod);
+                timeTablePeriod, member);
     }
 
     @Test
@@ -42,8 +56,8 @@ class TimeTableTest {
         TimeTableName a = TimeTableName.from("a");
         TimeTableName b = TimeTableName.from("a");
 
-        TimeTable aTable = TimeTable.createTimeTable(a, content, period);
-        TimeTable bTable = TimeTable.createTimeTable(b, content, period);
+        TimeTable aTable = TimeTable.createTimeTable(a, content, period, member);
+        TimeTable bTable = TimeTable.createTimeTable(b, content, period, member);
         // then
         assertNotEquals(aTable, bTable);
         assertEquals(a, b);
@@ -63,8 +77,8 @@ class TimeTableTest {
         TimeTableName a = TimeTableName.from("a");
         TimeTableName b = TimeTableName.from("b");
 
-        TimeTable aTable = TimeTable.createTimeTable(a, content, period);
-        TimeTable bTable = TimeTable.createTimeTable(b, content, period);
+        TimeTable aTable = TimeTable.createTimeTable(a, content, period, member);
+        TimeTable bTable = TimeTable.createTimeTable(b, content, period, member);
         // then
         assertNotEquals(aTable, bTable);
         assertNotEquals(a, b);
@@ -81,20 +95,19 @@ class TimeTableTest {
 
         // when, Then
         assertThrows(NullPointerException.class, () ->
-                TimeTable.createTimeTable(null, null, null));
+        TimeTable.createTimeTable(null, null, null, member));
         assertThrows(NullPointerException.class, () ->
-                TimeTable.createTimeTable(timeTableName, null, null));
+        TimeTable.createTimeTable(timeTableName, null, null, member));
         assertThrows(NullPointerException.class, () ->
-                TimeTable.createTimeTable(null, timeTableContent, null));
+        TimeTable.createTimeTable(null, timeTableContent, null, member));
         assertThrows(NullPointerException.class, () ->
-                TimeTable.createTimeTable(null, null, timeTablePeriod));
+        TimeTable.createTimeTable(null, null, timeTablePeriod, member));
         assertThrows(NullPointerException.class, () ->
-                TimeTable.createTimeTable(timeTableName, timeTableContent, null));
+        TimeTable.createTimeTable(timeTableName, timeTableContent, null, member));
         assertThrows(NullPointerException.class, () ->
-                TimeTable.createTimeTable(null, timeTableContent, timeTablePeriod));
-        assertThrows(NullPointerException.class, () ->
-                TimeTable.createTimeTable(timeTableName, null, timeTablePeriod));
-        assertDoesNotThrow(() -> TimeTable.createTimeTable(timeTableName, timeTableContent, timeTablePeriod));
+        TimeTable.createTimeTable(null, timeTableContent, timeTablePeriod, member));
+        assertThrows(NullPointerException.class, () -> TimeTable.createTimeTable(timeTableName, null, timeTablePeriod, member));
+        assertDoesNotThrow(() -> TimeTable.createTimeTable(timeTableName, timeTableContent, timeTablePeriod, member));
     }
 
     @Test
@@ -117,7 +130,13 @@ class TimeTableTest {
         TimeTableName oldTableName = timeTable.getTableName();
 
         // when
-        timeTable.changeTimeTable(TimeTableName.from("일정2"), timeTable.getContent(), timeTable.getTotalPeriod());
+        TimeTable editedTimeTable = TimeTable.createTimeTable(
+                TimeTableName.from("일정2"),
+                timeTable.getContent(),
+                timeTable.getTotalPeriod(),
+                timeTable.getMember()
+        );
+        timeTable.changeTimeTable(editedTimeTable);
 
         // then
         TimeTableName newTableName = timeTable.getTableName();
@@ -131,10 +150,16 @@ class TimeTableTest {
     public void changeTimeTableNameToNullTest() throws Exception {
         // given
         // when, then
+        TimeTable editedTimeTable = TimeTable.createTimeTable(
+                TimeTableName.from(null),
+                timeTable.getContent(),
+                timeTable.getTotalPeriod(),
+                timeTable.getMember()
+        );
         assertThrows(TimeTableNameInvalidException.class, () ->
-                timeTable.changeTimeTable(TimeTableName.from(null), timeTable.getContent(), timeTable.getTotalPeriod()));
+                timeTable.changeTimeTable(editedTimeTable));
         assertThrows(TimeTableNameInvalidException.class, () ->
-                timeTable.changeTimeTable(TimeTableName.from(null), timeTable.getContent(), timeTable.getTotalPeriod()),
+                        timeTable.changeTimeTable(editedTimeTable),
                 "시간표 명은 필수입니다."
         );
     }
@@ -144,8 +169,14 @@ class TimeTableTest {
     public void changeTimeTableNameToBlankTest() throws Exception {
         // given
         // when, then
-        assertThrows(TimeTableNameInvalidException.class, () ->
-                timeTable.changeTimeTable(TimeTableName.from(""), timeTable.getContent(), timeTable.getTotalPeriod()));
+        assertThrows(TimeTableNameInvalidException.class, () -> timeTable.changeTimeTable(
+                TimeTable.createTimeTable(
+                        TimeTableName.from(""),
+                        timeTable.getContent(),
+                        timeTable.getTotalPeriod(),
+                        timeTable.getMember()
+                )
+        ));
     }
 
     @Test
@@ -156,7 +187,13 @@ class TimeTableTest {
         TimeTableContent oldContent = timeTable.getContent();
 
         // when
-        timeTable.changeTimeTable(timeTable.getTableName(), TimeTableContent.from(NEW_CONTENT), timeTable.getTotalPeriod());
+        TimeTable editedTimeTable = TimeTable.createTimeTable(
+                timeTable.getTableName(),
+                TimeTableContent.from(NEW_CONTENT),
+                timeTable.getTotalPeriod(),
+                timeTable.getMember()
+        );
+        timeTable.changeTimeTable(editedTimeTable);
 
         // then
         TimeTableContent newContent = timeTable.getContent();
@@ -189,7 +226,13 @@ class TimeTableTest {
         LocalDateTime newTimeStart = LocalDateTime.of(2022, 1, 2, 0, 0);
         // when
         TimeTablePeriod newPeriod = TimeTablePeriod.between(newTimeStart, OLD_PERIOD_END);
-        timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(), newPeriod);
+        TimeTable editedTimeTable = TimeTable.createTimeTable(
+                timeTable.getTableName(),
+                timeTable.getContent(),
+                newPeriod,
+                timeTable.getMember()
+        );
+        timeTable.changeTimeTable(editedTimeTable);
 
         // then
         LocalDateTime newTotalStart = timeTable.getTotalPeriod().totalPeriodStart();
@@ -204,20 +247,16 @@ class TimeTableTest {
     public void changeTotalPeriodStartToWrongTimeTest() throws Exception {
         // given
         LocalDateTime dateLaterThanTotalEnd1 = LocalDateTime.of(2022, 1, 11, 0, 0);
-        LocalDateTime dateLaterThanTotalEnd2 = LocalDateTime.of(2022, 1, 10, 1, 0);
-        LocalDateTime dateLaterThanTotalEnd3 = LocalDateTime.of(2022, 1, 10, 0, 1);
-        LocalDateTime dateLaterThanTotalEnd4 = LocalDateTime.of(2023, 1, 10, 0, 0);
 
         // when, then
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(), TimeTablePeriod.between(dateLaterThanTotalEnd1, OLD_PERIOD_START)));
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),TimeTablePeriod.between(dateLaterThanTotalEnd2, OLD_PERIOD_START)));
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),TimeTablePeriod.between(dateLaterThanTotalEnd3, OLD_PERIOD_START)));
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),TimeTablePeriod.between(dateLaterThanTotalEnd4, OLD_PERIOD_START)));
-
+        assertThrows(TimeTablePeriodInvalidException.class, () -> timeTable.changeTimeTable(
+                TimeTable.createTimeTable(
+                    timeTable.getTableName(),
+                    timeTable.getContent(),
+                    TimeTablePeriod.between(dateLaterThanTotalEnd1, OLD_PERIOD_START),
+                    timeTable.getMember()
+                )
+        ));
     }
 
     @Test
@@ -229,7 +268,13 @@ class TimeTableTest {
 
         // when
         TimeTablePeriod newPeriod = TimeTablePeriod.between(OLD_PERIOD_START, newTimeEnd);
-        timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(), newPeriod);
+        TimeTable editedTimeTable = TimeTable.createTimeTable(
+                timeTable.getTableName(),
+                timeTable.getContent(),
+                newPeriod,
+                timeTable.getMember()
+        );
+        timeTable.changeTimeTable(editedTimeTable);
 
         // then
         LocalDateTime newTotalEnd = timeTable.getTotalPeriod().totalPeriodEnd();
@@ -249,13 +294,33 @@ class TimeTableTest {
         LocalDateTime dateEarlierThanTotalStart3 = LocalDateTime.of(2021, 12, 31, 23, 59);
 
         // when, then
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart1)));
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart2)));
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart3)));
-
+        assertThrows(TimeTablePeriodInvalidException.class, () -> timeTable.changeTimeTable(
+                TimeTable.createTimeTable(
+                    timeTable.getTableName(),
+                    timeTable.getContent(),
+                    TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart1),
+                    timeTable.getMember()
+                )
+            )
+        );
+        assertThrows(TimeTablePeriodInvalidException.class, () -> timeTable.changeTimeTable(
+                TimeTable.createTimeTable(
+                    timeTable.getTableName(),
+                    timeTable.getContent(),
+                    TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart2),
+                    timeTable.getMember()
+                )
+            )
+        );
+        assertThrows(TimeTablePeriodInvalidException.class, () -> timeTable.changeTimeTable(
+                TimeTable.createTimeTable(
+                    timeTable.getTableName(),
+                    timeTable.getContent(),
+                    TimeTablePeriod.between(OLD_PERIOD_END, dateEarlierThanTotalStart3),
+                    timeTable.getMember()
+                )
+            )
+        );
     }
 
     @Test
@@ -267,7 +332,13 @@ class TimeTableTest {
 
         // when
         TimeTablePeriod newPeriod = TimeTablePeriod.between(newTimeStart, newTimeEnd);
-        timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),newPeriod);
+        TimeTable editedTimeTable = TimeTable.createTimeTable(
+                timeTable.getTableName(),
+                timeTable.getContent(),
+                newPeriod,
+                timeTable.getMember()
+        );
+        timeTable.changeTimeTable(editedTimeTable);
 
         // then
         assertEquals(newTimeStart, timeTable.getTotalPeriod().totalPeriodStart());
@@ -286,8 +357,14 @@ class TimeTableTest {
         LocalDateTime timeEndEarlierThanTimeStart = LocalDateTime.of(2022, 1, 1, 0, 0);
 
         // when, than
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),TimeTablePeriod.between(timeStart, timeEndEarlierThanTimeStart)));
+        assertThrows(TimeTablePeriodInvalidException.class, () -> timeTable.changeTimeTable(
+                TimeTable.createTimeTable(
+                    timeTable.getTableName(),
+                    timeTable.getContent(),
+                    TimeTablePeriod.between(timeStart, timeEndEarlierThanTimeStart),
+                    timeTable.getMember()
+                )
+        ));
     }
 
     @Test
@@ -298,8 +375,14 @@ class TimeTableTest {
         LocalDateTime timeEndEqualToTimeStart = LocalDateTime.of(2022, 1, 1, 0, 0);
 
         // when, than
-        assertThrows(TimeTablePeriodInvalidException.class, () ->
-                timeTable.changeTimeTable(timeTable.getTableName(), timeTable.getContent(),TimeTablePeriod.between(timeStart, timeEndEqualToTimeStart)));
+        assertThrows(TimeTablePeriodInvalidException.class, () -> timeTable.changeTimeTable(
+                TimeTable.createTimeTable(
+                        timeTable.getTableName(),
+                        timeTable.getContent(),
+                        TimeTablePeriod.between(timeStart, timeEndEqualToTimeStart),
+                        timeTable.getMember()
+                )
+        ));
     }
 
     @Test
@@ -311,11 +394,13 @@ class TimeTableTest {
         LocalDateTime newPeriodStart = LocalDateTime.of(2022, 1, 2, 0, 0);
         LocalDateTime newPeriodEnd = LocalDateTime.of(2022, 1, 11, 0, 0);
         // when
-        timeTable.changeTimeTable(
+        TimeTable editedTimeTable = TimeTable.createTimeTable(
                 TimeTableName.from(newName),
                 TimeTableContent.from(newContent),
-                TimeTablePeriod.between(newPeriodStart, newPeriodEnd)
+                TimeTablePeriod.between(newPeriodStart, newPeriodEnd),
+                timeTable.getMember()
         );
+        timeTable.changeTimeTable(editedTimeTable);
 
         // then
         assertEquals(timeTable.getId(), timeTable.getId());

@@ -60,14 +60,11 @@ public class Schedule extends BaseTimeEntity {
         return this.schedulePeriod.ofDuration();
     }
 
-    public void changeSchedule(ScheduleTitle newScheduleTitle,
-                               ScheduleContent newScheduleContent,
-                               SchedulePeriod newSchedulePeriod,
-                               ScheduleCost newScheduleCost) {
-        changeScheduleTitle(newScheduleTitle);
-        changeScheduleContent(newScheduleContent);
-        changeSchedulePeriod(newSchedulePeriod);
-        changeScheduleCost(newScheduleCost);
+    public void changeSchedule(Schedule schedule) {
+        changeScheduleTitle(schedule.getScheduleTitle());
+        changeScheduleContent(schedule.getScheduleContent());
+        changeSchedulePeriod(schedule.getSchedulePeriod());
+        changeScheduleCost(schedule.getScheduleCost());
     }
 
     private void changeScheduleTitle(ScheduleTitle newScheduleTitle) {
