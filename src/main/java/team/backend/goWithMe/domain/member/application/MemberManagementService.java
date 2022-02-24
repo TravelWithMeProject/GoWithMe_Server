@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import team.backend.goWithMe.domain.member.domain.persist.Member;
 import team.backend.goWithMe.domain.member.domain.persist.MemberQueryRepository;
 import team.backend.goWithMe.domain.member.domain.persist.MemberRepository;
 import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
+import team.backend.goWithMe.domain.member.dto.FindAllResponse;
 import team.backend.goWithMe.domain.member.dto.JoinResponseDTO;
 import team.backend.goWithMe.domain.member.dto.MemberResponseDTO;
 import team.backend.goWithMe.domain.member.error.exception.DuplicateEmailException;
@@ -22,6 +24,7 @@ import team.backend.goWithMe.global.common.TokenProvider;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,7 +36,6 @@ public class MemberManagementService {
     private final MemberRepository memberRepository;
     private final MemberQueryRepository memberQueryRepository;
     private final PasswordEncoder encoder;
-    private final TokenProvider tokenProvider;
 
     // 회원 가입
     public JoinResponseDTO create(final Member member) {
@@ -43,16 +45,12 @@ public class MemberManagementService {
             throw new DuplicateEmailException(ErrorCode.EMAIL_DUPLICATION);
         }
 
-        Member savedMember = memberRepository.save(member);
-
-        return JoinResponseDTO.from(savedMember);
+        return JoinResponseDTO.from(memberRepository.save(member));
     }
 
     // 업데이트
-    public void update(final Member member, final AccessToken accessToken) {
-        String email = getEmail(accessToken);
-
-        Member findMember = memberRepository.findByEmail(UserEmail.from(email)).orElseThrow(
+    public void update(final Member member, final UserEmail email) {
+        Member findMember = memberRepository.findByEmail(email).orElseThrow(
                 () -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         findMember.update(member);
@@ -60,16 +58,14 @@ public class MemberManagementService {
     }
 
     // 회원 삭제
-    public void delete(final AccessToken accessToken) {
-        String email = getEmail(accessToken);
-
-        memberRepository.deleteByEmail(UserEmail.from(email));
+    public void delete(final UserEmail email) {
+        memberRepository.deleteByEmail(email);
     }
 
     // 회원 조회
     @Transactional(readOnly = true)
-    public MemberResponseDTO findOne(Long memberId) {
-        Member findMember = memberRepository.findById(memberId).orElseThrow(() -> {
+    public MemberResponseDTO findOne(final UserEmail email) {
+        Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> {
             throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         });
 
@@ -78,8 +74,8 @@ public class MemberManagementService {
 
     // 전체 회원 조회
     @Transactional(readOnly = true)
-    public List<MemberResponseDTO> findAll(final Long id, final Pageable pageable) {
-        Member member = memberRepository.findById(id).orElseThrow(() ->
+    public List<FindAllResponse> findAll(final UserEmail email, final Pageable pageable) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(() ->
             new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         /**
@@ -88,18 +84,12 @@ public class MemberManagementService {
          */
         if (member.getFavorite() != null) {
             return memberQueryRepository.findAllByFavorite(member.getFavorite(), pageable).stream()
-                    .map(MemberResponseDTO::create)
+                    .map(FindAllResponse::of)
                     .collect(Collectors.toList());
         }
 
         return memberRepository.findAll(pageable).getContent().stream()
-                .map(MemberResponseDTO::create)
+                .map(FindAllResponse::of)
                 .collect(Collectors.toList());
-    }
-
-    private String getEmail(AccessToken accessToken) {
-        Authentication authentication = tokenProvider.getAuthentication(accessToken.accessToken());
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        return principal.getUsername();
     }
 }

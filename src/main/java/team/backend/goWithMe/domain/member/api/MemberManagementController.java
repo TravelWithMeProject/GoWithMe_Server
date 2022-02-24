@@ -9,11 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team.backend.goWithMe.domain.member.application.MemberManagementService;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
+import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
 import team.backend.goWithMe.domain.member.dto.*;
-import team.backend.goWithMe.global.common.TokenDTO;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -21,13 +22,13 @@ import java.util.List;
 
 @RestController
 @Api("회원 관리 API")
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 public class MemberManagementController {
 
     private final MemberManagementService memberManagementService;
 
-    @PostMapping("member/join")
+    @PostMapping("/join")
     @ApiOperation(value = "회원 가입", notes = "회원 정보를 입력받아 저장한다.")
     @ApiParam(name = "회원 가입 데이터 전달 DTO", value = "요청 들어온 회원 정보")
     public ResponseEntity<JoinResponseDTO> create(@Valid @RequestBody JoinRequestDTO request) {
@@ -38,39 +39,40 @@ public class MemberManagementController {
         return ResponseEntity.created(createdMemberURI).body(memberManagementService.create(member));
     }
 
-    @PatchMapping("member")
+    @PatchMapping
     @ApiOperation(value = "회원 수정", notes = "회원 수정 정보를 입력 받아 변경한다.")
     public ResponseEntity<Void> modify(
             @ApiParam(name = "회원 변경 데이터 전달 DTO", value = "요청 들어온 회원 변경 정보")
             @Valid @RequestBody MemberUpdateDTO updateDTO) {
         Member member = updateDTO.toEntity();
-        memberManagementService.update(member, updateDTO.getAccessToken());
+
+        memberManagementService.update(member, UserEmail.from(getEmail()));
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("member/{id}")
+    @GetMapping
     @ApiOperation(value = "회원 조회", notes = "회원 정보를 보여주는 API")
-    @ApiParam(name = "회원 아이디", value = "회원 고유 식별값")
-    public ResponseEntity<MemberResponseDTO> findMember(@PathVariable Long id) {
-        return ResponseEntity.ok(memberManagementService.findOne(id));
+    public ResponseEntity<MemberResponseDTO> findMember() {
+        return ResponseEntity.ok(memberManagementService.findOne(UserEmail.from(getEmail())));
     }
 
-    @DeleteMapping("member")
+    @DeleteMapping
     @ApiOperation(value = "회원 삭제", notes = "회원 정보를 삭제한다.")
-    public ResponseEntity<Void> delete(@RequestBody AccessTokenRequestDTO accessTokenDTO) {
-        memberManagementService.delete(accessTokenDTO.getAccessToken());
+    public ResponseEntity<Void> delete() {
+        memberManagementService.delete(UserEmail.from(getEmail()));
         return ResponseEntity.noContent().build();
     }
 
     // 회원 검색 (QueryDSL)
 
     // 회원 검색창 -> 자기랑 선호도가 맞는 회원을 갖고와야함 -> 회원 검색
-    @GetMapping("members/{memberId}")
-    public ResponseEntity<List<MemberResponseDTO>> findAll(
-            @PathVariable Long memberId,
+    @GetMapping("/findAll")
+    public ResponseEntity<List<FindAllResponse>> findAll(
             @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(memberManagementService.findAll(memberId, pageable));
+        return ResponseEntity.ok(memberManagementService.findAll(UserEmail.from(getEmail()), pageable));
     }
 
-    // 선호도 (?)
+    private String getEmail() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
 }
