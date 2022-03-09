@@ -16,18 +16,29 @@ public class GivenMember {
     public static final LocalDate USER_BIRTH = LocalDate.of(1995, 11, 23);
     public static final UserProfileImage USER_PROFILE = UserProfileImage.from("/static/dss/we23");
 
-    public static Member createMember(final UserEmail email, final UserPassword password, final UserName name,
-                                      final RoleType roleType, final UserNickName nickName, final LocalDate birth,
-                                      final UserProfileImage profileImage) {
+    public static Member createMember() {
+
+        return Member.builder()
+                .email(USER_EMAIL)
+                .password(USER_PASSWORD)
+                .name(USER_NAME)
+                .roleType(RoleType.USER)
+                .nickname(USER_NICK_NAME)
+                .birth(USER_BIRTH)
+                .profileImage(USER_PROFILE)
+                .build();
+    }
+
+    public static Member of(final UserEmail email, final UserPassword password, final UserName name,
+                            final UserNickName nickname, final LocalDate birth, final UserProfileImage profile) {
 
         return Member.builder()
                 .email(email)
                 .password(password)
                 .name(name)
                 .roleType(RoleType.USER)
-                .nickname(nickName)
+                .nickname(nickname)
                 .birth(birth)
-                .profileImage(profileImage)
-                .build();
+                .profileImage(profile).build();
     }
 }

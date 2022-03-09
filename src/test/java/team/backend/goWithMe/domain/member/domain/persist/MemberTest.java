@@ -18,8 +18,7 @@ class MemberTest {
     @DisplayName("유저 생성 테스트 : 제대로 실행 되야 하는 테스트")
     void builderSuccessTest() {
 
-        Member member = createMember(USER_EMAIL, USER_PASSWORD, USER_NAME, ROLE_TYPE, USER_NICK_NAME,
-                USER_BIRTH, USER_PROFILE);
+        Member member = createMember();
 
         // then
         assertThat(member.getName().userName()).isEqualTo("KIM");
@@ -31,8 +30,7 @@ class MemberTest {
     @DisplayName("비밀번호 인코딩 테스트")
     void encodePassword() {
         final PasswordEncoder encoder = TestPasswordEncoder.initialize();
-        Member member = createMember(USER_EMAIL, USER_PASSWORD, USER_NAME, ROLE_TYPE, USER_NICK_NAME,
-                USER_BIRTH, USER_PROFILE).encode(encoder);
+        Member member = createMember().encode(encoder);
 
         assertAll(
                 () -> assertThat(member.getPassword()).isNotEqualTo(USER_PASSWORD),
@@ -44,22 +42,22 @@ class MemberTest {
     @Test
     @DisplayName("회원 수정 로직 테스트")
     void updateTest() {
-        Member member = createMember(USER_EMAIL, USER_PASSWORD, USER_NAME, ROLE_TYPE, USER_NICK_NAME,
-                USER_BIRTH, USER_PROFILE);
+        Member member = createMember();
 
         UserEmail updateEmail = UserEmail.from("ssar@naver.com");
         UserPassword updatePassword = UserPassword.from("6465");
         UserNickName updateNickName = UserNickName.from("GOLF");
         UserProfileImage updateProfile = UserProfileImage.from("/develop");
 
-        Member updatedMember = createMember(updateEmail, updatePassword, USER_NAME, ROLE_TYPE, updateNickName, USER_BIRTH,
+        Member updatedMember = of(updateEmail, updatePassword, USER_NAME, updateNickName, USER_BIRTH,
                 updateProfile);
 
+        final PasswordEncoder encoder = TestPasswordEncoder.initialize();
 
-        member.update(updatedMember);
+        member.update(updatedMember, encoder);
 
         assertThat(member.getEmail()).isEqualTo(updateEmail);
-        assertThat(member.getPassword()).isEqualTo(updatePassword);
         assertThat(member.getNickname()).isEqualTo(updateNickName);
+        assertThat(member.getPassword()).isNotEqualTo(updatePassword);
     }
 }
