@@ -38,6 +38,6 @@ public class CustomMemberDetailService implements UserDetailsService {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + member.getRoleType());
 
         return new User(member.getEmail().userEmail(),
-                member.getPassword().userPassword(), Collections.singleton(grantedAuthority));
+                "", Collections.singleton(grantedAuthority));
     }
 }
