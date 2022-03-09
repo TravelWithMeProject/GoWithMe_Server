@@ -15,7 +15,7 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public final class FavoritePeriod {
+public final class PreferencePeriod {
 
     @Column(name = "start_time", nullable = false)
     private LocalDate startTime;
@@ -23,12 +23,12 @@ public final class FavoritePeriod {
     @Column(name = "end_time", nullable = false)
     private LocalDate endTime;
 
-    public static FavoritePeriod of(final LocalDate startTime, final LocalDate endTime) {
+    public static PreferencePeriod of(final LocalDate startTime, final LocalDate endTime) {
         if (overPeriod(startTime, endTime)) {
             throw new OverPeriodException(ErrorCode.OVER_PERIOD_ERROR);
         }
 
-        return new FavoritePeriod(startTime, endTime);
+        return new PreferencePeriod(startTime, endTime);
     }
 
     private static boolean overPeriod(final LocalDate startTime, final LocalDate endTime) {
@@ -39,7 +39,7 @@ public final class FavoritePeriod {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FavoritePeriod time = (FavoritePeriod) o;
+        PreferencePeriod time = (PreferencePeriod) o;
         return Objects.equals(startTime(), time.startTime) && Objects.equals(endTime(), time.endTime);
     }
 

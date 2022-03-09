@@ -13,31 +13,31 @@ import java.util.Objects;
 @Embeddable
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class FavoriteArrival {
+public final class PreferenceArrival {
 
     @NotNull(message = "null은 안됩니다.")
-    @Column(name = "favorite_arrival", nullable = false, length = 50)
-    private String favoriteArrival;
+    @Column(name = "preference_arrival", nullable = false, length = 50)
+    private String preferenceArrival;
 
-    public static FavoriteArrival from(final String favoriteArrival) {
-        return new FavoriteArrival(favoriteArrival);
+    public static PreferenceArrival from(final String favoriteArrival) {
+        return new PreferenceArrival(favoriteArrival);
     }
 
     @JsonValue
-    public String favoriteArrival() {
-        return favoriteArrival;
+    public String preferenceArrival() {
+        return preferenceArrival;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FavoriteArrival favoriteArrival = (FavoriteArrival) o;
-        return Objects.equals(favoriteArrival(), favoriteArrival.favoriteArrival());
+        PreferenceArrival favoriteArrival = (PreferenceArrival) o;
+        return Objects.equals(preferenceArrival(), favoriteArrival.preferenceArrival());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(favoriteArrival());
+        return Objects.hash(preferenceArrival());
     }
 }
