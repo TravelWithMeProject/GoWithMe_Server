@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import team.backend.goWithMe.domain.member.application.MemberManagementService;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
 import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
+import team.backend.goWithMe.domain.member.domain.vo.UserName;
 import team.backend.goWithMe.domain.member.dto.*;
 
 import javax.validation.Valid;
@@ -42,7 +43,7 @@ public class MemberManagementController {
     @PatchMapping
     @ApiOperation(value = "회원 수정", notes = "회원 수정 정보를 입력 받아 변경한다.")
     public ResponseEntity<Void> modify(
-            @ApiParam(name = "회원 변경 데이터 전달 DTO", value = "요청 들어온 회원 변경 정보")
+            @ApiParam(name = "변경된 회원 데이터")
             @Valid @RequestBody MemberUpdateDTO updateDTO) {
         Member member = updateDTO.toEntity();
 
@@ -50,9 +51,9 @@ public class MemberManagementController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/findByEmail")
     @ApiOperation(value = "회원 조회", notes = "회원 정보를 보여주는 API")
-    public ResponseEntity<MemberResponseDTO> findMember() {
+    public ResponseEntity<MemberResponseDTO> findByEmail() {
         return ResponseEntity.ok(memberManagementService.findOne(UserEmail.from(getEmail())));
     }
 
@@ -63,10 +64,17 @@ public class MemberManagementController {
         return ResponseEntity.noContent().build();
     }
 
-    // 회원 검색 (QueryDSL)
+    // 회원 검색 (JPQL)
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<FindAllResponse>> searchMember(
+            @PathVariable String name,
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.ok(memberManagementService.searchMember(UserName.from(name), pageable));
+    }
+
 
     // 회원 검색창 -> 자기랑 선호도가 맞는 회원을 갖고와야함 -> 회원 검색
-    @GetMapping("/findAll")
+    @GetMapping
     public ResponseEntity<List<FindAllResponse>> findAll(
             @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(memberManagementService.findAll(UserEmail.from(getEmail()), pageable));

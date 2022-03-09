@@ -14,6 +14,7 @@ import team.backend.goWithMe.domain.member.domain.persist.Member;
 import team.backend.goWithMe.domain.member.domain.persist.MemberQueryRepository;
 import team.backend.goWithMe.domain.member.domain.persist.MemberRepository;
 import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
+import team.backend.goWithMe.domain.member.domain.vo.UserName;
 import team.backend.goWithMe.domain.member.dto.FindAllResponse;
 import team.backend.goWithMe.domain.member.dto.JoinResponseDTO;
 import team.backend.goWithMe.domain.member.dto.MemberResponseDTO;
@@ -53,8 +54,7 @@ public class MemberManagementService {
         Member findMember = memberRepository.findByEmail(email).orElseThrow(
                 () -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-        findMember.update(member);
-        findMember.encode(encoder);
+        findMember.update(member, encoder);
     }
 
     // 회원 삭제
@@ -82,13 +82,21 @@ public class MemberManagementService {
          * Favorite 설문지가 존재한다면 Favorite 정보를 갖고 조건에 부합하는 회원 만 갖고옴
          * 존재하지 않는다면 findAll
          */
-        if (member.getFavorite() != null) {
-            return memberQueryRepository.findAllByFavorite(member.getFavorite(), pageable).stream()
+        if (member.getPreference() != null) {
+            return memberQueryRepository.findAllByFavorite(member.getPreference(), pageable).stream()
                     .map(FindAllResponse::of)
                     .collect(Collectors.toList());
         }
 
         return memberRepository.findAll(pageable).getContent().stream()
+                .map(FindAllResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    public List<FindAllResponse> searchMember(final UserName name, final Pageable pageable) {
+        List<Member> members = memberRepository.findByName(name, pageable);
+
+        return members.stream()
                 .map(FindAllResponse::of)
                 .collect(Collectors.toList());
     }
