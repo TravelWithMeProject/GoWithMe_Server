@@ -55,6 +55,21 @@ public class JoinRequestDTO {
     @ApiModelProperty(example = "/user/image/my_image.jpg")
     private UserProfileImage profileImage;
 
+    private JoinRequestDTO(UserEmail userEmail, UserPassword userPassword, UserName name,
+                           UserNickName nickName, LocalDate birth, UserProfileImage profileImage) {
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.name = name;
+        this.nickName = nickName;
+        this.birth = birth;
+        this.profileImage = profileImage;
+    }
+
+    public static JoinRequestDTO from(final Member member) {
+        return new JoinRequestDTO(member.getEmail(), member.getPassword(), member.getName(), member.getNickname(),
+                member.getBirth(), member.getProfileImage());
+    }
+
     public Member toEntity() {
         return Member.builder()
                 .email(userEmail)
