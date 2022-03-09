@@ -10,19 +10,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.domain.preference.domain.persist.Preference;
 import team.backend.goWithMe.domain.preference.domain.vo.Accommodation;
-import team.backend.goWithMe.domain.preference.domain.vo.FavoriteArrival;
+import team.backend.goWithMe.domain.preference.domain.vo.PreferenceArrival;
 
 import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonTypeName("favorite")
+@JsonTypeName("prefer")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PreferenceCreateResponse {
 
     @JsonProperty("arrival")
-    private FavoriteArrival favoriteArrival;
+    private PreferenceArrival favoriteArrival;
 
     @JsonProperty("accommodation")
     private Accommodation accommodation;
@@ -41,10 +41,10 @@ public class PreferenceCreateResponse {
 
     public static PreferenceCreateResponse createResponse(final Preference favorite) {
 
-        LocalDate startTime = favorite.getFavoritePeriod().startTime();
-        LocalDate endTime = favorite.getFavoritePeriod().endTime();
+        LocalDate startTime = favorite.getPreferencePeriod().startTime();
+        LocalDate endTime = favorite.getPreferencePeriod().endTime();
 
-        return new PreferenceCreateResponse(favorite.getFavoriteArrival(), favorite.getAccommodation(),
+        return new PreferenceCreateResponse(favorite.getPreferenceArrival(), favorite.getAccommodation(),
                 startTime, endTime);
     }
 }

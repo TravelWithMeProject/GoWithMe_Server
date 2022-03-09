@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.backend.goWithMe.domain.preference.domain.vo.Accommodation;
-import team.backend.goWithMe.domain.preference.domain.vo.FavoriteArrival;
-import team.backend.goWithMe.domain.preference.domain.vo.FavoritePeriod;
+import team.backend.goWithMe.domain.preference.domain.vo.PreferenceArrival;
+import team.backend.goWithMe.domain.preference.domain.vo.PreferencePeriod;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
 import team.backend.goWithMe.global.common.BaseTimeEntity;
 
@@ -21,45 +21,68 @@ public class Preference extends BaseTimeEntity {
     private Long id;
 
     @Embedded
-    private FavoriteArrival favoriteArrival; // 도착지
+    private PreferenceArrival preferenceArrival; // 도착지
 
     @Embedded
     private Accommodation accommodation; // 숙박 유형
 
     @Embedded
-    private FavoritePeriod favoritePeriod; // 앞으로 여행 계획
+    private PreferencePeriod preferencePeriod; // 앞으로 여행 계획
 
-    private Preference(final FavoriteArrival favoriteArrival,
-                       final Accommodation accommodation, final FavoritePeriod favoritePeriod) {
-        this.favoriteArrival = favoriteArrival;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    private Preference(final PreferenceArrival favoriteArrival,
+                       final Accommodation accommodation, final PreferencePeriod favoritePeriod) {
+        this.preferenceArrival = favoriteArrival;
         this.accommodation = accommodation;
-        this.favoritePeriod = favoritePeriod;
+        this.preferencePeriod = favoritePeriod;
+    }
+
+    private Preference(final PreferenceArrival favoriteArrival, final Accommodation accommodation,
+                       final PreferencePeriod favoritePeriod, final Member member) {
+        this.preferenceArrival = favoriteArrival;
+        this.accommodation = accommodation;
+        this.preferencePeriod = favoritePeriod;
+        addMember(member);
     }
 
     /**
      * 비즈니스 로직
      */
-    public static Preference createSurvey(final FavoriteArrival favoriteArrival, final Accommodation accommodation,
-                                          final FavoritePeriod favoritePeriod) {
+    public static Preference createSurvey(final PreferenceArrival favoriteArrival, final Accommodation accommodation,
+                                          final PreferencePeriod favoritePeriod) {
         return new Preference(favoriteArrival, accommodation, favoritePeriod);
     }
 
-    public void updateFavorite(final Preference favorite) {
+    public static Preference createPreference(final PreferenceArrival favoriteArrival, final Accommodation accommodation,
+                                              final PreferencePeriod favoritePeriod, final Member member) {
 
-        changeArrival(favorite.getFavoriteArrival());
-        changeAccommodation(favorite.getAccommodation());
-        changeFavoritePeriod(favorite.getFavoritePeriod());
+        return new Preference(favoriteArrival, accommodation, favoritePeriod, member);
     }
 
-    private void changeArrival(FavoriteArrival favoriteArrival) {
-        this.favoriteArrival = favoriteArrival;
+    public void updateFavorite(final Preference preference) {
+
+        changeArrival(preference.getPreferenceArrival());
+        changeAccommodation(preference.getAccommodation());
+        changeFavoritePeriod(preference.getPreferencePeriod());
+    }
+
+    private void changeArrival(PreferenceArrival favoriteArrival) {
+        this.preferenceArrival = favoriteArrival;
     }
 
     private void changeAccommodation(Accommodation accommodation) {
         this.accommodation = accommodation;
     }
 
-    private void changeFavoritePeriod(FavoritePeriod favoritePeriod) {
-        this.favoritePeriod = favoritePeriod;
+    private void changeFavoritePeriod(PreferencePeriod favoritePeriod) {
+        this.preferencePeriod = favoritePeriod;
+    }
+
+    private void addMember(final Member member) {
+        this.member = member;
+        member.addPreference(this);
     }
 }
