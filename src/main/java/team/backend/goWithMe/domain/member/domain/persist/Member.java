@@ -41,9 +41,8 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private UserProfileImage profileImage;
 
-    @OneToOne
-    @JoinColumn(name = "preference_id")
-    private Preference favorite;
+    @OneToOne(mappedBy = "member")
+    private Preference preference;
 
     @Builder
     public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType,
@@ -58,14 +57,19 @@ public class Member extends BaseTimeEntity {
         this.profileImage = profileImage;
     }
 
+    public void addPreference(Preference preference) {
+        this.preference = preference;
+    }
+
     /**
      * 비즈 니스 로직
      */
-    public void update(final Member member) {
+    public void update(final Member member, final PasswordEncoder encoder) {
         changeEmail(member.email);
         changePassword(member.password);
         changeNickName(member.nickname);
         changeProfile(member.profileImage);
+        encode(encoder);
     }
 
     private void changeEmail(UserEmail email) {
@@ -81,10 +85,6 @@ public class Member extends BaseTimeEntity {
     }
 
     private void changeProfile(UserProfileImage profileImage) { this.profileImage = profileImage; }
-
-    public void addFavorite(final Preference favorite) {
-        this.favorite = favorite;
-    }
 
     // 비밀번호 해시화
     public Member encode(final PasswordEncoder encoder) {
