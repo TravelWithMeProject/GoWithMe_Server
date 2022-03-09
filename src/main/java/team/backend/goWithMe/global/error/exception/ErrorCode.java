@@ -26,12 +26,19 @@ public enum ErrorCode {
 
     // Favorite
     OVER_PERIOD_ERROR(400, "F001", "날짜 입력이 잘못 되었습니다."),
-    NOT_FOUND_FAVORITE(400, "F002", "해당 개체를 찾을 수 없습니다.")
-
-    ;
+    NOT_FOUND_FAVORITE(400, "F002", "해당 개체를 찾을 수 없습니다."),
 
 
     // travel domain
+    INVALID_TITLE_OR_NAME(400, "T001", "제목은 반드시 값이 입력되어야 합니다."),
+    PERIOD_MISMATCH_ERROR(400, "T002", "기간 설정에 오류가 있습니다."),
+    WRONG_TIMETABLE_OWNER(400, "T003", "시간표를 소유한 사용자 아이디가 일치하지 않습니다."),
+    NO_SUCH_TIMETABLE(404, "T004", "해당 id의 TimeTable이 없습니다."),
+    NO_SUCH_SCHEDULE(404, "T005", "해당 iddml Schedule이 없습니다."),
+    WRONG_SCHEDULE_OWNER(400, "T005", "해당 세부 일정을 소유한 시간표 아이디가 일치하지 않습니다."),
+    NO_SUCH_MEMBER_IN_TIMETABLE(404, "T006", "해당 id의 Member가 없습니다.(시간표 관련)")
+
+    ;
 
     // Mate domain
 

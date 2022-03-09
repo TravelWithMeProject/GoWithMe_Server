@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import team.backend.goWithMe.domain.trip.error.SchedulePeriodInvalidException;
+import team.backend.goWithMe.domain.trip.error.exception.SchedulePeriodInvalidException;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import javax.persistence.Column;
@@ -71,19 +71,19 @@ public final class SchedulePeriod{
         validateDetailPeriodInTotalPeriod(detailStart, totalPeriod);
         validateDetailPeriodInTotalPeriod(detailEnd, totalPeriod);
         if (detailStart.isAfter(detailEnd)) {
-            throw new SchedulePeriodInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new SchedulePeriodInvalidException(ErrorCode.PERIOD_MISMATCH_ERROR);
         }
         if (detailEnd.isBefore(detailStart)) {
-            throw new SchedulePeriodInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new SchedulePeriodInvalidException(ErrorCode.PERIOD_MISMATCH_ERROR);
         }
     }
 
     private static void validateDetailPeriodInTotalPeriod(LocalDateTime detailOne, TimeTablePeriod totalPeriod) {
         if (detailOne.isBefore(totalPeriod.totalPeriodStart())) {
-            throw new SchedulePeriodInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new SchedulePeriodInvalidException(ErrorCode.PERIOD_MISMATCH_ERROR);
         }
         if (detailOne.isAfter(totalPeriod.totalPeriodEnd())) {
-            throw new SchedulePeriodInvalidException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new SchedulePeriodInvalidException(ErrorCode.PERIOD_MISMATCH_ERROR);
         }
     }
 }
