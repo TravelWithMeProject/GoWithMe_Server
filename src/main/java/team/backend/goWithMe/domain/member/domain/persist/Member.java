@@ -64,12 +64,13 @@ public class Member extends BaseTimeEntity {
     /**
      * 비즈 니스 로직
      */
-    public void update(final Member member, final PasswordEncoder encoder) {
+    public Member update(final Member member, final PasswordEncoder encoder) {
         changeEmail(member.email);
         changePassword(member.password);
         changeNickName(member.nickname);
         changeProfile(member.profileImage);
         encode(encoder);
+        return this;
     }
 
     private void changeEmail(UserEmail email) {
