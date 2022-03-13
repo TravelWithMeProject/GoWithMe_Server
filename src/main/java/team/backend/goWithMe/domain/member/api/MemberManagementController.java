@@ -16,6 +16,7 @@ import team.backend.goWithMe.domain.member.domain.persist.Member;
 import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
 import team.backend.goWithMe.domain.member.domain.vo.UserName;
 import team.backend.goWithMe.domain.member.dto.*;
+import team.backend.goWithMe.global.common.TokenDTO;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -31,24 +32,22 @@ public class MemberManagementController {
 
     @PostMapping("/join")
     @ApiOperation(value = "회원 가입", notes = "회원 정보를 입력받아 저장한다.")
-    @ApiParam(name = "회원 가입 데이터 전달 DTO", value = "요청 들어온 회원 정보")
+    @ApiParam(name = "회원 가입 데이터 전달 DTO")
     public ResponseEntity<JoinResponseDTO> create(@Valid @RequestBody JoinRequestDTO request) {
         Member member = request.toEntity();
 
         URI createdMemberURI = URI.create(String.format("/api/v1/member/%d", member.getId()));
-
         return ResponseEntity.created(createdMemberURI).body(memberManagementService.create(member));
     }
 
     @PatchMapping
     @ApiOperation(value = "회원 수정", notes = "회원 수정 정보를 입력 받아 변경한다.")
-    public ResponseEntity<Void> modify(
+    public ResponseEntity<TokenDTO> update(
             @ApiParam(name = "변경된 회원 데이터")
             @Valid @RequestBody MemberUpdateDTO updateDTO) {
         Member member = updateDTO.toEntity();
 
-        memberManagementService.update(member, UserEmail.from(getEmail()));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(memberManagementService.update(member, UserEmail.from(getEmail())));
     }
 
     @GetMapping("/findByEmail")
@@ -64,7 +63,7 @@ public class MemberManagementController {
         return ResponseEntity.noContent().build();
     }
 
-    // 회원 검색 (JPQL)
+    // 회원 검색
     @GetMapping("/search/{name}")
     public ResponseEntity<List<FindAllResponse>> searchMember(
             @PathVariable String name,
