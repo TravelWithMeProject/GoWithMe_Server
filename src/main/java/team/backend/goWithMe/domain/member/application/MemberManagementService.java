@@ -2,11 +2,11 @@ package team.backend.goWithMe.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +20,11 @@ import team.backend.goWithMe.domain.member.dto.JoinResponseDTO;
 import team.backend.goWithMe.domain.member.dto.MemberResponseDTO;
 import team.backend.goWithMe.domain.member.error.exception.DuplicateEmailException;
 import team.backend.goWithMe.domain.member.error.exception.MemberNotFoundException;
-import team.backend.goWithMe.global.common.AccessToken;
+import team.backend.goWithMe.global.common.TokenDTO;
 import team.backend.goWithMe.global.common.TokenProvider;
 import team.backend.goWithMe.global.error.exception.ErrorCode;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,6 +36,8 @@ public class MemberManagementService {
     private final MemberRepository memberRepository;
     private final MemberQueryRepository memberQueryRepository;
     private final PasswordEncoder encoder;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder managerBuilder;
 
     // 회원 가입
     public JoinResponseDTO create(final Member member) {
@@ -50,11 +51,20 @@ public class MemberManagementService {
     }
 
     // 업데이트
-    public void update(final Member member, final UserEmail email) {
+    public TokenDTO update(final Member member, final UserEmail email) {
         Member findMember = memberRepository.findByEmail(email).orElseThrow(
                 () -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-        findMember.update(member, encoder);
+        Member updatedMember = findMember.update(member, encoder);
+
+        // 새로운 email을 context 안에 저장
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken
+                (updatedMember.getEmail().userEmail(), member.getPassword().userPassword());
+
+        Authentication authenticate = managerBuilder.getObject().authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+
+        return tokenProvider.createToken(updatedMember.getEmail().userEmail(), authenticate);
     }
 
     // 회원 삭제
@@ -65,6 +75,8 @@ public class MemberManagementService {
     // 회원 조회
     @Transactional(readOnly = true)
     public MemberResponseDTO findOne(final UserEmail email) {
+        log.debug("userEmail : {}", email.userEmail());
+
         Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> {
             throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         });
@@ -78,21 +90,18 @@ public class MemberManagementService {
         Member member = memberRepository.findByEmail(email).orElseThrow(() ->
             new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-        /**
-         * Favorite 설문지가 존재한다면 Favorite 정보를 갖고 조건에 부합하는 회원 만 갖고옴
-         * 존재하지 않는다면 findAll
-         */
         if (member.getPreference() != null) {
             return memberQueryRepository.findAllByFavorite(member.getPreference(), pageable).stream()
                     .map(FindAllResponse::of)
                     .collect(Collectors.toList());
         }
 
-        return memberRepository.findAll(pageable).getContent().stream()
+        return memberRepository.findAll(pageable).stream()
                 .map(FindAllResponse::of)
                 .collect(Collectors.toList());
     }
 
+    // 회원 검색
     public List<FindAllResponse> searchMember(final UserName name, final Pageable pageable) {
         List<Member> members = memberRepository.findByName(name, pageable);
 
