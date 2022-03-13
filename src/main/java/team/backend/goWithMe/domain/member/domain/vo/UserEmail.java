@@ -35,7 +35,7 @@ public final class UserEmail {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEmail userEmail = (UserEmail) o;
-        return Objects.equals(userEmail(), userEmail.email);
+        return Objects.equals(userEmail(), userEmail.userEmail());
     }
 
     @Override
