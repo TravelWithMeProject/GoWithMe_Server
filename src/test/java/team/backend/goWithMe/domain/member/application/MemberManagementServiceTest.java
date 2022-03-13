@@ -5,20 +5,31 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
+import team.backend.goWithMe.domain.member.domain.persist.MemberRepository;
 import team.backend.goWithMe.domain.member.domain.util.GivenMember;
-import team.backend.goWithMe.domain.member.domain.vo.UserEmail;
-import team.backend.goWithMe.domain.member.domain.vo.UserNickName;
-import team.backend.goWithMe.domain.member.domain.vo.UserPassword;
-import team.backend.goWithMe.domain.member.domain.vo.UserProfileImage;
+import team.backend.goWithMe.domain.member.domain.vo.*;
+import team.backend.goWithMe.domain.member.dto.FindAllResponse;
 import team.backend.goWithMe.domain.member.dto.MemberResponseDTO;
 import team.backend.goWithMe.domain.member.error.exception.MemberNotFoundException;
+import team.backend.goWithMe.domain.preference.domain.persist.Preference;
+import team.backend.goWithMe.domain.preference.domain.persist.PreferenceRepository;
+import team.backend.goWithMe.global.error.exception.ErrorCode;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static team.backend.goWithMe.domain.member.domain.persist.RoleType.USER;
 import static team.backend.goWithMe.domain.member.domain.util.GivenMember.*;
+import static team.backend.goWithMe.domain.preference.domain.util.GivenPreference.*;
+import static team.backend.goWithMe.global.error.exception.ErrorCode.*;
 
 @SpringBootTest
 @Transactional
@@ -30,17 +41,23 @@ class MemberManagementServiceTest {
     @Autowired
     private PasswordEncoder encoder;
 
-    static Member givenMember = Member.builder()
-            .email(USER_EMAIL)
-            .password(USER_PASSWORD)
-            .name(USER_NAME)
-            .nickname(USER_NICK_NAME)
-            .roleType(ROLE_TYPE)
-            .birth(USER_BIRTH)
-            .profileImage(USER_PROFILE).build();
+    @Autowired
+    private PreferenceRepository preferenceRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @BeforeEach
     void createTest() {
+        Member givenMember = Member.builder()
+                .email(USER_EMAIL)
+                .password(USER_PASSWORD)
+                .name(USER_NAME)
+                .nickname(USER_NICK_NAME)
+                .roleType(ROLE_TYPE)
+                .birth(USER_BIRTH)
+                .profileImage(USER_PROFILE).build();
+
         memberManagementService.create(givenMember);
     }
 
@@ -48,6 +65,9 @@ class MemberManagementServiceTest {
     @DisplayName("회원 업데이트 로직 테스트")
     void updateTest() {
         // given
+        Member member = memberRepository.findByEmail(USER_EMAIL).orElseThrow(
+                () -> new MemberNotFoundException(USER_NOT_FOUND));
+
         Member updateMember = Member.builder()
                 .email(UserEmail.from("ssar@gmail.com"))
                 .password(UserPassword.from("12345"))
@@ -56,13 +76,13 @@ class MemberManagementServiceTest {
                 .build();
 
         // when
-        memberManagementService.update(updateMember, givenMember.getEmail());
+        memberManagementService.update(updateMember, USER_EMAIL);
 
         // then
-        assertThat(givenMember.getEmail()).isEqualTo(UserEmail.from("ssar@gmail.com"));
-        assertTrue(encoder.matches("12345", givenMember.getPassword().userPassword()));
-        assertThat(givenMember.getNickname()).isEqualTo(UserNickName.from("golf"));
-        assertThat(givenMember.getProfileImage()).isEqualTo(updateMember.getProfileImage());
+        assertThat(member.getEmail()).isEqualTo(updateMember.getEmail());
+        assertTrue(encoder.matches("12345", member.getPassword().userPassword()));
+        assertThat(member.getNickname()).isEqualTo(UserNickName.from("golf"));
+        assertThat(member.getProfileImage()).isEqualTo(updateMember.getProfileImage());
     }
 
     @Test
@@ -87,16 +107,65 @@ class MemberManagementServiceTest {
         // given
 
         // when
-        memberManagementService.delete(givenMember.getEmail());
+        memberManagementService.delete(USER_EMAIL);
 
         // then
         assertThrows(MemberNotFoundException.class,
-                () -> memberManagementService.findOne(givenMember.getEmail()));
+                () -> memberManagementService.findOne(USER_EMAIL));
     }
 
     @Test
-    @DisplayName("회원 전체 조회 테스트")
+    @DisplayName("Preference가 없으면 회원 전체를 조회해온다.")
     void findAllTest() {
+        getMembers();
+        Pageable pageable = PageRequest.of(0, 100, Sort.Direction.ASC, "id");
 
+        List<FindAllResponse> members =
+                memberManagementService.findAll(UserEmail.from("member1@gmail.com"), pageable);
+
+        assertThat(members.size()).isEqualTo(11);
+
+        for (FindAllResponse member : members) {
+            System.out.println(member.getNickname().userNickname());
+        }
+    }
+
+    @Test
+    @DisplayName("Preference가 있으면 같은 값을 가진 회원들만 ")
+    void findAllByPreference() {
+        getMembers();
+        getPreferences();
+        Pageable pageable = PageRequest.of(0, 100, Sort.Direction.ASC, "id");
+
+        List<FindAllResponse> members = memberManagementService.findAll(UserEmail.from("member1@gmail.com"), pageable);
+
+        assertThat(members.size()).isEqualTo(6);
+    }
+
+    private void getPreferences() {
+        for (int i = 0; i < 6; i++) {
+            UserEmail email = UserEmail.from("member" + i + "@gmail.com");
+            Member member = memberRepository.findByEmail(email).orElseThrow(
+                    () -> new MemberNotFoundException(USER_NOT_FOUND));
+
+            Preference preference = Preference.createPreference(givenArrival, givenAccommodation, givenPeriod, member);
+            preferenceRepository.save(preference);
+        }
+    }
+
+    private void getMembers() {
+        for (int i = 0; i < 10; i++) {
+            Member member = Member.builder()
+                    .email(UserEmail.from("member" + i + "@gmail.com"))
+                    .password(UserPassword.from("1234" + i))
+                    .nickname(UserNickName.from("ssar" + i))
+                    .name(UserName.from("kims" + i))
+                    .roleType(USER)
+                    .profileImage(UserProfileImage.from("/nothing"))
+                    .birth(LocalDate.now())
+                    .build();
+
+            memberManagementService.create(member);
+        }
     }
 }
