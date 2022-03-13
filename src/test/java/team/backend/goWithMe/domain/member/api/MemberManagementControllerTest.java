@@ -12,7 +12,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import team.backend.goWithMe.domain.member.application.MemberManagementService;
 import team.backend.goWithMe.domain.member.domain.persist.Member;
-import team.backend.goWithMe.domain.member.domain.persist.RoleType;
 import team.backend.goWithMe.domain.member.domain.util.GivenMember;
 import team.backend.goWithMe.domain.member.dto.*;
 
@@ -22,7 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.mockito.Mockito.*;
-import static team.backend.goWithMe.domain.member.domain.util.GivenMember.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -44,7 +42,6 @@ class MemberManagementControllerTest {
     void createMember() throws Exception {
 
         JoinRequestDTO requestMember = JoinRequestDTO.from(member);
-
         JoinResponseDTO responseMember = JoinResponseDTO.from(member);
 
         String body = objectMapper.writeValueAsString(requestMember);
