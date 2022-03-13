@@ -150,18 +150,13 @@ class TimeTableTest {
     public void changeTimeTableNameToNullTest() throws Exception {
         // given
         // when, then
-        TimeTable editedTimeTable = TimeTable.createTimeTable(
-                TimeTableName.from(null),
-                timeTable.getContent(),
-                timeTable.getTotalPeriod(),
-                timeTable.getMember()
-        );
         assertThrows(TimeTableNameInvalidException.class, () ->
-                timeTable.changeTimeTable(editedTimeTable));
-        assertThrows(TimeTableNameInvalidException.class, () ->
-                        timeTable.changeTimeTable(editedTimeTable),
-                "시간표 명은 필수입니다."
-        );
+                TimeTable.createTimeTable(
+                        TimeTableName.from(null),
+                        timeTable.getContent(),
+                        timeTable.getTotalPeriod(),
+                        timeTable.getMember()
+                ));
     }
 
     @Test

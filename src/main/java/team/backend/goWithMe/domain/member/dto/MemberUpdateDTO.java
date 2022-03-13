@@ -40,8 +40,18 @@ public class MemberUpdateDTO {
     @ApiModelProperty(example = "/user/image/new_image.jpeg")
     private UserProfileImage profileImage;
 
-    @JsonProperty("accessToken")
-    private AccessToken accessToken;
+    private MemberUpdateDTO(UserEmail email, UserPassword password, UserNickName nickName,
+                           UserProfileImage profileImage) {
+        this.email = email;
+        this.password = password;
+        this.nickName = nickName;
+        this.profileImage = profileImage;
+    }
+
+    public static MemberUpdateDTO from(final Member member) {
+        return new MemberUpdateDTO(member.getEmail(), member.getPassword(), member.getNickname(),
+                member.getProfileImage());
+    }
 
     public Member toEntity() {
         return Member.builder()

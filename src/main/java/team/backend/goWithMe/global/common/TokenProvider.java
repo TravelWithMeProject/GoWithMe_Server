@@ -66,7 +66,7 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        log.info("authorities : {}", authorities);
+        log.debug("authorities : {}", authorities);
 
         long now = (new Date()).getTime();
 

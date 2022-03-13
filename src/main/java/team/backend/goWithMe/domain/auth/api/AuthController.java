@@ -11,7 +11,7 @@ import team.backend.goWithMe.global.common.TokenDTO;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 public class AuthController {
 

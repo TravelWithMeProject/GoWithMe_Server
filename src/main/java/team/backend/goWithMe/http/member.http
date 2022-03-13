@@ -1,0 +1,61 @@
+### Login
+
+POST http://localhost:8080/api/v1/members/login
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "ilgolc@naver.com",
+    "password": "1234"
+  }
+}
+
+
+### Join
+
+POST http://localhost:8080/api/v1/members/join
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "ilgolc@naver.com",
+    "password": "1234",
+    "name": "ssar",
+    "nickname": "dfsdafasd",
+    "birth": "10-12-1999",
+    "profile": "asdfasdf"
+  }
+}
+
+### Update
+
+PATCH http://localhost:8080/api/v1/members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImlsZ29sY0BuYXZlci5jb20iLCJuaWNrbmFtZSI6ImRmc2RhZmFzZCIsInJvbGUiOiJST0xFX1VTRVIiLCJleHAiOjE2NDY4MzQxODl9.5QuTjDDOiLNNArRgLAFI6rdf3EUOs50zfrND-BHDXhq9Vb3NUtVZghC1tfM_K-YKmLR7AdOWZhF3qUrdDSsxLA
+
+{
+  "user": {
+    "email": "ssar@naver.com",
+    "password": "123456",
+    "nickname": "kim03",
+    "profile": "/user/mmm/golf.jpg"
+  }
+}
+
+###FindOne
+
+GET http://localhost:8080/api/v1/members/findByEmail
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImlsZ29sY0BuYXZlci5jb20iLCJuaWNrbmFtZSI6ImRmc2RhZmFzZCIsInJvbGUiOiJST0xFX1VTRVIiLCJleHAiOjE2NDY4MzU5MDR9.BfGlUQNyTF4leX-hLFMpccmT3G_s4bonRGzrJecz0KuBrwft-3Myej8QEapBHIgt1i1CZhCelp9B_0mufMbFxA
+
+### Delete
+
+DELETE http://localhost:8080/api/v1/members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImlsZ29sY0BuYXZlci5jb20iLCJuaWNrbmFtZSI6ImRmc2RhZmFzZCIsInJvbGUiOiJST0xFX1VTRVIiLCJleHAiOjE2NDY4Mjk3NTR9.UBt-qgqx6eBFe8YrFwjzKsSCjbvuRVZBNMJEQyVez4fXwh8pR0AG3dHXz_DFJ7H9cc9sONmeq3Cv5GGR8d84vQ
+
+### FindAll
+
+GET http://localhost:8080/api/v1/members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImlsZ29sY0BuYXZlci5jb20iLCJuaWNrbmFtZSI6ImRmc2RhZmFzZCIsInJvbGUiOiJST0xFX1VTRVIiLCJleHAiOjE2NDY4MzU5MDR9.BfGlUQNyTF4leX-hLFMpccmT3G_s4bonRGzrJecz0KuBrwft-3Myej8QEapBHIgt1i1CZhCelp9B_0mufMbFxA

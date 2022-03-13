@@ -21,7 +21,7 @@ public final class TimeTableName {
     @Column(name = "table_name", length = 50) // 한글 기준 25자 제한
     private String tableName;
 
-    public static TimeTableName from(String tableName) {
+    public static TimeTableName from(final String tableName) {
         validateTimeTableName(tableName);
         return new TimeTableName(tableName);
     }

@@ -34,12 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
     private final CustomMemberDetailService customMemberDetailService;
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customMemberDetailService);
@@ -79,9 +73,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
                 .authorizeRequests()
-                        .antMatchers(HttpMethod.POST,"/api/v1/member/join").permitAll()
-                        .antMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
-                        .antMatchers(HttpMethod.POST, "/api/v1/member/reissue").permitAll()
+                        .antMatchers(HttpMethod.POST,"/api/v1/members/join").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/v1/members/login").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/v1/members/reissue").permitAll()
                         .antMatchers("/swagger-resources/**").permitAll()
                         .anyRequest().authenticated();
 

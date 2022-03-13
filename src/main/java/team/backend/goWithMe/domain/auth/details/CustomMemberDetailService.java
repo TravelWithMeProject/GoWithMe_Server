@@ -28,13 +28,13 @@ public class CustomMemberDetailService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         return memberRepository.findByEmail(UserEmail.from(email))
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    private UserDetails createUserDetails(Member member) {
+    private UserDetails createUserDetails(final Member member) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + member.getRoleType());
 
         return new User(member.getEmail().userEmail(),
