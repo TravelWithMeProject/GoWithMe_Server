@@ -1,6 +1,5 @@
 package team.backend.goWithMe.domain.member.domain.persist;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import team.backend.goWithMe.domain.preference.domain.vo.PreferencePeriod;
 import java.util.List;
 
 import static team.backend.goWithMe.domain.member.domain.persist.QMember.*;
+import static team.backend.goWithMe.domain.preference.domain.persist.QPreference.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class MemberQueryRepository {
     }
 
     private BooleanExpression eqPeriod(final PreferencePeriod preferencePeriod) {
-        if (preferencePeriod.startTime() == null || preferencePeriod.endTime() == null) {
+        if (preferencePeriod == null) {
             return null;
         }
 
