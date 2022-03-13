@@ -60,4 +60,14 @@ class MemberTest {
         assertThat(member.getNickname()).isEqualTo(updateNickName);
         assertThat(member.getPassword()).isNotEqualTo(updatePassword);
     }
+
+    @Test
+    @DisplayName("VO 값이 동등하면 동등한 값이다.")
+    void isSameEmail() {
+        UserEmail email1 = UserEmail.from("golf@gmail.com");
+        UserEmail email2 = UserEmail.from("golf@gmail.com");
+
+        assertThat(email1).isEqualTo(email2);
+        assertThat(email1).hasSameHashCodeAs(email2);
+    }
 }
