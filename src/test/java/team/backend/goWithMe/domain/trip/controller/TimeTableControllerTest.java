@@ -78,28 +78,6 @@ class TimeTableControllerTest {
                 .isEqualTo("{\"success\":true,\"timeTableId\":"+ sampleTimeTableId +"}");
     }
 
-//    @Test
-//    @DisplayName("시간표 저장 테스트 - 실패 케이스")
-//    public void saveTimeTableFailTest() throws Exception {
-//        TimeTableCreateDTO timeTableDTO = new TimeTableCreateDTO(MEMBER_ID, null,
-//                                                TIMETABLE_CONTENT, TIMETABLE_PERIOD_START, TIMETABLE_PERIOD_END);
-//
-//        Long sampleTimeTableId = 1L;
-//        given(timeTableService.saveTimeTable(any())).willThrow(new NullPointerException());
-//
-//        // when
-//        final ResultActions resultActions = mockMvc.perform(
-//                MockMvcRequestBuilders.post("/timeTable/create")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(timeTableDTO)));
-//
-//        // then
-//        MvcResult mvcResult = resultActions.andReturn();
-//        String contentAsString = mvcResult.getResponse().getContentAsString();
-//        System.out.println("contentAsString = " + contentAsString);
-//        resultActions.andExpect(status().isBadRequest());
-//    }
-
     @Test
     @DisplayName("특정 시간표 가져오기 테스트")
     public void getTimeTableTest() throws Exception {
